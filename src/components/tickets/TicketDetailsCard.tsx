@@ -15,27 +15,28 @@ import { enUS } from 'date-fns/locale'; // Default to enUS
 import { useAuth } from '@/contexts/AuthContext';
 import { ticketStatusOptions } from '@/types';
 import { Separator } from '../ui/separator';
+import { cn } from '@/lib/utils';
 
 interface TicketDetailsCardProps {
   ticket: Ticket;
   onUpdateStatus?: (ticketId: string, status: TicketStatus, actionDescription?: string) => void;
   onAddAction?: (ticketId: string, description: string) => void;
   isUpdating?: boolean;
+  isModalVariant?: boolean; // New prop
 }
 
-export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction, isUpdating }: TicketDetailsCardProps) {
+export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction, isUpdating, isModalVariant }: TicketDetailsCardProps) {
   const { user } = useAuth();
   const [newActionText, setNewActionText] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<TicketStatus>(ticket.status);
 
   React.useEffect(() => {
-    // Reset selectedStatus if the ticket prop changes
     setSelectedStatus(ticket.status);
-    setNewActionText(''); // also clear action text
+    setNewActionText(''); 
   }, [ticket]);
 
 
-  const dateLocale = enUS; // Default to English locale for dates
+  const dateLocale = enUS; 
 
   const handleAddAction = () => {
     if (newActionText.trim() && user?.displayName && onAddAction) {
@@ -87,18 +88,23 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
 
 
   return (
-    <Card className="shadow-lg w-full">
-      <CardHeader>
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-          <CardTitle className="text-2xl">{ticket.serialNumber}</CardTitle>
-          <TicketStatusBadge status={ticket.status} className="px-3 py-1.5 text-sm" />
-        </div>
-        <CardDescription className="text-sm text-muted-foreground flex items-center pt-1">
-          <Clock className="h-4 w-4 me-1.5" />
-          {`Received: ${format(new Date(ticket.receivedAt), 'PPp', { locale: dateLocale })} by ${ticket.reportedBy}`}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className={cn(
+      "w-full",
+      isModalVariant ? "" : "shadow-lg border" // Conditionally apply shadow and border
+    )}>
+      {!isModalVariant && ( // Only show card header if not in modal variant (modal has its own header)
+        <CardHeader>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <CardTitle className="text-2xl">{ticket.serialNumber}</CardTitle>
+            <TicketStatusBadge status={ticket.status} className="px-3 py-1.5 text-sm" />
+          </div>
+          <CardDescription className="text-sm text-muted-foreground flex items-center pt-1">
+            <Clock className="h-4 w-4 me-1.5" />
+            {`Received: ${format(new Date(ticket.receivedAt), 'PPp', { locale: dateLocale })} by ${ticket.reportedBy}`}
+          </CardDescription>
+        </CardHeader>
+      )}
+      <CardContent className={cn(isModalVariant ? "pt-0" : "pt-0")}> {/* Adjust padding if needed for modal */}
         <div>
           <h3 className="font-semibold text-md mb-1">Incident Details</h3>
           <p className="text-sm text-foreground/90">{ticket.description}</p>
@@ -145,7 +151,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           </div>
         </div>
 
-        <Separator />
+        <Separator className="my-4" />
 
         <div>
           <h3 className="font-semibold text-md mb-2 flex items-center"><Workflow className="h-5 w-5 me-2 text-primary" />Actions Log</h3>
@@ -170,7 +176,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
         
         {showActionSection && canUpdateStatus && (
             <>
-            <Separator />
+            <Separator className="my-4" />
             <div className="space-y-3">
               <h3 className="font-semibold text-md flex items-center"><Edit3 className="h-5 w-5 me-2 text-primary"/>Update Ticket</h3>
               <div className="flex flex-col sm:flex-row gap-4 items-end">
@@ -213,7 +219,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
         )}
 
       </CardContent>
-      {ticket.status === 'Closed' && ticket.closedAt && (
+      {!isModalVariant && ticket.status === 'Closed' && ticket.closedAt && (
           <CardFooter className="text-sm text-muted-foreground">
               {`Closed on: ${format(new Date(ticket.closedAt), 'PPp', { locale: dateLocale })}`}
           </CardFooter>
@@ -221,5 +227,4 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     </Card>
   );
 }
-
     

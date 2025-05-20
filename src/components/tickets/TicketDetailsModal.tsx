@@ -10,7 +10,7 @@ import { Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { TicketStatusBadge } from './TicketStatusBadge';
-import TicketDetailsCard from './TicketDetailsCard'; // Import the card
+import TicketDetailsCard from './TicketDetailsCard';
 
 interface TicketDetailsModalProps {
   ticket: Ticket | null;
@@ -25,8 +25,8 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-0">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col p-0 bg-card">
+        <DialogHeader className="p-6 pb-0 border-b">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <DialogTitle className="text-2xl">{ticket.serialNumber}</DialogTitle>
             <TicketStatusBadge status={ticket.status} className="px-3 py-1.5 text-sm" />
@@ -37,9 +37,10 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
           </DialogDescription>
         </DialogHeader>
         
-        {/* Render TicketDetailsCard within a ScrollArea for the modal body */}
-        <ScrollArea className="flex-grow overflow-y-auto px-6 pt-4 pb-6">
-          <TicketDetailsCard ticket={ticket} />
+        <ScrollArea className="flex-grow overflow-y-auto">
+          <div className="p-6"> {/* Add padding around the card content area */}
+            <TicketDetailsCard ticket={ticket} isModalVariant={true} />
+          </div>
         </ScrollArea>
         
         <DialogFooter className="p-6 pt-4 border-t">
@@ -49,5 +50,4 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
     </Dialog>
   );
 }
-
     
