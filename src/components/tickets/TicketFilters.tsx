@@ -124,13 +124,13 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="filter-platform">Platform</Label>
+          <Label htmlFor="filter-platform">Media Platform</Label>
           <Select value={filters.platform || ALL_ITEMS_VALUE} onValueChange={handlePlatformChange}>
             <SelectTrigger id="filter-platform">
-              <SelectValue placeholder="Any Platform" />
+              <SelectValue placeholder="Any Media Platform" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL_ITEMS_VALUE} key="all-platforms">Any Platform</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-platforms">Any Media Platform</SelectItem>
               {platformOptions.map(option => (
                 <SelectItem key={option} value={option}>{platformDisplay[option] || option}</SelectItem>
               ))}

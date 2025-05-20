@@ -94,7 +94,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           <p className="text-sm text-foreground/90">{ticket.description}</p>
           <div className="mt-2 space-y-1 text-sm text-muted-foreground">
             <p><strong>Media Material:</strong> {ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial ? ticket.otherMediaMaterial : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}</p>
-            <p><strong>Platform:</strong> {ticket.platform === 'Other' && ticket.otherPlatform ? ticket.otherPlatform : platformDisplay[ticket.platform] || ticket.platform}</p>
+            <p><strong>Media Platform:</strong> {ticket.platform === 'Other' && ticket.otherPlatform ? ticket.otherPlatform : platformDisplay[ticket.platform] || ticket.platform}</p>
             {ticket.issueLink && (
               <p className="flex items-center">
                 <LinkIcon className="h-4 w-4 me-1.5" />

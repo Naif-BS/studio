@@ -59,7 +59,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
               </TableHead>
               <TableHead className="w-[250px]">
                 <div className="flex items-center gap-1">
-                  <RadioTower className="h-4 w-4" /> Platform
+                  <RadioTower className="h-4 w-4" /> Media Platform
                 </div>
               </TableHead>
               <TableHead className="w-[180px]">
@@ -110,7 +110,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
             </TableHead>
             <TableHead className="w-[250px]">
               <div className="flex items-center gap-1">
-                <RadioTower className="h-4 w-4" /> Platform
+                <RadioTower className="h-4 w-4" /> Media Platform
               </div>
             </TableHead>
             <TableHead className="w-[180px]">

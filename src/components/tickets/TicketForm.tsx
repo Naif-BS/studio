@@ -42,7 +42,7 @@ const platformDisplay: Record<string, string> = {
 const ticketFormSchema = z.object({
   mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
   otherMediaMaterial: z.string().optional(),
-  platform: z.enum(platformOptions, { required_error: "Platform is required." }),
+  platform: z.enum(platformOptions, { required_error: "Media Platform is required." }),
   otherPlatform: z.string().optional(),
   issueLink: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
   screenshotLink: z.string().optional().or(z.literal('')), // Changed from .url()
@@ -61,7 +61,7 @@ const ticketFormSchema = z.object({
   }
   return true;
 }, {
-  message: "Please specify the other platform.",
+  message: "Please specify the other media platform.",
   path: ["otherPlatform"],
 });
 
@@ -160,11 +160,11 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             name="platform"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Platform of Observation</FormLabel>
+                <FormLabel>Media Platform</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select platform" />
+                      <SelectValue placeholder="Select media platform" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -183,7 +183,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
               name="otherPlatform"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Specify Other Platform</FormLabel>
+                  <FormLabel>Specify Other Media Platform</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., Specific App Name" {...field} />
                   </FormControl>
