@@ -9,7 +9,7 @@ const mediaMaterialToCode: Record<MediaMaterial, string> = {
   'Video Clip': 'V',
   'Audio Clip': 'A',
   'GIF': 'G',
-  'Other': 'O',
+  'Other': 'Z', // Changed from 'O'
 };
 
 const platformToCode: Record<Platform, string> = {
@@ -22,7 +22,7 @@ const platformToCode: Record<Platform, string> = {
   'SRSA Account on Instagram': 'I',
   'SRSA Account on TikTok': 'T',
   'SRSA Account on LinkedIn': 'K',
-  'Other': 'O',
+  'Other': 'Y', // Changed from 'O'
 };
 
 let tickets: Ticket[] = [
@@ -102,7 +102,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '6',
-    serialNumber: 'BDM-OO0001', // Other (O), Other (O)
+    serialNumber: 'BDM-ZY0001', // Other (Z), Other (Y) - Updated
     receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Other',
@@ -171,8 +171,8 @@ export const getTicketById = (id: string): Ticket | undefined => {
 
 // Helper function to generate the next serial number
 const generateNextSerialNumber = (material: MediaMaterial, plat: Platform): string => {
-  const materialCode = mediaMaterialToCode[material] || 'O';
-  const platformCode = platformToCode[plat] || 'O';
+  const materialCode = mediaMaterialToCode[material] || 'Z'; // Default to 'Z' if somehow unknown
+  const platformCode = platformToCode[plat] || 'Y'; // Default to 'Y' if somehow unknown
   const prefix = `BDM-${materialCode}${platformCode}`;
 
   const existingSerialsForPrefix = tickets
@@ -328,3 +328,4 @@ const formatDuration = (ms: number): string => {
 if (tickets.length === 0) {
   // This block is currently not hit due to pre-defined tickets array.
 }
+
