@@ -33,12 +33,19 @@ export default function ReportIncidentPage() {
         variant: "default",
       });
     } catch (error) {
+      let errorMessage = "There was an issue submitting your report. Please try again.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string' && error.trim() !== '') {
+        errorMessage = error;
+      }
+      
       toast({
         title: "Error Reporting Incident",
-        description: "There was an issue submitting your report. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
-      console.error("Error submitting incident:", error);
+      console.error("Error submitting incident object:", error);
     }
   };
 
