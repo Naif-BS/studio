@@ -43,7 +43,9 @@ export default function SidebarNav() {
 
 
   return (
-    <Sidebar className={cn(dir === 'rtl' ? "rtl:border-l ltr:border-r-0" : "ltr:border-r rtl:border-l-0")} collapsible="icon">
+    <Sidebar
+      side={dir === 'rtl' ? 'right' : 'left'}
+      collapsible="icon">
         <SidebarHeader className="flex items-center justify-between p-3">
           <Link href="/dashboard" className={cn(
             "text-xl font-semibold text-primary transition-opacity duration-300",
@@ -84,3 +86,4 @@ export default function SidebarNav() {
     </Sidebar>
   );
 }
+

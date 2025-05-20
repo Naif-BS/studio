@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -225,11 +226,11 @@ const Sidebar = React.forwardRef<
         <div
           className={cn(
             "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
-            "group-data-[collapsible=offcanvas]:w-0",
-            "group-data-[side=right]:rotate-180",
+            // "group-data-[side=right]:rotate-180", // This class might not be needed or could be for visual flair
             variant === "floating" || variant === "inset"
               ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
+              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+            "group-data-[collapsible=offcanvas]:w-0"
           )}
         />
         <div
@@ -238,17 +239,21 @@ const Sidebar = React.forwardRef<
             side === "left"
               ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
               : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
-            // Adjust the padding for floating and inset variants.
             variant === "floating" || variant === "inset"
               ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
+              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+            // Border logic for default 'sidebar' variant handled by child div, for floating/inset, border is on child
+            variant === "sidebar" && (side === "left" ? "border-r" : "border-l"),
             className
           )}
           {...props}
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+            className={cn(
+              "flex h-full w-full flex-col bg-sidebar",
+              (variant === "floating" || variant === "inset") && "rounded-lg border border-sidebar-border shadow"
+            )}
           >
             {children}
           </div>
@@ -322,8 +327,24 @@ const SidebarInset = React.forwardRef<
     <main
       ref={ref}
       className={cn(
-        "relative flex min-h-svh flex-1 flex-col bg-background",
-        "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[state=collapsed]:peer-data-[variant=inset]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
+        // Base styles
+        "relative flex min-h-svh flex-1 flex-col bg-background transition-[margin] duration-300 ease-in-out",
+
+        // Styles for 'sidebar' variant (default variant)
+        // LTR
+        "md:peer-data-[variant=sidebar]:peer-data-[side=left]:peer-data-[state=expanded]:ml-[var(--sidebar-width)]",
+        "md:peer-data-[variant=sidebar]:peer-data-[side=left]:peer-data-[state=collapsed]:peer-data-[collapsible=icon]:ml-[var(--sidebar-width-icon)]",
+        // RTL
+        "md:peer-data-[variant=sidebar]:peer-data-[side=right]:peer-data-[state=expanded]:mr-[var(--sidebar-width)]",
+        "md:peer-data-[variant=sidebar]:peer-data-[side=right]:peer-data-[state=collapsed]:peer-data-[collapsible=icon]:mr-[var(--sidebar-width-icon)]",
+
+        // Styles for 'inset' variant
+        "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))]",
+        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
+        
+        // Styles for 'floating' variant (similar to inset regarding main content margins)
+        "peer-data-[variant=floating]:min-h-[calc(100svh-theme(spacing.4))]",
+        "md:peer-data-[variant=floating]:m-2 md:peer-data-[variant=floating]:rounded-xl",
         className
       )}
       {...props}
@@ -761,3 +782,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
