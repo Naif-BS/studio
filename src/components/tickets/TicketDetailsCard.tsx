@@ -57,14 +57,15 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
   };
 
   const platformDisplay: Record<string, string> = {
-    'Facebook': 'Facebook',
-    'X (Twitter)': 'X (Twitter)',
-    'Instagram': 'Instagram',
-    'TikTok': 'TikTok',
-    'YouTube': 'YouTube',
-    'News Site': 'News Site',
-    'Blog': 'Blog',
-    'Forum': 'Forum',
+    'Umm Al-Qura Newspaper': 'Umm Al-Qura Newspaper',
+    'Local Media Channel/Platform': 'Local Media Channel/Platform',
+    'International Media Channel/Platform': 'International Media Channel/Platform',
+    'SRSA Website': 'SRSA Website',
+    'Unified Platform': 'Unified Platform',
+    'SRSA Account on Platform X': 'SRSA Account on Platform X',
+    'SRSA Account on Instagram': 'SRSA Account on Instagram',
+    'SRSA Account on TikTok': 'SRSA Account on TikTok',
+    'SRSA Account on LinkedIn': 'SRSA Account on LinkedIn',
     'Other': 'Other',
   };
 

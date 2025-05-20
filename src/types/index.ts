@@ -1,6 +1,18 @@
 
 export type MediaMaterial = 'Video' | 'Article' | 'Social Media Post' | 'Image' | 'Audio' | 'Other';
-export type Platform = 'Facebook' | 'X (Twitter)' | 'Instagram' | 'TikTok' | 'YouTube' | 'News Site' | 'Blog' | 'Forum' | 'Other';
+
+export type Platform =
+  | 'Umm Al-Qura Newspaper'
+  | 'Local Media Channel/Platform'
+  | 'International Media Channel/Platform'
+  | 'SRSA Website'
+  | 'Unified Platform'
+  | 'SRSA Account on Platform X'
+  | 'SRSA Account on Instagram'
+  | 'SRSA Account on TikTok'
+  | 'SRSA Account on LinkedIn'
+  | 'Other';
+
 export type TicketStatus = 'New' | 'Processing' | 'Closed';
 
 export interface TicketAction {
@@ -23,10 +35,23 @@ export interface Ticket {
   description: string;
   actionsLog: TicketAction[];
   reportedBy: string; // User who reported it
-  otherMediaMaterial?: string | null; // New field
-  otherPlatform?: string | null;      // New field
+  otherMediaMaterial?: string | null;
+  otherPlatform?: string | null;
 }
 
 export const mediaMaterialOptions: MediaMaterial[] = ['Video', 'Article', 'Social Media Post', 'Image', 'Audio', 'Other'];
-export const platformOptions: Platform[] = ['Facebook', 'X (Twitter)', 'Instagram', 'TikTok', 'YouTube', 'News Site', 'Blog', 'Forum', 'Other'];
+
+export const platformOptions: Platform[] = [
+  'Umm Al-Qura Newspaper',
+  'Local Media Channel/Platform',
+  'International Media Channel/Platform',
+  'SRSA Website',
+  'Unified Platform',
+  'SRSA Account on Platform X',
+  'SRSA Account on Instagram',
+  'SRSA Account on TikTok',
+  'SRSA Account on LinkedIn',
+  'Other',
+];
+
 export const ticketStatusOptions: TicketStatus[] = ['New', 'Processing', 'Closed'];

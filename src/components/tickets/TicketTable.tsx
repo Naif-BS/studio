@@ -28,14 +28,15 @@ const mediaMaterialDisplay: Record<string, string> = {
 };
 
 const platformDisplay: Record<string, string> = {
-    'Facebook': 'Facebook',
-    'X (Twitter)': 'X (Twitter)',
-    'Instagram': 'Instagram',
-    'TikTok': 'TikTok',
-    'YouTube': 'YouTube',
-    'News Site': 'News Site',
-    'Blog': 'Blog',
-    'Forum': 'Forum',
+    'Umm Al-Qura Newspaper': 'Umm Al-Qura Newspaper',
+    'Local Media Channel/Platform': 'Local Media Channel/Platform',
+    'International Media Channel/Platform': 'International Media Channel/Platform',
+    'SRSA Website': 'SRSA Website',
+    'Unified Platform': 'Unified Platform',
+    'SRSA Account on Platform X': 'SRSA Account on Platform X',
+    'SRSA Account on Instagram': 'SRSA Account on Instagram',
+    'SRSA Account on TikTok': 'SRSA Account on TikTok',
+    'SRSA Account on LinkedIn': 'SRSA Account on LinkedIn',
     'Other': 'Other',
 };
 
@@ -51,12 +52,12 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
             <TableRow>
               <TableHead className="w-[120px]">Status</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead className="w-[170px]">
+              <TableHead className="w-[200px]">
                 <div className="flex items-center gap-1">
                   <Layers className="h-4 w-4" /> Media Material
                 </div>
               </TableHead>
-              <TableHead className="w-[170px]">
+              <TableHead className="w-[250px]">
                 <div className="flex items-center gap-1">
                   <RadioTower className="h-4 w-4" /> Platform
                 </div>
@@ -102,12 +103,12 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
           <TableRow>
             <TableHead className="w-[120px]">Status</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead className="w-[170px]">
+            <TableHead className="w-[200px]">
               <div className="flex items-center gap-1">
                 <Layers className="h-4 w-4" /> Media Material
               </div>
             </TableHead>
-            <TableHead className="w-[170px]">
+            <TableHead className="w-[250px]">
               <div className="flex items-center gap-1">
                 <RadioTower className="h-4 w-4" /> Platform
               </div>

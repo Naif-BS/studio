@@ -10,7 +10,7 @@ let tickets: Ticket[] = [
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     status: 'Closed',
     mediaMaterial: 'Video',
-    platform: 'YouTube',
+    platform: 'International Media Channel/Platform', // Was 'YouTube'
     issueLink: 'https://youtube.com/example_video_1',
     description: 'Misleading content in a viral video.',
     actionsLog: [
@@ -26,7 +26,7 @@ let tickets: Ticket[] = [
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     status: 'Processing',
     mediaMaterial: 'Article',
-    platform: 'News Site',
+    platform: 'Local Media Channel/Platform', // Was 'News Site'
     issueLink: 'https://news.com/example_article_1',
     description: 'Hate speech found in comments section.',
      actionsLog: [
@@ -41,7 +41,7 @@ let tickets: Ticket[] = [
     receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
     status: 'New',
     mediaMaterial: 'Social Media Post',
-    platform: 'X (Twitter)',
+    platform: 'SRSA Account on Platform X', // Was 'X (Twitter)'
     issueLink: 'https://x.com/example_post_1',
     description: 'Fake news spreading rapidly.',
     actionsLog: [],
@@ -53,7 +53,7 @@ let tickets: Ticket[] = [
     receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
     status: 'New',
     mediaMaterial: 'Image',
-    platform: 'Instagram',
+    platform: 'SRSA Account on Instagram', // Was 'Instagram'
     screenshotLink: 'https://placehold.co/600x400.png',
     description: 'Copyright infringement on an image.',
     actionsLog: [],
@@ -67,7 +67,7 @@ let tickets: Ticket[] = [
     closedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
     status: 'Closed',
     mediaMaterial: 'Audio',
-    platform: 'TikTok',
+    platform: 'SRSA Account on TikTok', // Was 'TikTok'
     issueLink: 'https://tiktok.com/example_audio_1',
     description: 'Unauthorized use of copyrighted music.',
     actionsLog: [
@@ -84,11 +84,40 @@ let tickets: Ticket[] = [
     mediaMaterial: 'Other',
     otherMediaMaterial: 'Live Stream Segment',
     platform: 'Other',
-    otherPlatform: 'Twitch',
+    otherPlatform: 'Twitch', // This is still fine as 'Other' exists
     issueLink: 'https://twitch.tv/example_stream_clip',
     description: 'Violation of community guidelines during a live stream.',
     actionsLog: [],
     reportedBy: 'User F',
+  },
+  {
+    id: '7',
+    serialNumber: `MS-${Date.now() - 8 * 24 * 60 * 60 * 1000}-S3T4U`,
+    receivedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
+    startedProcessingAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    closedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+    status: 'Closed',
+    mediaMaterial: 'Article',
+    platform: 'Umm Al-Qura Newspaper',
+    issueLink: 'https://example-umm-al-qura.com/article_123',
+    description: 'Official announcement clarification needed.',
+    actionsLog: [
+      { timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), description: 'Reviewed official text.', user: 'Analyst SRSA' },
+      { timestamp: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), description: 'No action needed. Archived.', user: 'Analyst SRSA' },
+    ],
+    reportedBy: 'System Alert',
+  },
+  {
+    id: '8',
+    serialNumber: `MS-${Date.now() - 10 * 60 * 60 * 1000}-V5W6X`,
+    receivedAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
+    status: 'New',
+    mediaMaterial: 'Video',
+    platform: 'SRSA Website',
+    issueLink: 'https://srsa.gov.sa/videos/promo_vid_error',
+    description: 'Broken video link on SRSA website.',
+    actionsLog: [],
+    reportedBy: 'Internal Audit',
   }
 ];
 
