@@ -1,13 +1,37 @@
 
 import type { Ticket, TicketStatus, MediaMaterial, Platform, TicketAction } from '@/types';
 
+const mediaMaterialToCode: Record<MediaMaterial, string> = {
+  'Press Release': 'P',
+  'Legal Document': 'L',
+  'Infographic': 'F',
+  'Image': 'M',
+  'Video Clip': 'V',
+  'Audio Clip': 'A',
+  'GIF': 'G',
+  'Other': 'O',
+};
+
+const platformToCode: Record<Platform, string> = {
+  'Umm Al-Qura Newspaper': 'U',
+  'Local Media Channel/Platform': 'C',
+  'International Media Channel/Platform': 'N',
+  'SRSA Website': 'S',
+  'Unified Platform': 'P',
+  'SRSA Account on Platform X': 'X',
+  'SRSA Account on Instagram': 'I',
+  'SRSA Account on TikTok': 'T',
+  'SRSA Account on LinkedIn': 'K',
+  'Other': 'O',
+};
+
 let tickets: Ticket[] = [
   {
     id: '1',
-    serialNumber: 'BDM-M1001', // Updated format
-    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
-    startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // 4 days ago
-    closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+    serialNumber: 'BDM-VN0001', // Video Clip (V), International (N)
+    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
+    startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
+    closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), 
     status: 'Closed',
     mediaMaterial: 'Video Clip',
     platform: 'International Media Channel/Platform',
@@ -21,9 +45,9 @@ let tickets: Ticket[] = [
   },
   {
     id: '2',
-    serialNumber: 'BDM-M1002', // Updated format
-    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-    startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    serialNumber: 'BDM-PC0001', // Press Release (P), Local Channel (C)
+    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), 
+    startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
     status: 'Processing',
     mediaMaterial: 'Press Release',
     platform: 'Local Media Channel/Platform',
@@ -37,8 +61,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '3',
-    serialNumber: 'BDM-M1003', // Updated format
-    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+    serialNumber: 'BDM-FX0001', // Infographic (F), Platform X (X)
+    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Infographic',
     platform: 'SRSA Account on Platform X',
@@ -49,8 +73,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '4',
-    serialNumber: 'BDM-M1004', // Updated format
-    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
+    serialNumber: 'BDM-MI0001', // Image (M), Instagram (I)
+    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Image',
     platform: 'SRSA Account on Instagram',
@@ -61,8 +85,8 @@ let tickets: Ticket[] = [
   },
    {
     id: '5',
-    serialNumber: 'BDM-M1005', // Updated format
-    receivedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
+    serialNumber: 'BDM-AT0001', // Audio Clip (A), TikTok (T)
+    receivedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
     closedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
     status: 'Closed',
@@ -78,8 +102,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '6',
-    serialNumber: 'BDM-M1006', // Updated format
-    receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+    serialNumber: 'BDM-OO0001', // Other (O), Other (O)
+    receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Other',
     otherMediaMaterial: 'Live Stream Segment',
@@ -92,7 +116,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '7',
-    serialNumber: 'BDM-M1007', // Updated format
+    serialNumber: 'BDM-LU0001', // Legal Document (L), Umm Al-Qura (U)
     receivedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
@@ -109,7 +133,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '8',
-    serialNumber: 'BDM-M1008', // Updated format
+    serialNumber: 'BDM-VS0001', // Video Clip (V), SRSA Website (S)
     receivedAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Video Clip',
@@ -146,21 +170,30 @@ export const getTicketById = (id: string): Ticket | undefined => {
 };
 
 // Helper function to generate the next serial number
-const generateNextSerialNumber = (): string => {
-  const existingNumbers = tickets.map(t => {
-    const parts = t.serialNumber.split('-M');
-    return parts.length === 2 ? parseInt(parts[1], 10) : 0;
-  });
-  const maxNumber = existingNumbers.length > 0 ? Math.max(...existingNumbers) : 1000; // Start from 1001 if no tickets
-  const nextNumber = maxNumber >= 1000 ? maxNumber + 1 : 1001; // Ensure it starts from 1001
-  return `BDM-M${String(nextNumber).padStart(4, '0')}`;
+const generateNextSerialNumber = (material: MediaMaterial, plat: Platform): string => {
+  const materialCode = mediaMaterialToCode[material] || 'O';
+  const platformCode = platformToCode[plat] || 'O';
+  const prefix = `BDM-${materialCode}${platformCode}`;
+
+  const existingSerialsForPrefix = tickets
+    .filter(t => t.serialNumber.startsWith(prefix))
+    .map(t => {
+      const numericPart = t.serialNumber.substring(prefix.length);
+      return parseInt(numericPart, 10);
+    })
+    .filter(num => !isNaN(num));
+
+  const maxNumber = existingSerialsForPrefix.length > 0 ? Math.max(...existingSerialsForPrefix) : 0;
+  const nextNumber = maxNumber + 1;
+  
+  return `${prefix}${String(nextNumber).padStart(4, '0')}`;
 };
 
 
 export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'receivedAt' | 'status' | 'actionsLog'>): Ticket => {
   const newTicket: Ticket = {
-    id: String(tickets.length + 1 + Math.random()), // Ensure unique ID for new tickets
-    serialNumber: generateNextSerialNumber(), // Use the new generator
+    id: String(tickets.length + 1 + Math.random()), 
+    serialNumber: generateNextSerialNumber(ticketData.mediaMaterial, ticketData.platform), 
     receivedAt: new Date(),
     status: 'New',
     actionsLog: [],
@@ -173,14 +206,12 @@ export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'rece
     otherMediaMaterial: ticketData.mediaMaterial === 'Other' ? ticketData.otherMediaMaterial : null,
     otherPlatform: ticketData.platform === 'Other' ? ticketData.otherPlatform : null,
   };
-  tickets.unshift(newTicket); // Add to the beginning of the array
+  tickets.unshift(newTicket); 
   
-  // Deep clone and parse dates for the returned object
   const clonedNewTicket = JSON.parse(JSON.stringify(newTicket));
   return {
     ...clonedNewTicket,
     receivedAt: new Date(clonedNewTicket.receivedAt),
-     // Ensure optional date fields are handled correctly after stringify/parse
     startedProcessingAt: clonedNewTicket.startedProcessingAt ? new Date(clonedNewTicket.startedProcessingAt) : null,
     closedAt: clonedNewTicket.closedAt ? new Date(clonedNewTicket.closedAt) : null,
     actionsLog: clonedNewTicket.actionsLog.map((log: TicketAction) => ({...log, timestamp: new Date(log.timestamp)}))
@@ -191,7 +222,6 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
   const ticketIndex = tickets.findIndex(t => t.id === id);
   if (ticketIndex === -1) return undefined;
 
-  // Clone to avoid direct mutation if `tickets[ticketIndex]` is a reference to a complex object part
   const updatedTicket = { ...JSON.parse(JSON.stringify(tickets[ticketIndex])) };
   
   updatedTicket.status = status;
@@ -199,7 +229,7 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
   const actionLogEntry: TicketAction = {
     timestamp: new Date(),
     description: actionDescription || `Status updated to ${status}`,
-    user: 'System User' // Placeholder user
+    user: 'System User' 
   };
 
   if (status === 'Processing' && !updatedTicket.startedProcessingAt) {
@@ -213,7 +243,6 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
   updatedTicket.actionsLog = [...updatedTicket.actionsLog, actionLogEntry];
   tickets[ticketIndex] = updatedTicket;
   
-  // Parse dates for the returned object
   return {
     ...updatedTicket,
     receivedAt: new Date(updatedTicket.receivedAt),
@@ -233,12 +262,10 @@ export const addTicketAction = (id: string, description: string, user: string): 
     user,
   };
   
-  // Clone to avoid direct mutation issues if nested properties are involved
   const updatedTicket = { ...JSON.parse(JSON.stringify(tickets[ticketIndex])) };
   updatedTicket.actionsLog.push(newAction);
   tickets[ticketIndex] = updatedTicket;
   
-  // Parse dates for the returned object
   return {
     ...updatedTicket,
     receivedAt: new Date(updatedTicket.receivedAt),
@@ -253,8 +280,7 @@ export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => 
   if (processingTickets.length === 0) return 'N/A';
 
   const totalProcessingTime = processingTickets.reduce((sum, t) => {
-    if (t.startedProcessingAt) { // Ensure startedProcessingAt is not null
-      // Ensure receivedAt is a Date object
+    if (t.startedProcessingAt) { 
       const receivedAtTime = t.receivedAt instanceof Date ? t.receivedAt.getTime() : new Date(t.receivedAt).getTime();
       const startedProcessingAtTime = t.startedProcessingAt instanceof Date ? t.startedProcessingAt.getTime() : new Date(t.startedProcessingAt).getTime();
       return sum + (startedProcessingAtTime - receivedAtTime);
@@ -271,7 +297,7 @@ export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => 
   if (resolvedTickets.length === 0) return 'N/A';
   
   const totalResolutionTime = resolvedTickets.reduce((sum, t) => {
-    if (t.closedAt) { // Ensure closedAt is not null
+    if (t.closedAt) { 
         const receivedAtTime = t.receivedAt instanceof Date ? t.receivedAt.getTime() : new Date(t.receivedAt).getTime();
         const closedAtTime = t.closedAt instanceof Date ? t.closedAt.getTime() : new Date(t.closedAt).getTime();
         return sum + (closedAtTime - receivedAtTime);
@@ -301,7 +327,4 @@ const formatDuration = (ms: number): string => {
 // Initialize with some data for demonstration
 if (tickets.length === 0) {
   // This block is currently not hit due to pre-defined tickets array.
-  // addTicket({ mediaMaterial: 'Video Clip', platform: 'YouTube', issueLink: 'http://example.com/video', description: 'Sample video issue', reportedBy: 'Mock User 1' });
-  // addTicket({ mediaMaterial: 'Press Release', platform: 'News Site', issueLink: 'http://example.com/article', description: 'Sample article issue', reportedBy: 'Mock User 2' });
 }
-
