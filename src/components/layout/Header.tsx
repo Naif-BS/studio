@@ -15,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { LogOut, UserCircle, Settings } from 'lucide-react';
-// SidebarTrigger and useSidebar are removed as they are not used for a bottom navigation bar.
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -31,7 +30,6 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
-      {/* SidebarTrigger removed */}
       <div className="flex-1">
         <Link href="/dashboard" className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
           MediaScope
@@ -43,7 +41,11 @@ export default function Header() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar className="h-9 w-9">
-                <AvatarImage src={user.photoURL || undefined} alt={user.displayName || 'User'} data-ai-hint="profile avatar"/>
+                <AvatarImage 
+                  src={user.photoURL || undefined} 
+                  alt={user.displayName || 'User'} 
+                  data-ai-hint="profile avatar" // Added data-ai-hint
+                />
                 <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
               </Avatar>
             </Button>
