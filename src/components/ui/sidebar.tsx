@@ -22,16 +22,16 @@ import {
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH = "16rem"
-const SIDEBAR_WIDTH_MOBILE = "18rem"
-const SIDEBAR_WIDTH_ICON = "3rem"
+const SIDEBAR_WIDTH = "16rem" // Kept for context, but might not be used if only bottom bar
+const SIDEBAR_WIDTH_MOBILE = "18rem" // For potential future mobile sheet sidebar
+const SIDEBAR_WIDTH_ICON = "3rem" // Kept for context
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
-  state: "expanded" | "collapsed"
+  state: "expanded" | "collapsed" // May become less relevant for bottom bar
   open: boolean
   setOpen: (open: boolean) => void
-  openMobile: boolean
+  openMobile: boolean // Could be used for a drawer-style mobile menu if needed
   setOpenMobile: (open: boolean) => void
   isMobile: boolean
   toggleSidebar: () => void
@@ -71,8 +71,6 @@ const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
     const [_open, _setOpen] = React.useState(defaultOpen)
     const open = openProp ?? _open
     const setOpen = React.useCallback(
@@ -83,21 +81,19 @@ const SidebarProvider = React.forwardRef<
         } else {
           _setOpen(openState)
         }
-
-        // This sets the cookie to keep the sidebar state.
         document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
       },
       [setOpenProp, open]
     )
 
-    // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
+      // This toggle might be repurposed for a mobile menu drawer if needed
+      // For now, it primarily affects the 'open' state which is less used by bottom bar.
       return isMobile
-        ? setOpenMobile((open) => !open)
-        : setOpen((open) => !open)
+        ? setOpenMobile((current) => !current)
+        : setOpen((current) => !current)
     }, [isMobile, setOpen, setOpenMobile])
 
-    // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
@@ -108,13 +104,10 @@ const SidebarProvider = React.forwardRef<
           toggleSidebar()
         }
       }
-
       window.addEventListener("keydown", handleKeyDown)
       return () => window.removeEventListener("keydown", handleKeyDown)
     }, [toggleSidebar])
 
-    // We add a state so that we can do data-state="expanded" or "collapsed".
-    // This makes it easier to style the sidebar with Tailwind classes.
     const state = open ? "expanded" : "collapsed"
 
     const contextValue = React.useMemo<SidebarContext>(
@@ -142,7 +135,7 @@ const SidebarProvider = React.forwardRef<
               } as React.CSSProperties
             }
             className={cn(
-              "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
+              "group/sidebar-wrapper flex min-h-svh w-full", // Removed has-[[data-variant=inset]]:bg-sidebar
               className
             )}
             ref={ref}
@@ -157,6 +150,8 @@ const SidebarProvider = React.forwardRef<
 )
 SidebarProvider.displayName = "SidebarProvider"
 
+// The Sidebar component itself is no longer directly used by SidebarNav for the bottom bar.
+// It's kept here for potential other uses or if a vertical sidebar is reintroduced.
 const Sidebar = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & {
@@ -167,7 +162,7 @@ const Sidebar = React.forwardRef<
 >(
   (
     {
-      side = "left",
+      side = "left", // Default, but not primary for bottom bar
       variant = "sidebar",
       collapsible = "offcanvas",
       className,
@@ -178,22 +173,9 @@ const Sidebar = React.forwardRef<
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
-    if (collapsible === "none") {
-      return (
-        <div
-          className={cn(
-            "flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
-            className
-          )}
-          ref={ref}
-          {...props}
-        >
-          {children}
-        </div>
-      )
-    }
-
-    if (isMobile) {
+    // This logic is for a vertical sidebar.
+    // If you want a mobile drawer menu, this Sheet part can be used.
+    if (isMobile && collapsible !== "none") { // Example: use for a mobile drawer if SidebarTrigger is added back
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
@@ -212,17 +194,32 @@ const Sidebar = React.forwardRef<
         </Sheet>
       )
     }
+    
+    // Desktop vertical sidebar logic (less relevant now)
+    if (collapsible === "none") {
+       return (
+        <div
+          className={cn(
+            "hidden md:flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground", // hidden md:flex
+            className
+          )}
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </div>
+      )
+    }
 
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block text-sidebar-foreground"
+        className="group peer hidden md:block text-sidebar-foreground" // hidden md:block
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}
         data-side={side}
       >
-        {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
             "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
@@ -262,11 +259,19 @@ const Sidebar = React.forwardRef<
 )
 Sidebar.displayName = "Sidebar"
 
+
 const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, isMobile } = useSidebar();
+
+  // Only show trigger on mobile if we intend to use a drawer for mobile.
+  // If bottom bar is for mobile, this trigger might not be needed or be different.
+  if (!isMobile) {
+    // Could render a trigger for desktop vertical sidebar if that feature is ever re-enabled
+    // return null; // Or a trigger for desktop sidebar collapse/expand if still desired
+  }
 
   return (
     <Button
@@ -274,26 +279,26 @@ const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-7 w-7 md:hidden", className)} // Example: show only on mobile for a drawer
       onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
+        onClick?.(event);
+        toggleSidebar();
       }}
       {...props}
     >
       <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">Toggle Menu</span>
     </Button>
   )
 })
 SidebarTrigger.displayName = "SidebarTrigger"
 
+// SidebarRail is for vertical sidebars, less relevant for bottom bar.
 const SidebarRail = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button">
 >(({ className, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
-
   return (
     <button
       ref={ref}
@@ -317,6 +322,8 @@ const SidebarRail = React.forwardRef<
 })
 SidebarRail.displayName = "SidebarRail"
 
+// SidebarInset is now a simple container for header + main content.
+// In AppLayout, it's given flex-1 to grow and fill space above the bottom nav.
 const SidebarInset = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
@@ -325,20 +332,7 @@ const SidebarInset = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        // Base styles
-        "relative flex min-h-svh flex-1 flex-col bg-background transition-[margin] duration-300 ease-in-out",
-
-        // Styles for 'sidebar' variant (default variant) - LTR
-        "md:peer-data-[variant=sidebar]:peer-data-[side=left]:peer-data-[state=expanded]:ml-[var(--sidebar-width)]",
-        "md:peer-data-[variant=sidebar]:peer-data-[side=left]:peer-data-[state=collapsed]:peer-data-[collapsible=icon]:ml-[var(--sidebar-width-icon)]",
-
-        // Styles for 'inset' variant
-        "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))]",
-        "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
-        
-        // Styles for 'floating' variant (similar to inset regarding main content margins)
-        "peer-data-[variant=floating]:min-h-[calc(100svh-theme(spacing.4))]",
-        "md:peer-data-[variant=floating]:m-2 md:peer-data-[variant=floating]:rounded-xl",
+        "flex flex-col", // Basic structure; AppLayout controls its flex-grow and overflow
         className
       )}
       {...props}
@@ -346,6 +340,10 @@ const SidebarInset = React.forwardRef<
   )
 })
 SidebarInset.displayName = "SidebarInset"
+
+// The following components (SidebarInput, Header, Footer, etc.) are specific to the vertical sidebar structure.
+// They are less relevant if SidebarNav is completely custom for the bottom bar.
+// Kept for completeness of the original shadcn/ui sidebar structure.
 
 const SidebarInput = React.forwardRef<
   React.ElementRef<typeof Input>,
@@ -476,7 +474,6 @@ const SidebarGroupAction = React.forwardRef<
       data-sidebar="group-action"
       className={cn(
         "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-        // Increases the hit area of the button on mobile.
         "after:absolute after:-inset-2 after:md:hidden",
         "group-data-[collapsible=icon]:hidden",
         className
@@ -596,9 +593,9 @@ const SidebarMenuButton = React.forwardRef<
       <Tooltip>
         <TooltipTrigger asChild>{button}</TooltipTrigger>
         <TooltipContent
-          side="right"
+          side="right" // This might need to be 'top' for bottom bar items.
           align="center"
-          hidden={state !== "collapsed" || isMobile}
+          hidden={state !== "collapsed" || isMobile} // This logic is for vertical icon sidebar
           {...tooltip}
         />
       </Tooltip>
@@ -615,14 +612,12 @@ const SidebarMenuAction = React.forwardRef<
   }
 >(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button"
-
   return (
     <Comp
       ref={ref}
       data-sidebar="menu-action"
       className={cn(
         "absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0",
-        // Increases the hit area of the button on mobile.
         "after:absolute after:-inset-2 after:md:hidden",
         "peer-data-[size=sm]/menu-button:top-1",
         "peer-data-[size=default]/menu-button:top-1.5",
@@ -665,11 +660,9 @@ const SidebarMenuSkeleton = React.forwardRef<
     showIcon?: boolean
   }
 >(({ className, showIcon = false, ...props }, ref) => {
-  // Random width between 50 to 90%.
   const width = React.useMemo(() => {
     return `${Math.floor(Math.random() * 40) + 50}%`
   }, [])
-
   return (
     <div
       ref={ref}
@@ -729,7 +722,6 @@ const SidebarMenuSubButton = React.forwardRef<
   }
 >(({ asChild = false, size = "md", isActive, className, ...props }, ref) => {
   const Comp = asChild ? Slot : "a"
-
   return (
     <Comp
       ref={ref}

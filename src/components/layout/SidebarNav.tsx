@@ -5,22 +5,17 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { LayoutDashboard, BookText, HardHat, FilePlus } from 'lucide-react';
 import {
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarFooter,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  useSidebar,
-} from '@/components/ui/sidebar';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface NavItem {
   href: string;
-  label: string; 
+  label: string;
   icon: React.ElementType;
 }
 
@@ -33,49 +28,37 @@ const navItems: NavItem[] = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
-  const { open } = useSidebar();
 
   return (
-    <Sidebar
-      side="left" // Default to left
-      collapsible="icon">
-        <SidebarHeader className="flex items-center justify-between p-3">
-          <Link href="/dashboard" className={cn(
-            "text-xl font-semibold text-primary transition-opacity duration-300",
-            open ? "opacity-100" : "opacity-0 pointer-events-none"
-            )}>
-            MediaScope
-          </Link>
-        </SidebarHeader>
-      <SidebarContent>
-        <ScrollArea className="h-full">
-          <SidebarMenu>
-            {navItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <Link href={item.href} legacyBehavior passHref>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))}
-                    tooltip={{children: item.label, side: 'right'}}
-                    className="justify-start"
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-lg flex items-center z-40 md:hidden">
+      <TooltipProvider delayDuration={0}>
+        <ul className="flex justify-around items-center w-full h-full px-1">
+          {navItems.map((item) => (
+            <li key={item.href} className="flex-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex flex-col items-center justify-center h-full p-1 rounded-md text-xs font-medium transition-colors w-full",
+                      "hover:bg-accent hover:text-accent-foreground",
+                      (pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href)))
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    )}
                   >
-                    <a>
-                      <item.icon className="h-5 w-5" />
-                      <span className={cn(open ? "inline" : "sr-only")}>{item.label}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </Link>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </ScrollArea>
-      </SidebarContent>
-      <SidebarFooter className={cn(
-        "p-2 transition-opacity duration-300",
-         open ? "opacity-100" : "opacity-0 pointer-events-none h-0 overflow-hidden"
-        )}>
-        <p className="text-xs text-muted-foreground text-center">{`© ${new Date().getFullYear()} MediaScope`}</p>
-      </SidebarFooter>
-    </Sidebar>
+                    <item.icon className="h-5 w-5 mb-0.5" />
+                    <span className="truncate text-[10px]">{item.label}</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="mb-1">
+                  <p>{item.label}</p>
+                </TooltipContent>
+              </Tooltip>
+            </li>
+          ))}
+        </ul>
+      </TooltipProvider>
+    </nav>
   );
 }
