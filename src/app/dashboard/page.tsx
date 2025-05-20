@@ -4,13 +4,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
-import TicketDetailsCard from '@/components/tickets/TicketDetailsCard'; // Changed from Modal
+import TicketDetailsModal from '@/components/tickets/TicketDetailsModal'; // Use modal
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime } from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Info } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card } from '@/components/ui/card'; // For placeholder
 
 export default function DashboardPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -21,7 +20,8 @@ export default function DashboardPage() {
     platform: '',
     searchTerm: '',
   });
-  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null); // Changed from modalTicket
+  const [modalTicket, setModalTicket] = useState<Ticket | null>(null); // For modal
+  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -75,8 +75,10 @@ export default function DashboardPage() {
 
   const handleTicketRowClick = (ticketId: string) => {
     const ticket = tickets.find(t => t.id === ticketId);
-    setSelectedTicket(ticket || null);
-    // Removed navigation logic: router.push(`/operation-room?ticketId=${ticketId}`);
+    if (ticket) {
+      setModalTicket(ticket);
+      setIsModalOpen(true);
+    }
   };
 
   if (isLoading) {
@@ -88,19 +90,12 @@ export default function DashboardPage() {
           ))}
         </div>
         <Skeleton className="h-10 w-1/4 mb-4" />
-        <TicketFilters filters={filters} onFilterChange={setFilters} />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <div className="rounded-md border">
-              <Skeleton className="h-12 w-full" /> {/* Header */}
-              {[...Array(recentTicketsLimit)].map((_, i) => (
-                <Skeleton key={i} className="h-16 w-full border-t" /> 
-              ))}
-            </div>
-          </div>
-          <div className="lg:col-span-1">
-            <Skeleton className="h-[300px] w-full rounded-lg" /> {/* Placeholder for card */}
-          </div>
+        {/* TicketFilters skeleton - not strictly necessary as it's simple inputs */}
+        <div className="rounded-md border">
+            <Skeleton className="h-12 w-full" /> {/* Header */}
+            {[...Array(recentTicketsLimit)].map((_, i) => (
+            <Skeleton key={i} className="h-16 w-full border-t" /> 
+            ))}
         </div>
       </div>
     );
@@ -123,31 +118,23 @@ export default function DashboardPage() {
       <section>
         <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Tickets Activity</h2>
         <TicketFilters filters={filters} onFilterChange={setFilters} />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-4">
-          <div className="lg:col-span-2">
-            <TicketTable 
-                tickets={displayedTickets} 
-                isLoading={isLoading} 
-                onRowClick={handleTicketRowClick} 
-            />
-          </div>
-          <div className="lg:col-span-1">
-            {selectedTicket ? (
-              <TicketDetailsCard ticket={selectedTicket} />
-            ) : (
-              <Card className="h-full flex items-center justify-center min-h-[300px] bg-muted/20 border-dashed">
-                <div className="text-center text-muted-foreground p-6">
-                  <Info className="mx-auto h-12 w-12 mb-3" />
-                  <p className="text-lg">No ticket selected.</p>
-                  <p>Select a recent ticket to view its details.</p>
-                </div>
-              </Card>
-            )}
-          </div>
+        <div className="mt-4">
+          <TicketTable 
+              tickets={displayedTickets} 
+              isLoading={isLoading} 
+              onRowClick={handleTicketRowClick} 
+          />
         </div>
       </section>
+
+      {modalTicket && (
+        <TicketDetailsModal
+          ticket={modalTicket}
+          isOpen={isModalOpen}
+          onOpenChange={setIsModalOpen}
+        />
+      )}
     </div>
   );
 }
-
     
