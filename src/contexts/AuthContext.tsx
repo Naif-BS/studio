@@ -30,49 +30,69 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Simulate checking auth state from localStorage or a cookie
-    const storedUser = localStorage.getItem('mediaScopeUser');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    setIsLoading(true);
+    try {
+      const storedUser = localStorage.getItem('mediaScopeUser');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Failed to load user from localStorage:", error);
+      // Clear potentially corrupted stored data
+      localStorage.removeItem('mediaScopeUser');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   const login = async (email?: string, password?: string) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const mockUser: MockUser = {
-      uid: 'mock-user-123',
-      email: email || 'user@example.com',
-      displayName: email ? email.split('@')[0] : 'Mock User',
-      photoURL: `https://placehold.co/100x100.png?text=${(email ? email[0] : 'M').toUpperCase()}`,
-      // Required User properties from firebase/auth User type
-      emailVerified: true,
-      isAnonymous: false,
-      metadata: {},
-      providerData: [],
-      providerId: 'password', // or 'microsoft.com' for Outlook
-      refreshToken: 'mock-refresh-token',
-      tenantId: null,
-      delete: async () => {},
-      getIdToken: async () => 'mock-id-token',
-      getIdTokenResult: async () => ({ token: 'mock-id-token', claims: {}, expirationTime: '', issuedAtTime: '', signInProvider: null, signInSecondFactor: null}),
-      reload: async () => {},
-      toJSON: () => ({}),
-    };
-    setUser(mockUser);
-    localStorage.setItem('mediaScopeUser', JSON.stringify(mockUser));
-    setIsLoading(false);
-    router.push('/dashboard');
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      const mockUser: MockUser = {
+        uid: 'mock-user-123',
+        email: email || 'user@example.com',
+        displayName: email ? email.split('@')[0] : 'Mock User',
+        photoURL: `https://placehold.co/100x100.png?text=${(email ? email[0] : 'M').toUpperCase()}`,
+        // Required User properties from firebase/auth User type
+        emailVerified: true,
+        isAnonymous: false,
+        metadata: {},
+        providerData: [],
+        providerId: 'password', // or 'microsoft.com' for Outlook
+        refreshToken: 'mock-refresh-token',
+        tenantId: null,
+        delete: async () => {},
+        getIdToken: async () => 'mock-id-token',
+        getIdTokenResult: async () => ({ token: 'mock-id-token', claims: {}, expirationTime: '', issuedAtTime: '', signInProvider: null, signInSecondFactor: null}),
+        reload: async () => {},
+        toJSON: () => ({}),
+      };
+      setUser(mockUser);
+      localStorage.setItem('mediaScopeUser', JSON.stringify(mockUser));
+      router.push('/dashboard');
+    } catch (error) {
+      console.error("Login process failed:", error);
+      // In a real app, you might show a toast notification here
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 500));
-    setUser(null);
-    localStorage.removeItem('mediaScopeUser');
-    setIsLoading(false);
-    router.push('/login');
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setUser(null);
+      localStorage.removeItem('mediaScopeUser');
+      router.push('/login');
+    } catch (error) {
+      console.error("Logout process failed:", error);
+      // In a real app, you might show a toast notification here
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
