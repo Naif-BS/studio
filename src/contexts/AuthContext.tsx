@@ -29,17 +29,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // Simulate checking auth state from localStorage or a cookie
     setIsLoading(true);
     try {
-      const storedUser = localStorage.getItem('mediaScopeUser');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      const storedUserJson = localStorage.getItem('mediaScopeUser');
+      if (storedUserJson) {
+        let userObj = JSON.parse(storedUserJson) as MockUser | null;
+        if (userObj) {
+          // Ensure displayName is valid and non-empty
+          if (!userObj.displayName || userObj.displayName.trim() === '') {
+            userObj.displayName = (userObj.email ? userObj.email.split('@')[0].trim() : null) || 'User';
+          }
+          // Ensure photoURL is consistent with displayName
+          userObj.photoURL = `https://placehold.co/100x100.png?text=${(userObj.displayName[0] || 'U').toUpperCase()}`;
+          
+          // Optional: Update localStorage if changes were made to the loaded user object
+          // localStorage.setItem('mediaScopeUser', JSON.stringify(userObj));
+          
+          setUser(userObj);
+        } else {
+          setUser(null); 
+        }
       }
     } catch (error) {
       console.error("Failed to load user from localStorage:", error);
-      // Clear potentially corrupted stored data
       localStorage.removeItem('mediaScopeUser');
+      setUser(null); 
     } finally {
       setIsLoading(false);
     }
@@ -48,19 +62,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email?: string, password?: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const providedEmail = email || 'user@example.com';
+      const namePart = providedEmail.split('@')[0].trim();
+      const generatedDisplayName = namePart || 'User'; // Ensures displayName is never empty
+
       const mockUser: MockUser = {
         uid: 'mock-user-123',
-        email: email || 'user@example.com',
-        displayName: email ? email.split('@')[0] : 'Mock User',
-        photoURL: `https://placehold.co/100x100.png?text=${(email ? email[0] : 'M').toUpperCase()}`,
-        // Required User properties from firebase/auth User type
+        email: providedEmail,
+        displayName: generatedDisplayName,
+        photoURL: `https://placehold.co/100x100.png?text=${(generatedDisplayName[0] || 'U').toUpperCase()}`,
         emailVerified: true,
         isAnonymous: false,
         metadata: {},
         providerData: [],
-        providerId: 'password', // or 'microsoft.com' for Outlook
+        providerId: 'password', 
         refreshToken: 'mock-refresh-token',
         tenantId: null,
         delete: async () => {},
@@ -74,7 +91,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       router.push('/dashboard');
     } catch (error) {
       console.error("Login process failed:", error);
-      // In a real app, you might show a toast notification here
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +105,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       router.push('/login');
     } catch (error) {
       console.error("Logout process failed:", error);
-      // In a real app, you might show a toast notification here
     } finally {
       setIsLoading(false);
     }
