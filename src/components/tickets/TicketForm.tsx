@@ -15,14 +15,28 @@ import { mediaMaterialOptions, platformOptions } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import type { TranslationKey } from '@/lib/translations';
 
-// Helper function to get translation key for enum values
-const getEnumTranslationKey = (value: string, prefix: string): TranslationKey => {
-    const formattedValue = value.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/gi, '');
-    return `${prefix}.${formattedValue}` as TranslationKey;
-}
+// English display names for enums
+const mediaMaterialDisplay: Record<string, string> = {
+    'Video': 'Video',
+    'Article': 'Article',
+    'Social Media Post': 'Social Media Post',
+    'Image': 'Image',
+    'Audio': 'Audio',
+    'Other': 'Other',
+};
+
+const platformDisplay: Record<string, string> = {
+    'Facebook': 'Facebook',
+    'X (Twitter)': 'X (Twitter)',
+    'Instagram': 'Instagram',
+    'TikTok': 'TikTok',
+    'YouTube': 'YouTube',
+    'News Site': 'News Site',
+    'Blog': 'Blog',
+    'Forum': 'Forum',
+    'Other': 'Other',
+};
 
 const ticketFormSchema = z.object({
   mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
@@ -38,7 +52,7 @@ const ticketFormSchema = z.object({
   }
   return true;
 }, {
-  message: "Please specify the other media material.", // This message should also be translated if shown to user
+  message: "Please specify the other media material.",
   path: ["otherMediaMaterial"],
 }).refine(data => {
   if (data.platform === 'Other') {
@@ -46,7 +60,7 @@ const ticketFormSchema = z.object({
   }
   return true;
 }, {
-  message: "Please specify the other platform.", // This message should also be translated
+  message: "Please specify the other platform.",
   path: ["otherPlatform"],
 });
 
@@ -59,7 +73,6 @@ interface TicketFormProps {
 export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { dir, t } = useLanguage();
   const form = useForm<TicketFormValues>({
     resolver: zodResolver(ticketFormSchema),
     defaultValues: {
@@ -107,16 +120,16 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             name="mediaMaterial"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('ticketForm.mediaMaterialLabel')}</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} dir={dir}>
+                <FormLabel>Media Material</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t('ticketForm.selectMediaMaterialPlaceholder')} />
+                      <SelectValue placeholder="Select media material" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {mediaMaterialOptions.map(option => (
-                      <SelectItem key={option} value={option}>{t(getEnumTranslationKey(option, 'mediaMaterialOptions'))}</SelectItem>
+                      <SelectItem key={option} value={option}>{mediaMaterialDisplay[option] || option}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -131,9 +144,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
               name="otherMediaMaterial"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('ticketForm.specifyOtherMediaMaterialLabel')}</FormLabel>
+                  <FormLabel>Specify Other Media Material</FormLabel>
                   <FormControl>
-                    <Input placeholder={t('ticketForm.otherMediaPlaceholder')} {...field} />
+                    <Input placeholder="e.g., Podcast Series" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,16 +159,16 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             name="platform"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('ticketForm.platformLabel')}</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} dir={dir}>
+                <FormLabel>Platform of Observation</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t('ticketForm.selectPlatformPlaceholder')} />
+                      <SelectValue placeholder="Select platform" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {platformOptions.map(option => (
-                      <SelectItem key={option} value={option}>{t(getEnumTranslationKey(option, 'platformOptions'))}</SelectItem>
+                      <SelectItem key={option} value={option}>{platformDisplay[option] || option}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -169,9 +182,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
               name="otherPlatform"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('ticketForm.specifyOtherPlatformLabel')}</FormLabel>
+                  <FormLabel>Specify Other Platform</FormLabel>
                   <FormControl>
-                    <Input placeholder={t('ticketForm.otherPlatformPlaceholder')} {...field} />
+                    <Input placeholder="e.g., Specific App Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -185,9 +198,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="issueLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('ticketForm.issueLinkLabel')}</FormLabel>
+              <FormLabel>Link to Issue (Optional)</FormLabel>
               <FormControl>
-                <Input placeholder={t('ticketForm.issueLinkPlaceholder')} {...field} />
+                <Input placeholder="https://example.com/issue" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -199,9 +212,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="screenshotLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('ticketForm.screenshotLinkLabel')}</FormLabel>
+              <FormLabel>Screenshot Link (Optional)</FormLabel>
               <FormControl>
-                <Input placeholder={t('ticketForm.screenshotLinkPlaceholder')} {...field} data-ai-hint="screenshot link" />
+                <Input placeholder="https://example.com/screenshot.png" {...field} data-ai-hint="screenshot link" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -213,10 +226,10 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('ticketForm.descriptionLabel')}</FormLabel>
+              <FormLabel>Description of Incident</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t('ticketForm.descriptionPlaceholder')}
+                  placeholder="Provide a detailed description of the incident..."
                   className="min-h-[120px]"
                   {...field}
                 />
@@ -227,8 +240,8 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
         />
 
         <Button type="submit" className="w-full md:w-auto" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4 animate-spin`} />}
-          {t('ticketForm.submitButton')}
+          {isSubmitting && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
+          Submit Report
         </Button>
       </form>
     </Form>

@@ -10,7 +10,6 @@ import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionT
 import type { Ticket } from '@/types';
 import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function DashboardPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -22,7 +21,6 @@ export default function DashboardPage() {
     searchTerm: '',
   });
   const router = useRouter();
-  const { t } = useLanguage();
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -102,19 +100,19 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <section>
-        <h1 className="text-3xl font-bold tracking-tight mb-6">{t('dashboard.title')}</h1>
+        <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard Overview</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <StatCard title={t('totalTickets')} value={stats.total} icon={<FileText className="h-5 w-5" />} />
-          <StatCard title={t('newTickets')} value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} />
-          <StatCard title={t('processingTickets')} value={stats.processing} icon={<Hourglass className="h-5 w-5" />} />
-          <StatCard title={t('closedTickets')} value={stats.closed} icon={<ListChecks className="h-5 w-5" />} />
-          <StatCard title={t('avgProcessingTime')} value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description={t('avgProcessingTimeDesc')}/>
-          <StatCard title={t('avgResolutionTime')} value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description={t('avgResolutionTimeDesc')}/>
+          <StatCard title="Total Tickets" value={stats.total} icon={<FileText className="h-5 w-5" />} />
+          <StatCard title="New Tickets" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} />
+          <StatCard title="Processing Tickets" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} />
+          <StatCard title="Closed Tickets" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} />
+          <StatCard title="Avg. Processing Start Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="From receipt to start"/>
+          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="From receipt to close"/>
         </div>
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold tracking-tight mb-4">{t('dashboard.recentTicketsActivity')}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Tickets Activity</h2>
         <TicketFilters filters={filters} onFilterChange={setFilters} />
         <TicketTable 
             tickets={displayedTickets} 

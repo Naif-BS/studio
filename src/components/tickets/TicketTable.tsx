@@ -9,9 +9,7 @@ import { TicketStatusBadge } from './TicketStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Eye, Clock, Layers, RadioTower } from 'lucide-react';
 import { format } from 'date-fns';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { arSA, enUS } from 'date-fns/locale';
-import type { TranslationKey } from '@/lib/translations';
+import { enUS } from 'date-fns/locale'; // Default to English locale for dates
 
 interface TicketTableProps {
   tickets: Ticket[];
@@ -19,16 +17,31 @@ interface TicketTableProps {
   onRowClick?: (ticketId: string) => void;
 }
 
-// Helper function to get translation key for enum values
-const getEnumTranslationKey = (value: string, prefix: string): TranslationKey => {
-    const formattedValue = value.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/gi, '');
-    return `${prefix}.${formattedValue}` as TranslationKey;
-}
+// English display names for enums
+const mediaMaterialDisplay: Record<string, string> = {
+    'Video': 'Video',
+    'Article': 'Article',
+    'Social Media Post': 'Social Media Post',
+    'Image': 'Image',
+    'Audio': 'Audio',
+    'Other': 'Other',
+};
+
+const platformDisplay: Record<string, string> = {
+    'Facebook': 'Facebook',
+    'X (Twitter)': 'X (Twitter)',
+    'Instagram': 'Instagram',
+    'TikTok': 'TikTok',
+    'YouTube': 'YouTube',
+    'News Site': 'News Site',
+    'Blog': 'Blog',
+    'Forum': 'Forum',
+    'Other': 'Other',
+};
 
 
 export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTableProps) {
-  const { t, language, dir } = useLanguage();
-  const dateLocale = language === 'ar' ? arSA : enUS;
+  const dateLocale = enUS; // Default to English locale for dates
 
   if (isLoading) {
     return (
@@ -36,24 +49,24 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[120px]">{t('status')}</TableHead>
-              <TableHead>{t('description')}</TableHead>
+              <TableHead className="w-[120px]">Status</TableHead>
+              <TableHead>Description</TableHead>
               <TableHead className="w-[170px]">
                 <div className="flex items-center gap-1">
-                  <Layers className="h-4 w-4" /> {t('mediaMaterial')}
+                  <Layers className="h-4 w-4" /> Media Material
                 </div>
               </TableHead>
               <TableHead className="w-[170px]">
                 <div className="flex items-center gap-1">
-                  <RadioTower className="h-4 w-4" /> {t('platform')}
+                  <RadioTower className="h-4 w-4" /> Platform
                 </div>
               </TableHead>
               <TableHead className="w-[180px]">
                 <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" /> {t('received')}
+                  <Clock className="h-4 w-4" /> Received
                 </div>
               </TableHead>
-              <TableHead className="ltr:text-right rtl:text-left w-[100px]">{t('actions')}</TableHead>
+              <TableHead className="text-right w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,7 +77,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
-                <TableCell className="ltr:text-right rtl:text-left"><div className="h-8 w-20 bg-muted rounded animate-pulse ltr:ml-auto rtl:mr-auto"></div></TableCell>
+                <TableCell className="text-right"><div className="h-8 w-20 bg-muted rounded animate-pulse ml-auto"></div></TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -76,8 +89,8 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
   if (tickets.length === 0) {
     return (
       <div className="text-center py-10 border rounded-md bg-card">
-        <p className="text-lg text-muted-foreground">{t('noTicketsFound')}</p>
-        <p className="text-sm text-muted-foreground">{t('noTicketsFoundDesc')}</p>
+        <p className="text-lg text-muted-foreground">No tickets found.</p>
+        <p className="text-sm text-muted-foreground">There are no tickets matching the current criteria.</p>
       </div>
     );
   }
@@ -87,24 +100,24 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[120px]">{t('status')}</TableHead>
-            <TableHead>{t('description')}</TableHead>
+            <TableHead className="w-[120px]">Status</TableHead>
+            <TableHead>Description</TableHead>
             <TableHead className="w-[170px]">
               <div className="flex items-center gap-1">
-                <Layers className="h-4 w-4" /> {t('mediaMaterial')}
+                <Layers className="h-4 w-4" /> Media Material
               </div>
             </TableHead>
             <TableHead className="w-[170px]">
               <div className="flex items-center gap-1">
-                <RadioTower className="h-4 w-4" /> {t('platform')}
+                <RadioTower className="h-4 w-4" /> Platform
               </div>
             </TableHead>
             <TableHead className="w-[180px]">
               <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" /> {t('received')}
+                <Clock className="h-4 w-4" /> Received
               </div>
             </TableHead>
-            <TableHead className="ltr:text-right rtl:text-left w-[100px]">{t('actions')}</TableHead>
+            <TableHead className="text-right w-[100px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -116,13 +129,13 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
             >
               <TableCell><TicketStatusBadge status={ticket.status} /></TableCell>
               <TableCell className="truncate max-w-sm" title={ticket.description}>{ticket.description}</TableCell>
-              <TableCell>{ticket.mediaMaterial === 'Other' ? ticket.otherMediaMaterial : t(getEnumTranslationKey(ticket.mediaMaterial, 'mediaMaterialOptions'))}</TableCell>
-              <TableCell>{ticket.platform === 'Other' ? ticket.otherPlatform : t(getEnumTranslationKey(ticket.platform, 'platformOptions'))}</TableCell>
+              <TableCell>{ticket.mediaMaterial === 'Other' ? ticket.otherMediaMaterial : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}</TableCell>
+              <TableCell>{ticket.platform === 'Other' ? ticket.otherPlatform : platformDisplay[ticket.platform] || ticket.platform}</TableCell>
               <TableCell>{format(new Date(ticket.receivedAt), 'PPp', { locale: dateLocale })}</TableCell>
-              <TableCell className="ltr:text-right rtl:text-left">
+              <TableCell className="text-right">
                 <Button variant="outline" size="sm" asChild onClick={(e) => e.stopPropagation()}>
                   <Link href={`/operation-room?ticketId=${ticket.id}`}>
-                    <Eye className={dir === 'rtl' ? 'md:ms-2 h-4 w-4' : 'md:me-2 h-4 w-4'} /> <span className="hidden md:inline">{t('view')}</span>
+                    <Eye className="md:me-2 h-4 w-4" /> <span className="hidden md:inline">View</span>
                   </Link>
                 </Button>
               </TableCell>

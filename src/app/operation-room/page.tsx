@@ -10,10 +10,8 @@ import type { Ticket, TicketStatus } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSearchParams, useRouter } from 'next/navigation';
-// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"; // Alert seems unused
 import { Card } from "@/components/ui/card";
 import { Info } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function OperationRoomPage() {
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
@@ -24,7 +22,6 @@ export default function OperationRoomPage() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { t } = useLanguage();
 
   const [filters, setFilters] = useState<TicketFiltersState>({
     status: 'New', 
@@ -47,7 +44,6 @@ export default function OperationRoomPage() {
     setIsLoading(false);
   }, [searchParams]);
 
-
   useEffect(() => {
     loadTickets();
   }, [loadTickets]);
@@ -67,7 +63,7 @@ export default function OperationRoomPage() {
       if (selectedTicket?.id === ticketId) {
         setSelectedTicket(updatedTicket);
       }
-      toast({ title: t('status') + ' ' + t('ticketStatus.' + status.toLowerCase() as any), description: `Ticket ${updatedTicket.serialNumber} status changed to ${status}.` });
+      toast({ title: `Status ${status}`, description: `Ticket ${updatedTicket.serialNumber} status changed to ${status}.` });
     } else {
       toast({ title: 'Error', description: 'Failed to update ticket status.', variant: 'destructive' });
     }
@@ -83,7 +79,7 @@ export default function OperationRoomPage() {
       if (selectedTicket?.id === ticketId) {
         setSelectedTicket(updatedTicket);
       }
-      toast({ title: t('actions') + ' Logged', description: 'New action added to ticket log.' });
+      toast({ title: 'Action Logged', description: 'New action added to ticket log.' });
     } else {
       toast({ title: 'Error', description: 'Failed to log action.', variant: 'destructive' });
     }
@@ -113,23 +109,22 @@ export default function OperationRoomPage() {
       });
   }, [allTickets, filters]);
 
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-        <h1 className="text-3xl font-bold tracking-tight">{t('operationRoom.title')}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Operation Room</h1>
       </div>
       
       <TicketFilters filters={filters} onFilterChange={setFilters} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-           <h2 className="text-xl font-semibold mb-3">{t('operationRoom.ticketsQueue')}</h2>
+           <h2 className="text-xl font-semibold mb-3">Tickets Queue</h2>
           <TicketTable tickets={displayedTickets} isLoading={isLoading} onRowClick={handleSelectTicket} />
         </div>
         
         <div className="lg:col-span-1">
-          <h2 className="text-xl font-semibold mb-3">{t('operationRoom.ticketDetails')}</h2>
+          <h2 className="text-xl font-semibold mb-3">Ticket Details</h2>
           {selectedTicket ? (
             <TicketDetailsCard
               ticket={selectedTicket}
@@ -141,8 +136,8 @@ export default function OperationRoomPage() {
             <Card className="h-full flex items-center justify-center min-h-[300px] bg-muted/20 border-dashed">
               <div className="text-center text-muted-foreground p-6">
                 <Info className="mx-auto h-12 w-12 mb-3" />
-                <p className="text-lg">{t('operationRoom.noTicketSelected')}</p>
-                <p>{t('operationRoom.noTicketSelectedDesc')}</p>
+                <p className="text-lg">No ticket selected.</p>
+                <p>Please select a ticket from the list to view its details and take action.</p>
               </div>
             </Card>
           )}

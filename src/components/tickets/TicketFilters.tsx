@@ -9,8 +9,6 @@ import { Label } from '@/components/ui/label';
 import type { TicketStatus, MediaMaterial, Platform } from '@/types';
 import { ticketStatusOptions, mediaMaterialOptions, platformOptions } from '@/types';
 import { FilterX } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import type { TranslationKey } from '@/lib/translations';
 
 export interface TicketFiltersState {
   status?: TicketStatus | '';
@@ -27,15 +25,36 @@ interface TicketFiltersProps {
 
 const ALL_ITEMS_VALUE = "__ALL__";
 
-// Helper function to get translation key for enum values (like 'Social Media Post' -> 'socialMediaPost')
-const getEnumTranslationKey = (value: string, prefix: string): TranslationKey => {
-    const formattedValue = value.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/gi, ''); // Basic normalization
-    return `${prefix}.${formattedValue}` as TranslationKey;
-}
+// English display names for enums
+const ticketStatusDisplay: Record<string, string> = {
+    'New': 'New',
+    'Processing': 'Processing',
+    'Closed': 'Closed',
+};
+
+const mediaMaterialDisplay: Record<string, string> = {
+    'Video': 'Video',
+    'Article': 'Article',
+    'Social Media Post': 'Social Media Post',
+    'Image': 'Image',
+    'Audio': 'Audio',
+    'Other': 'Other',
+};
+
+const platformDisplay: Record<string, string> = {
+    'Facebook': 'Facebook',
+    'X (Twitter)': 'X (Twitter)',
+    'Instagram': 'Instagram',
+    'TikTok': 'TikTok',
+    'YouTube': 'YouTube',
+    'News Site': 'News Site',
+    'Blog': 'Blog',
+    'Forum': 'Forum',
+    'Other': 'Other',
+};
 
 
 export default function TicketFilters({ filters, onFilterChange, showSearch = true }: TicketFiltersProps) {
-  const { dir, t } = useLanguage();
   const handleStatusChange = (value: string) => {
     onFilterChange({ ...filters, status: value === ALL_ITEMS_VALUE ? '' : value as TicketStatus | '' });
   };
@@ -63,10 +82,10 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-end">
         {showSearch && (
           <div className="space-y-1.5">
-            <Label htmlFor="search-tickets">{t('search')}</Label>
+            <Label htmlFor="search-tickets">Search</Label>
             <Input
               id="search-tickets"
-              placeholder={t('searchByKeyword')}
+              placeholder="Search by keyword, ID..."
               value={filters.searchTerm || ''}
               onChange={handleSearchTermChange}
             />
@@ -74,45 +93,45 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         )}
         
         <div className="space-y-1.5">
-          <Label htmlFor="filter-status">{t('status')}</Label>
-          <Select value={filters.status || ALL_ITEMS_VALUE} onValueChange={handleStatusChange} dir={dir}>
+          <Label htmlFor="filter-status">Status</Label>
+          <Select value={filters.status || ALL_ITEMS_VALUE} onValueChange={handleStatusChange}>
             <SelectTrigger id="filter-status">
-              <SelectValue placeholder={t('anyStatus')} />
+              <SelectValue placeholder="Any Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL_ITEMS_VALUE} key="all-statuses">{t('anyStatus')}</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-statuses">Any Status</SelectItem>
               {ticketStatusOptions.map(option => (
-                <SelectItem key={option} value={option}>{t(`ticketStatus.${option.toLowerCase()}` as any)}</SelectItem>
+                <SelectItem key={option} value={option}>{ticketStatusDisplay[option] || option}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="filter-media-material">{t('mediaMaterial')}</Label>
-          <Select value={filters.mediaMaterial || ALL_ITEMS_VALUE} onValueChange={handleMediaMaterialChange} dir={dir}>
+          <Label htmlFor="filter-media-material">Media Material</Label>
+          <Select value={filters.mediaMaterial || ALL_ITEMS_VALUE} onValueChange={handleMediaMaterialChange}>
             <SelectTrigger id="filter-media-material">
-              <SelectValue placeholder={t('anyMaterial')} />
+              <SelectValue placeholder="Any Material" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL_ITEMS_VALUE} key="all-materials">{t('anyMaterial')}</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-materials">Any Material</SelectItem>
               {mediaMaterialOptions.map(option => (
-                <SelectItem key={option} value={option}>{t(getEnumTranslationKey(option, 'mediaMaterialOptions'))}</SelectItem>
+                <SelectItem key={option} value={option}>{mediaMaterialDisplay[option] || option}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="filter-platform">{t('platform')}</Label>
-          <Select value={filters.platform || ALL_ITEMS_VALUE} onValueChange={handlePlatformChange} dir={dir}>
+          <Label htmlFor="filter-platform">Platform</Label>
+          <Select value={filters.platform || ALL_ITEMS_VALUE} onValueChange={handlePlatformChange}>
             <SelectTrigger id="filter-platform">
-              <SelectValue placeholder={t('anyPlatform')} />
+              <SelectValue placeholder="Any Platform" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={ALL_ITEMS_VALUE} key="all-platforms">{t('anyPlatform')}</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-platforms">Any Platform</SelectItem>
               {platformOptions.map(option => (
-                <SelectItem key={option} value={option}>{t(getEnumTranslationKey(option, 'platformOptions'))}</SelectItem>
+                <SelectItem key={option} value={option}>{platformDisplay[option] || option}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -121,7 +140,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         {hasActiveFilters && (
           <div className="md:col-start-auto xl:col-start-auto pt-2 md:pt-0 flex items-end">
             <Button variant="ghost" onClick={clearFilters} className="w-full md:w-auto">
-              <FilterX className={dir === 'rtl' ? 'ms-2' : 'me-2' + " h-4 w-4"} /> {t('clearFilters')}
+              <FilterX className="me-2 h-4 w-4" /> Clear Filters
             </Button>
           </div>
         )}
