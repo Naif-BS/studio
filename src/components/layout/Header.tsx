@@ -14,12 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, UserCircle, Settings, ChevronsLeftRight, ShieldCheck } from 'lucide-react';
-import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'; // Assuming SidebarTrigger exists for mobile
+import { LogOut, UserCircle, Settings, Languages } from 'lucide-react'; // Added Languages icon
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
+import { useLanguage } from '@/contexts/LanguageContext'; // Added import
 
 export default function Header() {
   const { user, logout } = useAuth();
-  const { isMobile } = useSidebar(); // From shadcn/ui sidebar context
+  const { isMobile } = useSidebar(); 
+  const { language, toggleLanguage, dir } = useLanguage(); // Added language context
 
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
@@ -31,13 +33,19 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex rtl:flex-row-reverse h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
+    <header className={`sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6 ${dir === 'rtl' ? 'flex-row-reverse' : ''}`}>
        {isMobile && <SidebarTrigger />}
       <div className="flex-1">
         <Link href="/dashboard" className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
           MediaScope
         </Link>
       </div>
+      
+      <Button variant="outline" size="icon" onClick={toggleLanguage} title="Toggle Language">
+        <Languages className="h-5 w-5" />
+        <span className="sr-only">Toggle Language ({language === 'en' ? 'Switch to Arabic' : 'Switch to English'})</span>
+      </Button>
+
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -59,16 +67,16 @@ export default function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <UserCircle className="me-2 h-4 w-4" />
+              <UserCircle className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4`} />
               <span>Profile</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Settings className="me-2 h-4 w-4" />
+              <Settings className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4`} />
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
-              <LogOut className="me-2 h-4 w-4" />
+              <LogOut className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4`} />
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

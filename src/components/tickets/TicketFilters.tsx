@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import type { TicketStatus, MediaMaterial, Platform } from '@/types';
 import { ticketStatusOptions, mediaMaterialOptions, platformOptions } from '@/types';
 import { FilterX } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export interface TicketFiltersState {
   status?: TicketStatus | '';
@@ -23,9 +24,10 @@ interface TicketFiltersProps {
   showSearch?: boolean;
 }
 
-const ALL_ITEMS_VALUE = "__ALL__"; // Define a non-empty constant for "any" selection
+const ALL_ITEMS_VALUE = "__ALL__";
 
 export default function TicketFilters({ filters, onFilterChange, showSearch = true }: TicketFiltersProps) {
+  const { dir } = useLanguage();
   const handleStatusChange = (value: string) => {
     onFilterChange({ ...filters, status: value === ALL_ITEMS_VALUE ? '' : value as TicketStatus | '' });
   };
@@ -65,7 +67,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         
         <div className="space-y-1.5">
           <Label htmlFor="filter-status">Status</Label>
-          <Select value={filters.status || ALL_ITEMS_VALUE} onValueChange={handleStatusChange}>
+          <Select value={filters.status || ALL_ITEMS_VALUE} onValueChange={handleStatusChange} dir={dir}>
             <SelectTrigger id="filter-status">
               <SelectValue placeholder="Any Status" />
             </SelectTrigger>
@@ -80,7 +82,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
 
         <div className="space-y-1.5">
           <Label htmlFor="filter-media-material">Media Material</Label>
-          <Select value={filters.mediaMaterial || ALL_ITEMS_VALUE} onValueChange={handleMediaMaterialChange}>
+          <Select value={filters.mediaMaterial || ALL_ITEMS_VALUE} onValueChange={handleMediaMaterialChange} dir={dir}>
             <SelectTrigger id="filter-media-material">
               <SelectValue placeholder="Any Material" />
             </SelectTrigger>
@@ -95,7 +97,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
 
         <div className="space-y-1.5">
           <Label htmlFor="filter-platform">Platform</Label>
-          <Select value={filters.platform || ALL_ITEMS_VALUE} onValueChange={handlePlatformChange}>
+          <Select value={filters.platform || ALL_ITEMS_VALUE} onValueChange={handlePlatformChange} dir={dir}>
             <SelectTrigger id="filter-platform">
               <SelectValue placeholder="Any Platform" />
             </SelectTrigger>
@@ -111,7 +113,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         {hasActiveFilters && (
           <div className="md:col-start-auto xl:col-start-auto pt-2 md:pt-0 flex items-end">
             <Button variant="ghost" onClick={clearFilters} className="w-full md:w-auto">
-              <FilterX className="me-2 h-4 w-4" /> Clear Filters
+              <FilterX className={dir === 'rtl' ? 'ms-2' : 'me-2' + " h-4 w-4"} /> Clear Filters
             </Button>
           </div>
         )}

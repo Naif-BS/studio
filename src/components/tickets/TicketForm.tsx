@@ -15,6 +15,7 @@ import { mediaMaterialOptions, platformOptions } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ticketFormSchema = z.object({
   mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
@@ -51,6 +52,7 @@ interface TicketFormProps {
 export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { dir } = useLanguage();
   const form = useForm<TicketFormValues>({
     resolver: zodResolver(ticketFormSchema),
     defaultValues: {
@@ -75,13 +77,15 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
       return;
     }
     
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000)); 
     
     const submissionData: TicketFormValues = {
         ...data,
-        otherMediaMaterial: data.mediaMaterial === 'Other' ? data.otherMediaMaterial : undefined,
-        otherPlatform: data.platform === 'Other' ? data.otherPlatform : undefined,
+        // Ensure 'other' fields are properly set or cleared based on selection
+        mediaMaterial: data.mediaMaterial,
+        otherMediaMaterial: data.mediaMaterial === 'Other' ? data.otherMediaMaterial : '',
+        platform: data.platform,
+        otherPlatform: data.platform === 'Other' ? data.otherPlatform : '',
     };
 
     onSubmitSuccess(submissionData);
@@ -98,7 +102,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Media Material</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value} dir={dir}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select media material" />
@@ -137,7 +141,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Platform of Observation</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} defaultValue={field.value} dir={dir}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select platform" />
@@ -217,7 +221,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
         />
 
         <Button type="submit" className="w-full md:w-auto" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
+          {isSubmitting && <Loader2 className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4 animate-spin`} />}
           Submit Report
         </Button>
       </form>

@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { ticketStatusOptions } from '@/types';
 import { Separator } from '../ui/separator';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface TicketDetailsCardProps {
   ticket: Ticket;
@@ -24,6 +25,7 @@ interface TicketDetailsCardProps {
 
 export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction, isUpdating }: TicketDetailsCardProps) {
   const { user } = useAuth();
+  const { dir } = useLanguage();
   const [newActionText, setNewActionText] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<TicketStatus>(ticket.status);
 
@@ -50,7 +52,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           <TicketStatusBadge status={ticket.status} className="px-3 py-1.5 text-sm" />
         </div>
         <CardDescription className="text-sm text-muted-foreground flex items-center pt-1">
-          <Clock className="h-4 w-4 me-1.5" />
+          <Clock className={`h-4 w-4 ${dir === 'rtl' ? 'ms-1.5' : 'me-1.5'}`} />
           Received: {format(new Date(ticket.receivedAt), 'PPp')} by {ticket.reportedBy}
         </CardDescription>
       </CardHeader>
@@ -59,11 +61,11 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           <h3 className="font-semibold text-md mb-1">Incident Details</h3>
           <p className="text-sm text-foreground/90">{ticket.description}</p>
           <div className="mt-2 space-y-1 text-sm text-muted-foreground">
-            <p><strong>Media Material:</strong> {ticket.mediaMaterial}</p>
-            <p><strong>Platform:</strong> {ticket.platform}</p>
+            <p><strong>Media Material:</strong> {ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial ? ticket.otherMediaMaterial : ticket.mediaMaterial}</p>
+            <p><strong>Platform:</strong> {ticket.platform === 'Other' && ticket.otherPlatform ? ticket.otherPlatform : ticket.platform}</p>
             {ticket.issueLink && (
               <p className="flex items-center">
-                <LinkIcon className="h-4 w-4 me-1.5" />
+                <LinkIcon className={`h-4 w-4 ${dir === 'rtl' ? 'ms-1.5' : 'me-1.5'}`} />
                 <strong>Issue Link:</strong>&nbsp;
                 <a href={ticket.issueLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
                   {ticket.issueLink}
@@ -72,7 +74,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
             )}
             {ticket.screenshotLink && (
               <p className="flex items-center">
-                <ImageIcon className="h-4 w-4 me-1.5" />
+                <ImageIcon className={`h-4 w-4 ${dir === 'rtl' ? 'ms-1.5' : 'me-1.5'}`} />
                 <strong>Screenshot:</strong>&nbsp;
                 <a href={ticket.screenshotLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
                   View Screenshot
@@ -85,15 +87,15 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
         <Separator />
 
         <div>
-          <h3 className="font-semibold text-md mb-2 flex items-center"><Workflow className="h-5 w-5 me-2 text-primary" />Actions Log</h3>
+          <h3 className="font-semibold text-md mb-2 flex items-center"><Workflow className={`h-5 w-5 ${dir === 'rtl' ? 'ms-2' : 'me-2'} text-primary`} />Actions Log</h3>
           {ticket.actionsLog.length > 0 ? (
             <ScrollArea className="h-40 border rounded-md p-3 bg-muted/30">
               <ul className="space-y-3">
                 {ticket.actionsLog.slice().reverse().map((action, index) => (
                   <li key={index} className="text-sm">
                     <div className="flex justify-between items-center text-xs text-muted-foreground mb-0.5">
-                      <span className="flex items-center"><User className="h-3 w-3 me-1" />{action.user}</span>
-                      <span className="flex items-center"><Clock className="h-3 w-3 me-1" />{format(new Date(action.timestamp), 'MMM d, yyyy h:mm a')}</span>
+                      <span className="flex items-center"><User className={`h-3 w-3 ${dir === 'rtl' ? 'ms-1' : 'me-1'}`} />{action.user}</span>
+                      <span className="flex items-center"><Clock className={`h-3 w-3 ${dir === 'rtl' ? 'ms-1' : 'me-1'}`} />{format(new Date(action.timestamp), 'MMM d, yyyy h:mm a')}</span>
                     </div>
                     <p className="text-foreground/90">{action.description}</p>
                   </li>
@@ -109,11 +111,11 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
             <>
             <Separator />
             <div className="space-y-3">
-              <h3 className="font-semibold text-md flex items-center"><Edit3 className="h-5 w-5 me-2 text-primary"/>Update Ticket</h3>
+              <h3 className="font-semibold text-md flex items-center"><Edit3 className={`h-5 w-5 ${dir === 'rtl' ? 'ms-2' : 'me-2'} text-primary`}/>Update Ticket</h3>
               <div className="flex flex-col sm:flex-row gap-4 items-end">
                   <div className="flex-grow space-y-1.5 w-full sm:w-auto">
                       <label htmlFor="status-select" className="text-sm font-medium text-muted-foreground">Change Status</label>
-                      <Select value={selectedStatus} onValueChange={(value) => setSelectedStatus(value as TicketStatus)} disabled={isUpdating || !canUpdateStatus}>
+                      <Select value={selectedStatus} onValueChange={(value) => setSelectedStatus(value as TicketStatus)} disabled={isUpdating || !canUpdateStatus} dir={dir}>
                           <SelectTrigger id="status-select">
                               <SelectValue placeholder="Select status" />
                           </SelectTrigger>
@@ -143,7 +145,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
                 />
               </div>
               <Button onClick={handleAddAction} disabled={!newActionText.trim() || isUpdating || !canUpdateStatus}>
-                <Send className="h-4 w-4 me-2" /> Add Action to Log
+                <Send className={`h-4 w-4 ${dir === 'rtl' ? 'ms-2' : 'me-2'}`} /> Add Action to Log
               </Button>
             </div>
             </>

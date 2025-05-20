@@ -19,6 +19,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 
 interface NavItem {
@@ -36,11 +37,12 @@ const navItems: NavItem[] = [
 
 export default function SidebarNav() {
   const pathname = usePathname();
-  const { open, toggleSidebar } = useSidebar();
+  const { open } = useSidebar();
+  const { dir } = useLanguage();
 
 
   return (
-    <Sidebar className="ltr:border-r rtl:border-l" collapsible="icon">
+    <Sidebar className={cn(dir === 'rtl' ? "rtl:border-l ltr:border-r-0" : "ltr:border-r rtl:border-l-0")} collapsible="icon">
         <SidebarHeader className="flex items-center justify-between p-3">
           <Link href="/dashboard" className={cn(
             "text-xl font-semibold text-primary transition-opacity duration-300",
@@ -48,7 +50,6 @@ export default function SidebarNav() {
             )}>
             MediaScope
           </Link>
-          {/* Sidebar trigger for desktop, if needed, or style the existing one */}
         </SidebarHeader>
       <SidebarContent>
         <ScrollArea className="h-full">
@@ -59,7 +60,7 @@ export default function SidebarNav() {
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))}
-                    tooltip={{children: item.label}}
+                    tooltip={{children: item.label, side: dir === 'rtl' ? 'left' : 'right'}}
                     className="justify-start"
                   >
                     <a>
@@ -77,7 +78,6 @@ export default function SidebarNav() {
         "p-2 transition-opacity duration-300",
          open ? "opacity-100" : "opacity-0 pointer-events-none h-0 overflow-hidden"
         )}>
-        {/* Footer content if any */}
         <p className="text-xs text-muted-foreground text-center">&copy; {new Date().getFullYear()} MediaScope</p>
       </SidebarFooter>
     </Sidebar>
