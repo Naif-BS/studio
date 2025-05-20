@@ -4,12 +4,12 @@ import type { Ticket, TicketStatus, MediaMaterial, Platform, TicketAction } from
 let tickets: Ticket[] = [
   {
     id: '1',
-    serialNumber: `MS-${Date.now() - 5 * 24 * 60 * 60 * 1000}-A1B2C`,
+    serialNumber: 'MS-A1B2C',
     receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // 4 days ago
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     status: 'Closed',
-    mediaMaterial: 'Video Clip', // Updated
+    mediaMaterial: 'Video Clip',
     platform: 'International Media Channel/Platform',
     issueLink: 'https://youtube.com/example_video_1',
     description: 'Misleading content in a viral video.',
@@ -21,11 +21,11 @@ let tickets: Ticket[] = [
   },
   {
     id: '2',
-    serialNumber: `MS-${Date.now() - 3 * 24 * 60 * 60 * 1000}-D3E4F`,
+    serialNumber: 'MS-D3E4F',
     receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     status: 'Processing',
-    mediaMaterial: 'Press Release', // Updated
+    mediaMaterial: 'Press Release',
     platform: 'Local Media Channel/Platform',
     issueLink: 'https://news.com/example_article_1',
     description: 'Hate speech found in comments section.',
@@ -37,10 +37,10 @@ let tickets: Ticket[] = [
   },
   {
     id: '3',
-    serialNumber: `MS-${Date.now() - 1 * 24 * 60 * 60 * 1000}-G5H6I`,
+    serialNumber: 'MS-G5H6I',
     receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
     status: 'New',
-    mediaMaterial: 'Infographic', // Updated
+    mediaMaterial: 'Infographic',
     platform: 'SRSA Account on Platform X',
     issueLink: 'https://x.com/example_post_1',
     description: 'Fake news spreading rapidly.',
@@ -49,10 +49,10 @@ let tickets: Ticket[] = [
   },
   {
     id: '4',
-    serialNumber: `MS-${Date.now() - 12 * 60 * 60 * 1000}-J7K8L`,
+    serialNumber: 'MS-J7K8L',
     receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
     status: 'New',
-    mediaMaterial: 'Image', // No change needed
+    mediaMaterial: 'Image',
     platform: 'SRSA Account on Instagram',
     screenshotLink: 'https://placehold.co/600x400.png',
     description: 'Copyright infringement on an image.',
@@ -61,12 +61,12 @@ let tickets: Ticket[] = [
   },
    {
     id: '5',
-    serialNumber: `MS-${Date.now() - 6 * 24 * 60 * 60 * 1000}-M9N0O`,
+    serialNumber: 'MS-M9N0O',
     receivedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
     startedProcessingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
     closedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
     status: 'Closed',
-    mediaMaterial: 'Audio Clip', // Updated
+    mediaMaterial: 'Audio Clip',
     platform: 'SRSA Account on TikTok',
     issueLink: 'https://tiktok.com/example_audio_1',
     description: 'Unauthorized use of copyrighted music.',
@@ -78,10 +78,10 @@ let tickets: Ticket[] = [
   },
   {
     id: '6',
-    serialNumber: `MS-${Date.now() - 2 * 60 * 60 * 1000}-P1Q2R`,
+    serialNumber: 'MS-P1Q2R',
     receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     status: 'New',
-    mediaMaterial: 'Other', // No change needed
+    mediaMaterial: 'Other',
     otherMediaMaterial: 'Live Stream Segment',
     platform: 'Other',
     otherPlatform: 'Twitch',
@@ -92,12 +92,12 @@ let tickets: Ticket[] = [
   },
   {
     id: '7',
-    serialNumber: `MS-${Date.now() - 8 * 24 * 60 * 60 * 1000}-S3T4U`,
+    serialNumber: 'MS-S3T4U',
     receivedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
     status: 'Closed',
-    mediaMaterial: 'Legal Document', // Updated
+    mediaMaterial: 'Legal Document',
     platform: 'Umm Al-Qura Newspaper',
     issueLink: 'https://example-umm-al-qura.com/article_123',
     description: 'Official announcement clarification needed.',
@@ -109,10 +109,10 @@ let tickets: Ticket[] = [
   },
   {
     id: '8',
-    serialNumber: `MS-${Date.now() - 10 * 60 * 60 * 1000}-V5W6X`,
+    serialNumber: 'MS-V5W6X',
     receivedAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
     status: 'New',
-    mediaMaterial: 'Video Clip', // Updated
+    mediaMaterial: 'Video Clip',
     platform: 'SRSA Website',
     issueLink: 'https://srsa.gov.sa/videos/promo_vid_error',
     description: 'Broken video link on SRSA website.',
@@ -148,7 +148,7 @@ export const getTicketById = (id: string): Ticket | undefined => {
 export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'receivedAt' | 'status' | 'actionsLog'>): Ticket => {
   const newTicket: Ticket = {
     id: String(tickets.length + 1 + Math.random()), // Ensure unique ID for new tickets
-    serialNumber: `MS-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+    serialNumber: `MS-${Math.random().toString(36).substring(2, 8).toUpperCase()}`, // Simplified serial number
     receivedAt: new Date(),
     status: 'New',
     actionsLog: [],
@@ -292,3 +292,4 @@ if (tickets.length === 0) {
   // addTicket({ mediaMaterial: 'Video Clip', platform: 'YouTube', issueLink: 'http://example.com/video', description: 'Sample video issue', reportedBy: 'Mock User 1' });
   // addTicket({ mediaMaterial: 'Press Release', platform: 'News Site', issueLink: 'http://example.com/article', description: 'Sample article issue', reportedBy: 'Mock User 2' });
 }
+
