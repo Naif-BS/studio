@@ -13,6 +13,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Card as UiCard } from "@/components/ui/card";
 import { Info } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 export default function OperationRoomPage() {
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
