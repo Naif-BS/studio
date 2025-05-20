@@ -1,0 +1,165 @@
+
+"use client";
+
+import React from 'react';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import type { MediaMaterial, Platform } from '@/types';
+import { mediaMaterialOptions, platformOptions } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
+
+const ticketFormSchema = z.object({
+  mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
+  platform: z.enum(platformOptions, { required_error: "Platform is required." }),
+  issueLink: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
+  screenshotLink: z.string().url({ message: "Please enter a valid URL for the screenshot." }).optional().or(z.literal('')),
+  description: z.string().min(10, { message: "Description must be at least 10 characters." }).max(1000, { message: "Description must not exceed 1000 characters." }),
+});
+
+type TicketFormValues = z.infer<typeof ticketFormSchema>;
+
+interface TicketFormProps {
+  onSubmitSuccess: (data: TicketFormValues) => void;
+}
+
+export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const form = useForm<TicketFormValues>({
+    resolver: zodResolver(ticketFormSchema),
+    defaultValues: {
+      mediaMaterial: undefined,
+      platform: undefined,
+      issueLink: '',
+      screenshotLink: '',
+      description: '',
+    },
+  });
+
+  const {formState: {isSubmitting}} = form;
+
+  const onSubmit: SubmitHandler<TicketFormValues> = async (data) => {
+    if (!user) {
+      toast({ title: "Authentication Error", description: "You must be logged in to report an incident.", variant: "destructive" });
+      return;
+    }
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000)); 
+    onSubmitSuccess(data);
+    form.reset(); // Reset form after successful submission
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="mediaMaterial"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Media Material</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select media material" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {mediaMaterialOptions.map(option => (
+                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="platform"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Platform of Observation</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select platform" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {platformOptions.map(option => (
+                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="issueLink"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Link to Issue (Optional)</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/issue" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="screenshotLink"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Screenshot Link (Optional)</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/screenshot.png" {...field} data-ai-hint="screenshot link" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description of Incident</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Provide a detailed description of the incident..."
+                  className="min-h-[120px]"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full md:w-auto" disabled={isSubmitting}>
+          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Submit Report
+        </Button>
+      </form>
+    </Form>
+  );
+}
