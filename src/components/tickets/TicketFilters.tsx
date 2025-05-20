@@ -23,17 +23,19 @@ interface TicketFiltersProps {
   showSearch?: boolean;
 }
 
+const ALL_ITEMS_VALUE = "__ALL__"; // Define a non-empty constant for "any" selection
+
 export default function TicketFilters({ filters, onFilterChange, showSearch = true }: TicketFiltersProps) {
   const handleStatusChange = (value: string) => {
-    onFilterChange({ ...filters, status: value as TicketStatus | '' });
+    onFilterChange({ ...filters, status: value === ALL_ITEMS_VALUE ? '' : value as TicketStatus | '' });
   };
 
   const handleMediaMaterialChange = (value: string) => {
-    onFilterChange({ ...filters, mediaMaterial: value as MediaMaterial | '' });
+    onFilterChange({ ...filters, mediaMaterial: value === ALL_ITEMS_VALUE ? '' : value as MediaMaterial | '' });
   };
 
   const handlePlatformChange = (value: string) => {
-    onFilterChange({ ...filters, platform: value as Platform | '' });
+    onFilterChange({ ...filters, platform: value === ALL_ITEMS_VALUE ? '' : value as Platform | '' });
   };
 
   const handleSearchTermChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,12 +65,12 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         
         <div className="space-y-1.5">
           <Label htmlFor="filter-status">Status</Label>
-          <Select value={filters.status || ''} onValueChange={handleStatusChange}>
+          <Select value={filters.status || ALL_ITEMS_VALUE} onValueChange={handleStatusChange}>
             <SelectTrigger id="filter-status">
               <SelectValue placeholder="Any Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any Status</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-statuses">Any Status</SelectItem>
               {ticketStatusOptions.map(option => (
                 <SelectItem key={option} value={option}>{option}</SelectItem>
               ))}
@@ -78,12 +80,12 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
 
         <div className="space-y-1.5">
           <Label htmlFor="filter-media-material">Media Material</Label>
-          <Select value={filters.mediaMaterial || ''} onValueChange={handleMediaMaterialChange}>
+          <Select value={filters.mediaMaterial || ALL_ITEMS_VALUE} onValueChange={handleMediaMaterialChange}>
             <SelectTrigger id="filter-media-material">
               <SelectValue placeholder="Any Material" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any Material</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-materials">Any Material</SelectItem>
               {mediaMaterialOptions.map(option => (
                 <SelectItem key={option} value={option}>{option}</SelectItem>
               ))}
@@ -93,12 +95,12 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
 
         <div className="space-y-1.5">
           <Label htmlFor="filter-platform">Platform</Label>
-          <Select value={filters.platform || ''} onValueChange={handlePlatformChange}>
+          <Select value={filters.platform || ALL_ITEMS_VALUE} onValueChange={handlePlatformChange}>
             <SelectTrigger id="filter-platform">
               <SelectValue placeholder="Any Platform" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any Platform</SelectItem>
+              <SelectItem value={ALL_ITEMS_VALUE} key="all-platforms">Any Platform</SelectItem>
               {platformOptions.map(option => (
                 <SelectItem key={option} value={option}>{option}</SelectItem>
               ))}
