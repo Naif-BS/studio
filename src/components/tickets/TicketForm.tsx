@@ -45,7 +45,7 @@ const ticketFormSchema = z.object({
   platform: z.enum(platformOptions, { required_error: "Media Platform is required." }),
   otherPlatform: z.string().optional(),
   issueLink: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
-  screenshotLink: z.string().optional().or(z.literal('')), // Changed from .url()
+  screenshotLink: z.string().optional().or(z.literal('')),
   description: z.string().min(10, { message: "Description must be at least 10 characters." }).max(1000, { message: "Description must not exceed 1000 characters." }),
 }).refine(data => {
   if (data.mediaMaterial === 'Other') {
@@ -63,6 +63,13 @@ const ticketFormSchema = z.object({
 }, {
   message: "Please specify the other media platform.",
   path: ["otherPlatform"],
+}).refine(data => {
+  const hasIssueLink = data.issueLink && data.issueLink.trim() !== '';
+  const hasScreenshotLink = data.screenshotLink && data.screenshotLink.trim() !== '';
+  return hasIssueLink || hasScreenshotLink;
+}, {
+  message: "Please provide either a Link to Issue or Upload a Screenshot.",
+  path: ["issueLink"], // Error message will appear under issueLink field
 });
 
 export type TicketFormValues = z.infer<typeof ticketFormSchema>;
@@ -199,7 +206,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="issueLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Link to Issue (Optional)</FormLabel>
+              <FormLabel>Link to Issue</FormLabel>
               <FormControl>
                 <Input placeholder="https://example.com/issue" {...field} />
               </FormControl>
@@ -213,7 +220,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="screenshotLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Upload Screenshot (Optional)</FormLabel>
+              <FormLabel>Upload Screenshot</FormLabel>
               <FormControl>
                 <input
                   type="file"
