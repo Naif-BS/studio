@@ -105,13 +105,24 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
               </p>
             )}
             {ticket.screenshotLink && (
-              <p className="flex items-center">
-                <ImageIcon className="h-4 w-4 me-1.5" />
-                <strong>Screenshot:</strong>&nbsp;
-                <a href={ticket.screenshotLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
-                  View Screenshot
-                </a>
-              </p>
+              <div className="mt-2">
+                <p className="flex items-center font-semibold text-sm mb-1">
+                  <ImageIcon className="h-4 w-4 me-1.5 text-primary" />
+                  Screenshot:
+                </p>
+                {ticket.screenshotLink.startsWith('data:image/') ? (
+                  <img
+                    src={ticket.screenshotLink}
+                    alt="Screenshot"
+                    className="rounded-md border max-w-full h-auto max-h-60 object-contain"
+                    data-ai-hint="user uploaded image"
+                  />
+                ) : (
+                  <a href={ticket.screenshotLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
+                    View Screenshot Link
+                  </a>
+                )}
+              </div>
             )}
           </div>
         </div>

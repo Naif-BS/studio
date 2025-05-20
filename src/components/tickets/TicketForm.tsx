@@ -45,7 +45,7 @@ const ticketFormSchema = z.object({
   platform: z.enum(platformOptions, { required_error: "Platform is required." }),
   otherPlatform: z.string().optional(),
   issueLink: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
-  screenshotLink: z.string().url({ message: "Please enter a valid URL for the screenshot." }).optional().or(z.literal('')),
+  screenshotLink: z.string().optional().or(z.literal('')), // Changed from .url()
   description: z.string().min(10, { message: "Description must be at least 10 characters." }).max(1000, { message: "Description must not exceed 1000 characters." }),
 }).refine(data => {
   if (data.mediaMaterial === 'Other') {
@@ -213,9 +213,27 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="screenshotLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Screenshot Link (Optional)</FormLabel>
+              <FormLabel>Upload Screenshot (Optional)</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/screenshot.png" {...field} data-ai-hint="screenshot link" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        field.onChange(reader.result as string); // Set the data URL string
+                      };
+                      reader.readAsDataURL(file);
+                    } else {
+                      field.onChange(''); // Clear if no file selected
+                    }
+                  }}
+                  // field.value is not used for file inputs
+                  // field.ref, field.name, field.onBlur are implicitly handled by Controller for native inputs
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
