@@ -56,17 +56,17 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
               <TableHead>Description</TableHead>
               <TableHead className="w-[200px]">
                 <div className="flex items-center gap-1">
-                  <Layers className="h-4 w-4" /> Media Material
+                  <Layers className="h-4 w-4 me-1" /> Media Material
                 </div>
               </TableHead>
               <TableHead className="w-[250px]">
                 <div className="flex items-center gap-1">
-                  <RadioTower className="h-4 w-4" /> Media Platform
+                  <RadioTower className="h-4 w-4 me-1" /> Media Platform
                 </div>
               </TableHead>
               <TableHead className="w-[180px]">
                 <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" /> Received
+                  <Clock className="h-4 w-4 me-1" /> Received
                 </div>
               </TableHead>
               <TableHead className="text-right w-[100px]">Actions</TableHead>
@@ -107,17 +107,17 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
             <TableHead>Description</TableHead>
             <TableHead className="w-[200px]">
               <div className="flex items-center gap-1">
-                <Layers className="h-4 w-4" /> Media Material
+                <Layers className="h-4 w-4 me-1" /> Media Material
               </div>
             </TableHead>
             <TableHead className="w-[250px]">
               <div className="flex items-center gap-1">
-                <RadioTower className="h-4 w-4" /> Media Platform
+                <RadioTower className="h-4 w-4 me-1" /> Media Platform
               </div>
             </TableHead>
             <TableHead className="w-[180px]">
               <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" /> Received
+                <Clock className="h-4 w-4 me-1" /> Received
               </div>
             </TableHead>
             <TableHead className="text-right w-[100px]">Actions</TableHead>
@@ -132,8 +132,16 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
             >
               <TableCell><TicketStatusBadge status={ticket.status} /></TableCell>
               <TableCell className="truncate max-w-sm" title={ticket.description}>{ticket.description}</TableCell>
-              <TableCell>{ticket.mediaMaterial === 'Other' ? ticket.otherMediaMaterial : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}</TableCell>
-              <TableCell>{ticket.platform === 'Other' ? ticket.otherPlatform : platformDisplay[ticket.platform] || ticket.platform}</TableCell>
+              <TableCell>
+                {ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial 
+                  ? `Other: ${ticket.otherMediaMaterial}` 
+                  : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}
+              </TableCell>
+              <TableCell>
+                {ticket.platform === 'Other' && ticket.otherPlatform 
+                  ? `Other: ${ticket.otherPlatform}` 
+                  : platformDisplay[ticket.platform] || ticket.platform}
+              </TableCell>
               <TableCell>{format(new Date(ticket.receivedAt), 'PPp', { locale: dateLocale })}</TableCell>
               <TableCell className="text-right">
                 <Button variant="outline" size="sm" asChild onClick={(e) => e.stopPropagation()}>
