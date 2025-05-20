@@ -2,11 +2,11 @@
 "use client";
 
 import React from 'react';
-import type { Ticket } from '@/types';
+import type { Ticket, TicketAction } from '@/types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Clock, User, Link as LinkIcon, Image as ImageIcon, Layers, RadioTower, FileTextIcon } from 'lucide-react';
+import { Clock, User, Link as LinkIcon, Image as ImageIcon, Layers, RadioTower, FileTextIcon, Workflow } from 'lucide-react';
 import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import { TicketStatusBadge } from './TicketStatusBadge';
@@ -61,10 +61,10 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
           </DialogDescription>
         </DialogHeader>
         
-        <ScrollArea className="flex-grow overflow-y-auto pr-2 -mr-2">
-          <div className="space-y-5 py-4 px-1">
+        <ScrollArea className="flex-grow overflow-y-auto pr-6 -mr-6 pl-1"> {/* Adjusted padding for scrollbar */}
+          <div className="space-y-6 py-4 px-1"> {/* Matches CardContent spacing */}
             <div>
-              <h3 className="font-semibold text-md mb-1.5 flex items-center">
+              <h3 className="font-semibold text-md mb-1 flex items-center">
                 <FileTextIcon className="h-5 w-5 me-2 text-primary" />
                 Incident Details
               </h3>
@@ -120,21 +120,23 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
 
             <div>
               <h3 className="font-semibold text-md mb-2 flex items-center">
-                <User className="h-5 w-5 me-2 text-primary" />
+                <Workflow className="h-5 w-5 me-2 text-primary" />
                 Actions Log
-                </h3>
+              </h3>
               {ticket.actionsLog.length > 0 ? (
-                <div className="space-y-3 max-h-60 overflow-y-auto border rounded-md p-3 bg-muted/30"> {/* Kept ScrollArea inside for this section in case of long logs */}
-                  {ticket.actionsLog.slice().reverse().map((action, index) => (
-                    <li key={index} className="text-sm list-none">
-                      <div className="flex justify-between items-center text-xs text-muted-foreground mb-0.5">
-                        <span className="flex items-center"><User className="h-3 w-3 me-1" />{action.user}</span>
-                        <span className="flex items-center"><Clock className="h-3 w-3 me-1" />{format(new Date(action.timestamp), 'MMM d, yyyy h:mm a', { locale: dateLocale })}</span>
-                      </div>
-                      <p className="text-foreground/90">{action.description}</p>
-                    </li>
-                  ))}
-                </div>
+                <ScrollArea className="h-40 border rounded-md p-3 bg-muted/30">
+                  <ul className="space-y-3">
+                    {ticket.actionsLog.slice().reverse().map((action, index) => (
+                      <li key={index} className="text-sm list-none">
+                        <div className="flex justify-between items-center text-xs text-muted-foreground mb-0.5">
+                          <span className="flex items-center"><User className="h-3 w-3 me-1" />{action.user}</span>
+                          <span className="flex items-center"><Clock className="h-3 w-3 me-1" />{format(new Date(action.timestamp), 'MMM d, yyyy h:mm a', { locale: dateLocale })}</span>
+                        </div>
+                        <p className="text-foreground/90">{action.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </ScrollArea>
               ) : (
                 <p className="text-sm text-muted-foreground italic">No actions logged yet.</p>
               )}
@@ -142,6 +144,11 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
           </div>
         </ScrollArea>
         
+        {ticket.status === 'Closed' && ticket.closedAt && (
+          <div className="text-sm text-muted-foreground px-6 pb-4 pt-2 border-t">
+              {`Closed on: ${format(new Date(ticket.closedAt), 'PPp', { locale: dateLocale })}`}
+          </div>
+        )}
         <DialogFooter className="pt-4 border-t">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Close</Button>
         </DialogFooter>
