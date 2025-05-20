@@ -4,7 +4,7 @@ import type { Ticket, TicketStatus, MediaMaterial, Platform, TicketAction } from
 let tickets: Ticket[] = [
   {
     id: '1',
-    serialNumber: 'MS-A1B2C',
+    serialNumber: 'BDM-M1001', // Updated format
     receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // 4 days ago
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
@@ -21,7 +21,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '2',
-    serialNumber: 'MS-D3E4F',
+    serialNumber: 'BDM-M1002', // Updated format
     receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     status: 'Processing',
@@ -37,7 +37,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '3',
-    serialNumber: 'MS-G5H6I',
+    serialNumber: 'BDM-M1003', // Updated format
     receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
     status: 'New',
     mediaMaterial: 'Infographic',
@@ -49,7 +49,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '4',
-    serialNumber: 'MS-J7K8L',
+    serialNumber: 'BDM-M1004', // Updated format
     receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
     status: 'New',
     mediaMaterial: 'Image',
@@ -61,7 +61,7 @@ let tickets: Ticket[] = [
   },
    {
     id: '5',
-    serialNumber: 'MS-M9N0O',
+    serialNumber: 'BDM-M1005', // Updated format
     receivedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
     startedProcessingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
     closedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
@@ -78,7 +78,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '6',
-    serialNumber: 'MS-P1Q2R',
+    serialNumber: 'BDM-M1006', // Updated format
     receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     status: 'New',
     mediaMaterial: 'Other',
@@ -92,7 +92,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '7',
-    serialNumber: 'MS-S3T4U',
+    serialNumber: 'BDM-M1007', // Updated format
     receivedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
@@ -109,7 +109,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '8',
-    serialNumber: 'MS-V5W6X',
+    serialNumber: 'BDM-M1008', // Updated format
     receivedAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Video Clip',
@@ -145,10 +145,22 @@ export const getTicketById = (id: string): Ticket | undefined => {
   };
 };
 
+// Helper function to generate the next serial number
+const generateNextSerialNumber = (): string => {
+  const existingNumbers = tickets.map(t => {
+    const parts = t.serialNumber.split('-M');
+    return parts.length === 2 ? parseInt(parts[1], 10) : 0;
+  });
+  const maxNumber = existingNumbers.length > 0 ? Math.max(...existingNumbers) : 1000; // Start from 1001 if no tickets
+  const nextNumber = maxNumber >= 1000 ? maxNumber + 1 : 1001; // Ensure it starts from 1001
+  return `BDM-M${String(nextNumber).padStart(4, '0')}`;
+};
+
+
 export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'receivedAt' | 'status' | 'actionsLog'>): Ticket => {
   const newTicket: Ticket = {
     id: String(tickets.length + 1 + Math.random()), // Ensure unique ID for new tickets
-    serialNumber: `MS-${Math.random().toString(36).substring(2, 8).toUpperCase()}`, // Simplified serial number
+    serialNumber: generateNextSerialNumber(), // Use the new generator
     receivedAt: new Date(),
     status: 'New',
     actionsLog: [],
