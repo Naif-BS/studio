@@ -6,11 +6,13 @@ import TicketForm from '@/components/tickets/TicketForm';
 import { addTicket } from '@/lib/data';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/AuthContext';
-import type { TicketFormValues as IncidentReportFormValues } from '@/components/tickets/TicketForm'; // Use existing type
+import type { TicketFormValues as IncidentReportFormValues } from '@/components/tickets/TicketForm';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ReportIncidentPage() {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   const handleFormSubmit = (data: IncidentReportFormValues) => {
     if (!user || !user.displayName) {
@@ -28,7 +30,7 @@ export default function ReportIncidentPage() {
       };
       const newTicket = addTicket(newTicketData);
       toast({
-        title: "Incident Reported",
+        title: t('reportIncident.title') + " " + t('submit'), // Example of combining translations
         description: `Ticket ${newTicket.serialNumber} has been successfully submitted.`,
         variant: "default",
       });
@@ -44,7 +46,7 @@ export default function ReportIncidentPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Report New Incident</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{t('reportIncident.title')}</h1>
       <div className="max-w-2xl">
         <TicketForm onSubmitSuccess={handleFormSubmit} />
       </div>

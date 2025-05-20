@@ -3,6 +3,7 @@
 
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { translations, getTranslationValue, type TranslationKey } from '@/lib/translations'; // Import translations and helper
 
 type Language = 'en' | 'ar';
 
@@ -11,6 +12,7 @@ interface LanguageContextType {
   setLanguage: Dispatch<SetStateAction<Language>>;
   toggleLanguage: () => void;
   dir: 'ltr' | 'rtl';
+  t: (key: TranslationKey, replacements?: Record<string, string | number>) => string; // Add t function
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -21,11 +23,8 @@ const getInitialLanguage = (): Language => {
     if (storedLang && ['en', 'ar'].includes(storedLang)) {
       return storedLang;
     }
-    // You could also try to detect browser language here if desired
-    // const browserLang = navigator.language.split('-')[0];
-    // if (browserLang === 'ar') return 'ar';
   }
-  return 'ar'; // Default to Arabic as per previous setup
+  return 'ar'; // Default to Arabic
 };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
@@ -49,8 +48,20 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     setLanguage((prevLang) => (prevLang === 'en' ? 'ar' : 'en'));
   }, []);
 
+  const t = useCallback((key: TranslationKey, replacements?: Record<string, string | number>): string => {
+    let translatedString = getTranslationValue(translations, key, language);
+    
+    if (replacements) {
+      Object.keys(replacements).forEach(placeholder => {
+        const regex = new RegExp(`{${placeholder}}`, 'g');
+        translatedString = translatedString.replace(regex, String(replacements[placeholder]));
+      });
+    }
+    return translatedString;
+  }, [language]);
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, dir }}>
+    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, dir, t }}>
       {children}
     </LanguageContext.Provider>
   );

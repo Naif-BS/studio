@@ -7,6 +7,7 @@ import TicketFilters, { type TicketFiltersState } from '@/components/tickets/Tic
 import { getTickets } from '@/lib/data';
 import type { Ticket } from '@/types';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -20,6 +21,7 @@ export default function LogbookPage() {
     searchTerm: '',
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -68,7 +70,7 @@ export default function LogbookPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Media Logbook</h1>
+      <h1 className="text-3xl font-bold tracking-tight">{t('logbook.title')}</h1>
       <TicketFilters filters={filters} onFilterChange={setFilters} />
       <TicketTable tickets={paginatedTickets} isLoading={isLoading} />
       {totalPages > 1 && !isLoading && (
@@ -92,6 +94,7 @@ export default function LogbookPage() {
                     </PaginationLink>
                  </PaginationItem>
             ))}
+             {/* TODO: Add ellipsis logic if too many pages */}
             <PaginationItem>
               <PaginationNext
                 href="#"

@@ -16,6 +16,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { TranslationKey } from '@/lib/translations';
+
+// Helper function to get translation key for enum values
+const getEnumTranslationKey = (value: string, prefix: string): TranslationKey => {
+    const formattedValue = value.toLowerCase().replace(/\s+/g, '').replace(/[^\w]/gi, '');
+    return `${prefix}.${formattedValue}` as TranslationKey;
+}
 
 const ticketFormSchema = z.object({
   mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
@@ -31,7 +38,7 @@ const ticketFormSchema = z.object({
   }
   return true;
 }, {
-  message: "Please specify the other media material.",
+  message: "Please specify the other media material.", // This message should also be translated if shown to user
   path: ["otherMediaMaterial"],
 }).refine(data => {
   if (data.platform === 'Other') {
@@ -39,7 +46,7 @@ const ticketFormSchema = z.object({
   }
   return true;
 }, {
-  message: "Please specify the other platform.",
+  message: "Please specify the other platform.", // This message should also be translated
   path: ["otherPlatform"],
 });
 
@@ -52,7 +59,7 @@ interface TicketFormProps {
 export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { dir } = useLanguage();
+  const { dir, t } = useLanguage();
   const form = useForm<TicketFormValues>({
     resolver: zodResolver(ticketFormSchema),
     defaultValues: {
@@ -81,7 +88,6 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
     
     const submissionData: TicketFormValues = {
         ...data,
-        // Ensure 'other' fields are properly set or cleared based on selection
         mediaMaterial: data.mediaMaterial,
         otherMediaMaterial: data.mediaMaterial === 'Other' ? data.otherMediaMaterial : '',
         platform: data.platform,
@@ -101,16 +107,16 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             name="mediaMaterial"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Media Material</FormLabel>
+                <FormLabel>{t('ticketForm.mediaMaterialLabel')}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} dir={dir}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select media material" />
+                      <SelectValue placeholder={t('ticketForm.selectMediaMaterialPlaceholder')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {mediaMaterialOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                      <SelectItem key={option} value={option}>{t(getEnumTranslationKey(option, 'mediaMaterialOptions'))}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -125,9 +131,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
               name="otherMediaMaterial"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Specify Other Media Material</FormLabel>
+                  <FormLabel>{t('ticketForm.specifyOtherMediaMaterialLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Podcast Series" {...field} />
+                    <Input placeholder={t('ticketForm.otherMediaPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,16 +146,16 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             name="platform"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Platform of Observation</FormLabel>
+                <FormLabel>{t('ticketForm.platformLabel')}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} dir={dir}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select platform" />
+                      <SelectValue placeholder={t('ticketForm.selectPlatformPlaceholder')} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {platformOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                      <SelectItem key={option} value={option}>{t(getEnumTranslationKey(option, 'platformOptions'))}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -163,9 +169,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
               name="otherPlatform"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Specify Other Platform</FormLabel>
+                  <FormLabel>{t('ticketForm.specifyOtherPlatformLabel')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., Specific App Name" {...field} />
+                    <Input placeholder={t('ticketForm.otherPlatformPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -179,9 +185,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="issueLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Link to Issue (Optional)</FormLabel>
+              <FormLabel>{t('ticketForm.issueLinkLabel')}</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/issue" {...field} />
+                <Input placeholder={t('ticketForm.issueLinkPlaceholder')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -193,9 +199,9 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="screenshotLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Screenshot Link (Optional)</FormLabel>
+              <FormLabel>{t('ticketForm.screenshotLinkLabel')}</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/screenshot.png" {...field} data-ai-hint="screenshot link" />
+                <Input placeholder={t('ticketForm.screenshotLinkPlaceholder')} {...field} data-ai-hint="screenshot link" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -207,10 +213,10 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description of Incident</FormLabel>
+              <FormLabel>{t('ticketForm.descriptionLabel')}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Provide a detailed description of the incident..."
+                  placeholder={t('ticketForm.descriptionPlaceholder')}
                   className="min-h-[120px]"
                   {...field}
                 />
@@ -222,7 +228,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
 
         <Button type="submit" className="w-full md:w-auto" disabled={isSubmitting}>
           {isSubmitting && <Loader2 className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4 animate-spin`} />}
-          Submit Report
+          {t('ticketForm.submitButton')}
         </Button>
       </form>
     </Form>

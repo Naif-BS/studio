@@ -14,14 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LogOut, UserCircle, Settings, Languages } from 'lucide-react'; // Added Languages icon
+import { LogOut, UserCircle, Settings, Languages } from 'lucide-react';
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
-import { useLanguage } from '@/contexts/LanguageContext'; // Added import
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Header() {
   const { user, logout } = useAuth();
-  const { isMobile } = useSidebar(); 
-  const { language, toggleLanguage, dir } = useLanguage(); // Added language context
+  const { isMobile } = useSidebar();
+  const { language, toggleLanguage, dir, t } = useLanguage();
 
   const getInitials = (name?: string | null) => {
     if (!name) return 'U';
@@ -37,13 +37,13 @@ export default function Header() {
        {isMobile && <SidebarTrigger />}
       <div className="flex-1">
         <Link href="/dashboard" className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
-          MediaScope
+          {t('mediaScope')}
         </Link>
       </div>
       
-      <Button variant="outline" size="icon" onClick={toggleLanguage} title="Toggle Language">
+      <Button variant="outline" size="icon" onClick={toggleLanguage} title={t('header.toggleLanguage')}>
         <Languages className="h-5 w-5" />
-        <span className="sr-only">Toggle Language ({language === 'en' ? 'Switch to Arabic' : 'Switch to English'})</span>
+        <span className="sr-only">{t('header.toggleLanguage')} ({language === 'en' ? t('ar') : t('en')})</span>
       </Button>
 
       {user && (
@@ -56,7 +56,7 @@ export default function Header() {
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuContent className="w-56" align="end" forceMount dir={dir}>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">{user.displayName || 'User'}</p>
@@ -68,16 +68,16 @@ export default function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <UserCircle className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4`} />
-              <span>Profile</span>
+              <span>{t('header.profile')}</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Settings className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4`} />
-              <span>Settings</span>
+              <span>{t('header.settings')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <LogOut className={`${dir === 'rtl' ? 'ms-2' : 'me-2'} h-4 w-4`} />
-              <span>Log out</span>
+              <span>{t('header.logout')}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
