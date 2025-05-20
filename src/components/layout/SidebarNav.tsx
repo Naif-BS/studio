@@ -40,7 +40,7 @@ export default function SidebarNav() {
 
 
   return (
-    <Sidebar className="border-r" collapsible="icon">
+    <Sidebar className="ltr:border-r rtl:border-l" collapsible="icon">
         <SidebarHeader className="flex items-center justify-between p-3">
           <Link href="/dashboard" className={cn(
             "text-xl font-semibold text-primary transition-opacity duration-300",

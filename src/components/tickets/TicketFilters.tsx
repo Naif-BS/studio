@@ -111,7 +111,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         {hasActiveFilters && (
           <div className="md:col-start-auto xl:col-start-auto pt-2 md:pt-0 flex items-end">
             <Button variant="ghost" onClick={clearFilters} className="w-full md:w-auto">
-              <FilterX className="mr-2 h-4 w-4" /> Clear Filters
+              <FilterX className="me-2 h-4 w-4" /> Clear Filters
             </Button>
           </div>
         )}

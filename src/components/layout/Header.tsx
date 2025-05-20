@@ -31,7 +31,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex rtl:flex-row-reverse h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
        {isMobile && <SidebarTrigger />}
       <div className="flex-1">
         <Link href="/dashboard" className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
@@ -59,16 +59,16 @@ export default function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <UserCircle className="mr-2 h-4 w-4" />
+              <UserCircle className="me-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
+              <Settings className="me-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="me-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

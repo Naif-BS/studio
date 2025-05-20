@@ -29,7 +29,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
               <TableHead className="w-[170px]">Material</TableHead>
               <TableHead className="w-[170px]">Platform</TableHead>
               <TableHead className="w-[180px]">Received</TableHead>
-              <TableHead className="text-right w-[100px]">Actions</TableHead>
+              <TableHead className="ltr:text-right rtl:text-left w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -41,7 +41,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
-                <TableCell className="text-right"><div className="h-8 w-20 bg-muted rounded animate-pulse ml-auto"></div></TableCell>
+                <TableCell className="ltr:text-right rtl:text-left"><div className="h-8 w-20 bg-muted rounded animate-pulse ltr:ml-auto rtl:mr-auto"></div></TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -82,7 +82,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
                 <Clock className="h-4 w-4" /> Received
               </div>
             </TableHead>
-            <TableHead className="text-right w-[100px]">Actions</TableHead>
+            <TableHead className="ltr:text-right rtl:text-left w-[100px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -98,10 +98,10 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
               <TableCell>{ticket.mediaMaterial === 'Other' ? ticket.otherMediaMaterial : ticket.mediaMaterial}</TableCell>
               <TableCell>{ticket.platform === 'Other' ? ticket.otherPlatform : ticket.platform}</TableCell>
               <TableCell>{format(new Date(ticket.receivedAt), 'PPp')}</TableCell>
-              <TableCell className="text-right">
+              <TableCell className="ltr:text-right rtl:text-left">
                 <Button variant="outline" size="sm" asChild onClick={(e) => e.stopPropagation()}>
                   <Link href={`/operation-room?ticketId=${ticket.id}`}>
-                    <Eye className="mr-0 md:mr-2 h-4 w-4" /> <span className="hidden md:inline">View</span>
+                    <Eye className="md:me-2 h-4 w-4" /> <span className="hidden md:inline">View</span>
                   </Link>
                 </Button>
               </TableCell>
