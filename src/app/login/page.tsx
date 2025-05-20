@@ -5,20 +5,11 @@ import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Loader2, Mail } from 'lucide-react'; // Using Mail icon for generic email login
+import { Loader2 } from 'lucide-react'; 
 
 export default function LoginPage() {
   const { login, isLoading: authLoading } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(''); // Password field for mock traditional login
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await login(email, password); 
-  };
-  
   const handleOutlookSignIn = async () => {
     // Simulate Outlook sign-in, using a default mock user or specific logic
     await login('outlook.user@example.com', 'password'); 
@@ -29,44 +20,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold text-primary">MediaScope</CardTitle>
-          <CardDescription>Sign in to monitor media effectively</CardDescription>
+          <CardDescription>Sign in with your Outlook account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="user@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={authLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={authLoading}
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={authLoading}>
-              {authLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In
-            </Button>
-          </form>
-          <div className="my-6 flex items-center">
-            <div className="flex-grow border-t border-border"></div>
-            <span className="mx-4 flex-shrink text-xs uppercase text-muted-foreground">Or</span>
-            <div className="flex-grow border-t border-border"></div>
-          </div>
           <Button variant="outline" className="w-full" onClick={handleOutlookSignIn} disabled={authLoading}>
             {authLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
