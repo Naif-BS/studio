@@ -18,11 +18,13 @@ import { Loader2 } from 'lucide-react';
 
 // English display names for enums
 const mediaMaterialDisplay: Record<string, string> = {
-    'Video': 'Video',
-    'Article': 'Article',
-    'Social Media Post': 'Social Media Post',
+    'Press Release': 'Press Release',
+    'Legal Document': 'Legal Document',
+    'Infographic': 'Infographic',
     'Image': 'Image',
-    'Audio': 'Audio',
+    'Video Clip': 'Video Clip',
+    'Audio Clip': 'Audio Clip',
+    'GIF': 'GIF',
     'Other': 'Other',
 };
 
@@ -238,8 +240,6 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
                       field.onChange(''); // Clear if no file selected
                     }
                   }}
-                  // field.value is not used for file inputs
-                  // field.ref, field.name, field.onBlur are implicitly handled by Controller for native inputs
                 />
               </FormControl>
               <FormMessage />

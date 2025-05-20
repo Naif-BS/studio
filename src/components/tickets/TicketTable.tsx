@@ -19,11 +19,13 @@ interface TicketTableProps {
 
 // English display names for enums
 const mediaMaterialDisplay: Record<string, string> = {
-    'Video': 'Video',
-    'Article': 'Article',
-    'Social Media Post': 'Social Media Post',
+    'Press Release': 'Press Release',
+    'Legal Document': 'Legal Document',
+    'Infographic': 'Infographic',
     'Image': 'Image',
-    'Audio': 'Audio',
+    'Video Clip': 'Video Clip',
+    'Audio Clip': 'Audio Clip',
+    'GIF': 'GIF',
     'Other': 'Other',
 };
 

@@ -9,8 +9,8 @@ let tickets: Ticket[] = [
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // 4 days ago
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     status: 'Closed',
-    mediaMaterial: 'Video',
-    platform: 'International Media Channel/Platform', // Was 'YouTube'
+    mediaMaterial: 'Video Clip', // Updated
+    platform: 'International Media Channel/Platform',
     issueLink: 'https://youtube.com/example_video_1',
     description: 'Misleading content in a viral video.',
     actionsLog: [
@@ -25,8 +25,8 @@ let tickets: Ticket[] = [
     receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     status: 'Processing',
-    mediaMaterial: 'Article',
-    platform: 'Local Media Channel/Platform', // Was 'News Site'
+    mediaMaterial: 'Press Release', // Updated
+    platform: 'Local Media Channel/Platform',
     issueLink: 'https://news.com/example_article_1',
     description: 'Hate speech found in comments section.',
      actionsLog: [
@@ -40,8 +40,8 @@ let tickets: Ticket[] = [
     serialNumber: `MS-${Date.now() - 1 * 24 * 60 * 60 * 1000}-G5H6I`,
     receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
     status: 'New',
-    mediaMaterial: 'Social Media Post',
-    platform: 'SRSA Account on Platform X', // Was 'X (Twitter)'
+    mediaMaterial: 'Infographic', // Updated
+    platform: 'SRSA Account on Platform X',
     issueLink: 'https://x.com/example_post_1',
     description: 'Fake news spreading rapidly.',
     actionsLog: [],
@@ -52,8 +52,8 @@ let tickets: Ticket[] = [
     serialNumber: `MS-${Date.now() - 12 * 60 * 60 * 1000}-J7K8L`,
     receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
     status: 'New',
-    mediaMaterial: 'Image',
-    platform: 'SRSA Account on Instagram', // Was 'Instagram'
+    mediaMaterial: 'Image', // No change needed
+    platform: 'SRSA Account on Instagram',
     screenshotLink: 'https://placehold.co/600x400.png',
     description: 'Copyright infringement on an image.',
     actionsLog: [],
@@ -66,8 +66,8 @@ let tickets: Ticket[] = [
     startedProcessingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
     closedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), 
     status: 'Closed',
-    mediaMaterial: 'Audio',
-    platform: 'SRSA Account on TikTok', // Was 'TikTok'
+    mediaMaterial: 'Audio Clip', // Updated
+    platform: 'SRSA Account on TikTok',
     issueLink: 'https://tiktok.com/example_audio_1',
     description: 'Unauthorized use of copyrighted music.',
     actionsLog: [
@@ -81,10 +81,10 @@ let tickets: Ticket[] = [
     serialNumber: `MS-${Date.now() - 2 * 60 * 60 * 1000}-P1Q2R`,
     receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     status: 'New',
-    mediaMaterial: 'Other',
+    mediaMaterial: 'Other', // No change needed
     otherMediaMaterial: 'Live Stream Segment',
     platform: 'Other',
-    otherPlatform: 'Twitch', // This is still fine as 'Other' exists
+    otherPlatform: 'Twitch',
     issueLink: 'https://twitch.tv/example_stream_clip',
     description: 'Violation of community guidelines during a live stream.',
     actionsLog: [],
@@ -97,7 +97,7 @@ let tickets: Ticket[] = [
     startedProcessingAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
     status: 'Closed',
-    mediaMaterial: 'Article',
+    mediaMaterial: 'Legal Document', // Updated
     platform: 'Umm Al-Qura Newspaper',
     issueLink: 'https://example-umm-al-qura.com/article_123',
     description: 'Official announcement clarification needed.',
@@ -112,7 +112,7 @@ let tickets: Ticket[] = [
     serialNumber: `MS-${Date.now() - 10 * 60 * 60 * 1000}-V5W6X`,
     receivedAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
     status: 'New',
-    mediaMaterial: 'Video',
+    mediaMaterial: 'Video Clip', // Updated
     platform: 'SRSA Website',
     issueLink: 'https://srsa.gov.sa/videos/promo_vid_error',
     description: 'Broken video link on SRSA website.',
@@ -289,6 +289,6 @@ const formatDuration = (ms: number): string => {
 // Initialize with some data for demonstration
 if (tickets.length === 0) {
   // This block is currently not hit due to pre-defined tickets array.
-  // addTicket({ mediaMaterial: 'Video', platform: 'YouTube', issueLink: 'http://example.com/video', description: 'Sample video issue', reportedBy: 'Mock User 1' });
-  // addTicket({ mediaMaterial: 'Article', platform: 'News Site', issueLink: 'http://example.com/article', description: 'Sample article issue', reportedBy: 'Mock User 2' });
+  // addTicket({ mediaMaterial: 'Video Clip', platform: 'YouTube', issueLink: 'http://example.com/video', description: 'Sample video issue', reportedBy: 'Mock User 1' });
+  // addTicket({ mediaMaterial: 'Press Release', platform: 'News Site', issueLink: 'http://example.com/article', description: 'Sample article issue', reportedBy: 'Mock User 2' });
 }

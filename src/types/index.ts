@@ -1,5 +1,13 @@
 
-export type MediaMaterial = 'Video' | 'Article' | 'Social Media Post' | 'Image' | 'Audio' | 'Other';
+export type MediaMaterial =
+  | 'Press Release'
+  | 'Legal Document'
+  | 'Infographic'
+  | 'Image'
+  | 'Video Clip'
+  | 'Audio Clip'
+  | 'GIF'
+  | 'Other';
 
 export type Platform =
   | 'Umm Al-Qura Newspaper'
@@ -39,7 +47,16 @@ export interface Ticket {
   otherPlatform?: string | null;
 }
 
-export const mediaMaterialOptions: MediaMaterial[] = ['Video', 'Article', 'Social Media Post', 'Image', 'Audio', 'Other'];
+export const mediaMaterialOptions: MediaMaterial[] = [
+  'Press Release',
+  'Legal Document',
+  'Infographic',
+  'Image',
+  'Video Clip',
+  'Audio Clip',
+  'GIF',
+  'Other',
+];
 
 export const platformOptions: Platform[] = [
   'Umm Al-Qura Newspaper',

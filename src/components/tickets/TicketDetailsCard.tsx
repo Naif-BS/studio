@@ -46,13 +46,14 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
   
   const canUpdateStatus = ticket.status !== 'Closed';
 
-  // Map enum values to display text (English)
   const mediaMaterialDisplay: Record<string, string> = {
-    'Video': 'Video',
-    'Article': 'Article',
-    'Social Media Post': 'Social Media Post',
+    'Press Release': 'Press Release',
+    'Legal Document': 'Legal Document',
+    'Infographic': 'Infographic',
     'Image': 'Image',
-    'Audio': 'Audio',
+    'Video Clip': 'Video Clip',
+    'Audio Clip': 'Audio Clip',
+    'GIF': 'GIF',
     'Other': 'Other',
   };
 
