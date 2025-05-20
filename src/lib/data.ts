@@ -76,6 +76,20 @@ let tickets: Ticket[] = [
     ],
     reportedBy: 'User E',
   },
+  {
+    id: '6',
+    serialNumber: `MS-${Date.now() - 2 * 60 * 60 * 1000}-P1Q2R`,
+    receivedAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
+    status: 'New',
+    mediaMaterial: 'Other',
+    otherMediaMaterial: 'Live Stream Segment',
+    platform: 'Other',
+    otherPlatform: 'Twitch',
+    issueLink: 'https://twitch.tv/example_stream_clip',
+    description: 'Violation of community guidelines during a live stream.',
+    actionsLog: [],
+    reportedBy: 'User F',
+  }
 ];
 
 export const getTickets = (): Ticket[] => {
@@ -91,28 +105,44 @@ export const getTickets = (): Ticket[] => {
 export const getTicketById = (id: string): Ticket | undefined => {
   const ticket = tickets.find(t => t.id === id);
   if (!ticket) return undefined;
+  // Deep clone and parse dates
+  const clonedTicket = JSON.parse(JSON.stringify(ticket));
   return {
-    ...JSON.parse(JSON.stringify(ticket)),
-    receivedAt: new Date(ticket.receivedAt),
-    startedProcessingAt: ticket.startedProcessingAt ? new Date(ticket.startedProcessingAt) : null,
-    closedAt: ticket.closedAt ? new Date(ticket.closedAt) : null,
-    actionsLog: ticket.actionsLog.map(log => ({...log, timestamp: new Date(log.timestamp)}))
+    ...clonedTicket,
+    receivedAt: new Date(clonedTicket.receivedAt),
+    startedProcessingAt: clonedTicket.startedProcessingAt ? new Date(clonedTicket.startedProcessingAt) : null,
+    closedAt: clonedTicket.closedAt ? new Date(clonedTicket.closedAt) : null,
+    actionsLog: clonedTicket.actionsLog.map((log: TicketAction) => ({...log, timestamp: new Date(log.timestamp)}))
   };
 };
 
 export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'receivedAt' | 'status' | 'actionsLog'>): Ticket => {
   const newTicket: Ticket = {
-    ...ticketData,
-    id: String(tickets.length + 1),
+    id: String(tickets.length + 1 + Math.random()), // Ensure unique ID for new tickets
     serialNumber: `MS-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
     receivedAt: new Date(),
     status: 'New',
     actionsLog: [],
+    mediaMaterial: ticketData.mediaMaterial,
+    platform: ticketData.platform,
+    description: ticketData.description,
+    reportedBy: ticketData.reportedBy,
+    issueLink: ticketData.issueLink || null,
+    screenshotLink: ticketData.screenshotLink || null,
+    otherMediaMaterial: ticketData.mediaMaterial === 'Other' ? ticketData.otherMediaMaterial : null,
+    otherPlatform: ticketData.platform === 'Other' ? ticketData.otherPlatform : null,
   };
   tickets.unshift(newTicket); // Add to the beginning of the array
+  
+  // Deep clone and parse dates for the returned object
+  const clonedNewTicket = JSON.parse(JSON.stringify(newTicket));
   return {
-    ...JSON.parse(JSON.stringify(newTicket)),
-    receivedAt: new Date(newTicket.receivedAt),
+    ...clonedNewTicket,
+    receivedAt: new Date(clonedNewTicket.receivedAt),
+     // Ensure optional date fields are handled correctly after stringify/parse
+    startedProcessingAt: clonedNewTicket.startedProcessingAt ? new Date(clonedNewTicket.startedProcessingAt) : null,
+    closedAt: clonedNewTicket.closedAt ? new Date(clonedNewTicket.closedAt) : null,
+    actionsLog: clonedNewTicket.actionsLog.map((log: TicketAction) => ({...log, timestamp: new Date(log.timestamp)}))
   };
 };
 
@@ -120,7 +150,9 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
   const ticketIndex = tickets.findIndex(t => t.id === id);
   if (ticketIndex === -1) return undefined;
 
-  const updatedTicket = { ...tickets[ticketIndex] };
+  // Clone to avoid direct mutation if `tickets[ticketIndex]` is a reference to a complex object part
+  const updatedTicket = { ...JSON.parse(JSON.stringify(tickets[ticketIndex])) };
+  
   updatedTicket.status = status;
 
   const actionLogEntry: TicketAction = {
@@ -140,12 +172,13 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
   updatedTicket.actionsLog = [...updatedTicket.actionsLog, actionLogEntry];
   tickets[ticketIndex] = updatedTicket;
   
+  // Parse dates for the returned object
   return {
-    ...JSON.parse(JSON.stringify(updatedTicket)),
+    ...updatedTicket,
     receivedAt: new Date(updatedTicket.receivedAt),
     startedProcessingAt: updatedTicket.startedProcessingAt ? new Date(updatedTicket.startedProcessingAt) : null,
     closedAt: updatedTicket.closedAt ? new Date(updatedTicket.closedAt) : null,
-    actionsLog: updatedTicket.actionsLog.map(log => ({...log, timestamp: new Date(log.timestamp)}))
+    actionsLog: updatedTicket.actionsLog.map((log: TicketAction) => ({...log, timestamp: new Date(log.timestamp)}))
   };
 };
 
@@ -159,15 +192,18 @@ export const addTicketAction = (id: string, description: string, user: string): 
     user,
   };
   
-  tickets[ticketIndex].actionsLog.push(newAction);
+  // Clone to avoid direct mutation issues if nested properties are involved
+  const updatedTicket = { ...JSON.parse(JSON.stringify(tickets[ticketIndex])) };
+  updatedTicket.actionsLog.push(newAction);
+  tickets[ticketIndex] = updatedTicket;
   
-  const updatedTicket = tickets[ticketIndex];
+  // Parse dates for the returned object
   return {
-    ...JSON.parse(JSON.stringify(updatedTicket)),
+    ...updatedTicket,
     receivedAt: new Date(updatedTicket.receivedAt),
     startedProcessingAt: updatedTicket.startedProcessingAt ? new Date(updatedTicket.startedProcessingAt) : null,
     closedAt: updatedTicket.closedAt ? new Date(updatedTicket.closedAt) : null,
-    actionsLog: updatedTicket.actionsLog.map(log => ({...log, timestamp: new Date(log.timestamp)}))
+    actionsLog: updatedTicket.actionsLog.map((log: TicketAction) => ({...log, timestamp: new Date(log.timestamp)}))
   };
 };
 
@@ -176,9 +212,11 @@ export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => 
   if (processingTickets.length === 0) return 'N/A';
 
   const totalProcessingTime = processingTickets.reduce((sum, t) => {
-    // Ensure startedProcessingAt is not null before using it
-    if (t.startedProcessingAt) {
-      return sum + (t.startedProcessingAt.getTime() - t.receivedAt.getTime());
+    if (t.startedProcessingAt) { // Ensure startedProcessingAt is not null
+      // Ensure receivedAt is a Date object
+      const receivedAtTime = t.receivedAt instanceof Date ? t.receivedAt.getTime() : new Date(t.receivedAt).getTime();
+      const startedProcessingAtTime = t.startedProcessingAt instanceof Date ? t.startedProcessingAt.getTime() : new Date(t.startedProcessingAt).getTime();
+      return sum + (startedProcessingAtTime - receivedAtTime);
     }
     return sum;
   }, 0);
@@ -192,9 +230,10 @@ export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => 
   if (resolvedTickets.length === 0) return 'N/A';
   
   const totalResolutionTime = resolvedTickets.reduce((sum, t) => {
-     // Ensure closedAt is not null
-    if (t.closedAt) {
-      return sum + (t.closedAt.getTime() - t.receivedAt.getTime());
+    if (t.closedAt) { // Ensure closedAt is not null
+        const receivedAtTime = t.receivedAt instanceof Date ? t.receivedAt.getTime() : new Date(t.receivedAt).getTime();
+        const closedAtTime = t.closedAt instanceof Date ? t.closedAt.getTime() : new Date(t.closedAt).getTime();
+        return sum + (closedAtTime - receivedAtTime);
     }
     return sum;
   }, 0);
@@ -213,13 +252,14 @@ const formatDuration = (ms: number): string => {
   if (days > 0) duration += `${days}d `;
   if (hours > 0) duration += `${hours}h `;
   if (minutes > 0) duration += `${minutes}m `;
-  if (seconds > 0 || duration === '') duration += `${seconds}s`; // Show seconds if it's the only unit or primary
+  if (seconds > 0 || duration === '') duration += `${seconds}s`;
   
   return duration.trim() || '0s';
 };
 
 // Initialize with some data for demonstration
 if (tickets.length === 0) {
+  // This block is currently not hit due to pre-defined tickets array.
   // addTicket({ mediaMaterial: 'Video', platform: 'YouTube', issueLink: 'http://example.com/video', description: 'Sample video issue', reportedBy: 'Mock User 1' });
   // addTicket({ mediaMaterial: 'Article', platform: 'News Site', issueLink: 'http://example.com/article', description: 'Sample article issue', reportedBy: 'Mock User 2' });
 }

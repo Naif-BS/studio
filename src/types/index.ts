@@ -23,6 +23,8 @@ export interface Ticket {
   description: string;
   actionsLog: TicketAction[];
   reportedBy: string; // User who reported it
+  otherMediaMaterial?: string | null; // New field
+  otherPlatform?: string | null;      // New field
 }
 
 export const mediaMaterialOptions: MediaMaterial[] = ['Video', 'Article', 'Social Media Post', 'Image', 'Audio', 'Other'];

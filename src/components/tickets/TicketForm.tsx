@@ -18,13 +18,31 @@ import { Loader2 } from 'lucide-react';
 
 const ticketFormSchema = z.object({
   mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
+  otherMediaMaterial: z.string().optional(),
   platform: z.enum(platformOptions, { required_error: "Platform is required." }),
+  otherPlatform: z.string().optional(),
   issueLink: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
   screenshotLink: z.string().url({ message: "Please enter a valid URL for the screenshot." }).optional().or(z.literal('')),
   description: z.string().min(10, { message: "Description must be at least 10 characters." }).max(1000, { message: "Description must not exceed 1000 characters." }),
+}).refine(data => {
+  if (data.mediaMaterial === 'Other') {
+    return !!data.otherMediaMaterial && data.otherMediaMaterial.trim().length > 0;
+  }
+  return true;
+}, {
+  message: "Please specify the other media material.",
+  path: ["otherMediaMaterial"],
+}).refine(data => {
+  if (data.platform === 'Other') {
+    return !!data.otherPlatform && data.otherPlatform.trim().length > 0;
+  }
+  return true;
+}, {
+  message: "Please specify the other platform.",
+  path: ["otherPlatform"],
 });
 
-type TicketFormValues = z.infer<typeof ticketFormSchema>;
+export type TicketFormValues = z.infer<typeof ticketFormSchema>;
 
 interface TicketFormProps {
   onSubmitSuccess: (data: TicketFormValues) => void;
@@ -37,14 +55,19 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
     resolver: zodResolver(ticketFormSchema),
     defaultValues: {
       mediaMaterial: undefined,
+      otherMediaMaterial: '',
       platform: undefined,
+      otherPlatform: '',
       issueLink: '',
       screenshotLink: '',
       description: '',
     },
   });
 
-  const {formState: {isSubmitting}} = form;
+  const { formState: { isSubmitting }, watch } = form;
+
+  const watchedMediaMaterial = watch("mediaMaterial");
+  const watchedPlatform = watch("platform");
 
   const onSubmit: SubmitHandler<TicketFormValues> = async (data) => {
     if (!user) {
@@ -54,8 +77,15 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
     
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000)); 
-    onSubmitSuccess(data);
-    form.reset(); // Reset form after successful submission
+    
+    const submissionData: TicketFormValues = {
+        ...data,
+        otherMediaMaterial: data.mediaMaterial === 'Other' ? data.otherMediaMaterial : undefined,
+        otherPlatform: data.platform === 'Other' ? data.otherPlatform : undefined,
+    };
+
+    onSubmitSuccess(submissionData);
+    form.reset(); 
   };
 
   return (
@@ -85,6 +115,22 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             )}
           />
 
+          {watchedMediaMaterial === 'Other' && (
+            <FormField
+              control={form.control}
+              name="otherMediaMaterial"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Specify Other Media Material</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., Podcast Series" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
           <FormField
             control={form.control}
             name="platform"
@@ -107,6 +153,21 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
               </FormItem>
             )}
           />
+           {watchedPlatform === 'Other' && (
+            <FormField
+              control={form.control}
+              name="otherPlatform"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Specify Other Platform</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., Specific App Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <FormField
