@@ -226,7 +226,6 @@ const Sidebar = React.forwardRef<
         <div
           className={cn(
             "duration-200 relative h-svh w-[--sidebar-width] bg-transparent transition-[width] ease-linear",
-            // "group-data-[side=right]:rotate-180", // This class might not be needed or could be for visual flair
             variant === "floating" || variant === "inset"
               ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
               : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
@@ -242,7 +241,6 @@ const Sidebar = React.forwardRef<
             variant === "floating" || variant === "inset"
               ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
               : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
-            // Border logic for default 'sidebar' variant handled by child div, for floating/inset, border is on child
             variant === "sidebar" && (side === "left" ? "border-r" : "border-l"),
             className
           )}
@@ -321,22 +319,18 @@ SidebarRail.displayName = "SidebarRail"
 
 const SidebarInset = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"main">
+  React.ComponentProps<"div">
 >(({ className, ...props }, ref) => {
   return (
-    <main
+    <div
       ref={ref}
       className={cn(
         // Base styles
         "relative flex min-h-svh flex-1 flex-col bg-background transition-[margin] duration-300 ease-in-out",
 
-        // Styles for 'sidebar' variant (default variant)
-        // LTR
+        // Styles for 'sidebar' variant (default variant) - LTR
         "md:peer-data-[variant=sidebar]:peer-data-[side=left]:peer-data-[state=expanded]:ml-[var(--sidebar-width)]",
         "md:peer-data-[variant=sidebar]:peer-data-[side=left]:peer-data-[state=collapsed]:peer-data-[collapsible=icon]:ml-[var(--sidebar-width-icon)]",
-        // RTL
-        "md:peer-data-[variant=sidebar]:peer-data-[side=right]:peer-data-[state=expanded]:mr-[var(--sidebar-width)]",
-        "md:peer-data-[variant=sidebar]:peer-data-[side=right]:peer-data-[state=collapsed]:peer-data-[collapsible=icon]:mr-[var(--sidebar-width-icon)]",
 
         // Styles for 'inset' variant
         "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))]",
@@ -782,4 +776,3 @@ export {
   SidebarTrigger,
   useSidebar,
 }
-
