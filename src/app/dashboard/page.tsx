@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'; // Keep for now, might be used for other actions later
 import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
@@ -20,7 +20,7 @@ export default function DashboardPage() {
     platform: '',
     searchTerm: '',
   });
-  const router = useRouter();
+  const router = useRouter(); // Retained if other navigation features are added
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -73,7 +73,9 @@ export default function DashboardPage() {
   const displayedTickets = filteredTickets.slice(0, recentTicketsLimit);
 
   const handleTicketRowClick = (ticketId: string) => {
-    router.push(`/operation-room?ticketId=${ticketId}`);
+    // router.push(`/operation-room?ticketId=${ticketId}`); // Navigation removed as per request
+    console.log("Ticket row/view clicked on dashboard for ticket ID:", ticketId);
+    // Future: Could open a modal or perform a different action here.
   };
 
   if (isLoading) {

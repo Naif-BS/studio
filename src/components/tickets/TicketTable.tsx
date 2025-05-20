@@ -2,14 +2,14 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
+// Removed Link import as "View" button will no longer be a direct link
 import type { Ticket } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TicketStatusBadge } from './TicketStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Eye, Clock, Layers, RadioTower } from 'lucide-react';
 import { format } from 'date-fns';
-import { enUS } from 'date-fns/locale'; // Default to English locale for dates
+import { enUS } from 'date-fns/locale';
 
 interface TicketTableProps {
   tickets: Ticket[];
@@ -17,7 +17,6 @@ interface TicketTableProps {
   onRowClick?: (ticketId: string) => void;
 }
 
-// English display names for enums
 const mediaMaterialDisplay: Record<string, string> = {
     'Press Release': 'Press Release',
     'Legal Document': 'Legal Document',
@@ -44,7 +43,7 @@ const platformDisplay: Record<string, string> = {
 
 
 export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTableProps) {
-  const dateLocale = enUS; // Default to English locale for dates
+  const dateLocale = enUS;
 
   if (isLoading) {
     return (
@@ -144,10 +143,18 @@ export default function TicketTable({ tickets, isLoading, onRowClick }: TicketTa
               </TableCell>
               <TableCell>{format(new Date(ticket.receivedAt), 'PPp', { locale: dateLocale })}</TableCell>
               <TableCell className="text-right">
-                <Button variant="outline" size="sm" asChild onClick={(e) => e.stopPropagation()}>
-                  <Link href={`/operation-room?ticketId=${ticket.id}`}>
-                    <Eye className="md:me-2 h-4 w-4" /> <span className="hidden md:inline">View</span>
-                  </Link>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent row click if button has its own action
+                    if (onRowClick) {
+                      onRowClick(ticket.id);
+                    }
+                    // If no onRowClick, button does nothing or could be disabled
+                  }}
+                >
+                  <Eye className="md:me-2 h-4 w-4" /> <span className="hidden md:inline">View</span>
                 </Button>
               </TableCell>
             </TableRow>
