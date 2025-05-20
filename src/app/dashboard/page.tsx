@@ -2,9 +2,9 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation'; // Keep for now, might be used for other actions later
 import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
+import TicketDetailsModal from '@/components/tickets/TicketDetailsModal';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime } from '@/lib/data';
 import type { Ticket } from '@/types';
@@ -20,7 +20,8 @@ export default function DashboardPage() {
     platform: '',
     searchTerm: '',
   });
-  const router = useRouter(); // Retained if other navigation features are added
+  const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -44,8 +45,8 @@ export default function DashboardPage() {
           (filters.searchTerm
             ? ticket.serialNumber.toLowerCase().includes(searchLower) ||
               ticket.description.toLowerCase().includes(searchLower) ||
-              ticket.platform.toLowerCase().includes(searchLower) ||
-              ticket.mediaMaterial.toLowerCase().includes(searchLower)
+              (ticket.platform && ticket.platform.toLowerCase().includes(searchLower)) ||
+              (ticket.mediaMaterial && ticket.mediaMaterial.toLowerCase().includes(searchLower))
             : true)
         );
       })
@@ -73,9 +74,12 @@ export default function DashboardPage() {
   const displayedTickets = filteredTickets.slice(0, recentTicketsLimit);
 
   const handleTicketRowClick = (ticketId: string) => {
-    // router.push(`/operation-room?ticketId=${ticketId}`); // Navigation removed as per request
+    const ticket = tickets.find(t => t.id === ticketId);
+    if (ticket) {
+      setModalTicket(ticket);
+      setIsModalOpen(true);
+    }
     console.log("Ticket row/view clicked on dashboard for ticket ID:", ticketId);
-    // Future: Could open a modal or perform a different action here.
   };
 
   if (isLoading) {
@@ -123,6 +127,7 @@ export default function DashboardPage() {
         />
          {/* The TicketTable component itself handles the "no tickets" message */}
       </section>
+      <TicketDetailsModal ticket={modalTicket} isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );
 }

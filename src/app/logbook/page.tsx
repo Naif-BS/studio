@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import TicketTable from '@/components/tickets/TicketTable';
+import TicketDetailsModal from '@/components/tickets/TicketDetailsModal';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets } from '@/lib/data';
 import type { Ticket } from '@/types';
@@ -20,6 +21,8 @@ export default function LogbookPage() {
     searchTerm: '',
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -44,8 +47,8 @@ export default function LogbookPage() {
           (filters.searchTerm
             ? ticket.serialNumber.toLowerCase().includes(searchLower) ||
               ticket.description.toLowerCase().includes(searchLower) ||
-              ticket.platform.toLowerCase().includes(searchLower) ||
-              ticket.mediaMaterial.toLowerCase().includes(searchLower)
+              (ticket.platform && ticket.platform.toLowerCase().includes(searchLower)) ||
+              (ticket.mediaMaterial && ticket.mediaMaterial.toLowerCase().includes(searchLower))
             : true)
         );
       })
@@ -65,11 +68,23 @@ export default function LogbookPage() {
     }
   };
 
+  const handleViewTicketClick = (ticketId: string) => {
+    const ticket = allTickets.find(t => t.id === ticketId);
+    if (ticket) {
+      setModalTicket(ticket);
+      setIsModalOpen(true);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">Media Logbook</h1>
       <TicketFilters filters={filters} onFilterChange={setFilters} />
-      <TicketTable tickets={paginatedTickets} isLoading={isLoading} />
+      <TicketTable 
+        tickets={paginatedTickets} 
+        isLoading={isLoading} 
+        onRowClick={handleViewTicketClick} 
+      />
       {totalPages > 1 && !isLoading && (
          <Pagination>
           <PaginationContent>
@@ -102,6 +117,7 @@ export default function LogbookPage() {
           </PaginationContent>
         </Pagination>
       )}
+      <TicketDetailsModal ticket={modalTicket} isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );
 }
