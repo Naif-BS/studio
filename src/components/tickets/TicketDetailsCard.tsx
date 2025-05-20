@@ -18,8 +18,8 @@ import { Separator } from '../ui/separator';
 
 interface TicketDetailsCardProps {
   ticket: Ticket;
-  onUpdateStatus: (ticketId: string, status: TicketStatus, actionDescription?: string) => void;
-  onAddAction: (ticketId: string, description: string) => void;
+  onUpdateStatus?: (ticketId: string, status: TicketStatus, actionDescription?: string) => void;
+  onAddAction?: (ticketId: string, description: string) => void;
   isUpdating?: boolean;
 }
 
@@ -28,23 +28,32 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
   const [newActionText, setNewActionText] = useState('');
   const [selectedStatus, setSelectedStatus] = useState<TicketStatus>(ticket.status);
 
+  React.useEffect(() => {
+    // Reset selectedStatus if the ticket prop changes
+    setSelectedStatus(ticket.status);
+    setNewActionText(''); // also clear action text
+  }, [ticket]);
+
+
   const dateLocale = enUS; // Default to English locale for dates
 
   const handleAddAction = () => {
-    if (newActionText.trim() && user?.displayName) {
+    if (newActionText.trim() && user?.displayName && onAddAction) {
       onAddAction(ticket.id, newActionText.trim());
       setNewActionText('');
     }
   };
 
   const handleStatusUpdate = () => {
-    if (selectedStatus !== ticket.status) {
+    if (selectedStatus !== ticket.status && onUpdateStatus) {
       const actionDesc = `Status changed to ${selectedStatus} by ${user?.displayName || 'User'}`;
       onUpdateStatus(ticket.id, selectedStatus, actionDesc);
     }
   };
   
   const canUpdateStatus = ticket.status !== 'Closed';
+  const showActionSection = !!onUpdateStatus && !!onAddAction;
+
 
   const mediaMaterialDisplay: Record<string, string> = {
     'Press Release': 'Press Release',
@@ -159,7 +168,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           )}
         </div>
         
-        {canUpdateStatus && (
+        {showActionSection && canUpdateStatus && (
             <>
             <Separator />
             <div className="space-y-3">
@@ -212,3 +221,5 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     </Card>
   );
 }
+
+    

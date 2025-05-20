@@ -42,6 +42,8 @@ const platformDisplay: Record<string, string> = {
     'Other': 'Other',
 };
 
+// This component is no longer the primary way to show details on Logbook/Dashboard,
+// but might be used elsewhere or in future features. Keeping it for now.
 export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: TicketDetailsModalProps) {
   if (!ticket) return null;
 
@@ -156,3 +158,5 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
     </Dialog>
   );
 }
+
+    
