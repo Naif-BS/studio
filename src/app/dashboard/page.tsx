@@ -2,8 +2,9 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import StatCard from '@/components/dashboard/StatCard';
-import TicketItem from '@/components/tickets/TicketItem';
+import TicketTable from '@/components/tickets/TicketTable';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime } from '@/lib/data';
 import type { Ticket } from '@/types';
@@ -19,6 +20,7 @@ export default function DashboardPage() {
     platform: '',
     searchTerm: '',
   });
+  const router = useRouter();
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -70,6 +72,10 @@ export default function DashboardPage() {
   const recentTicketsLimit = 5;
   const displayedTickets = filteredTickets.slice(0, recentTicketsLimit);
 
+  const handleTicketRowClick = (ticketId: string) => {
+    router.push(`/operation-room?ticketId=${ticketId}`);
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -80,9 +86,11 @@ export default function DashboardPage() {
         </div>
         <Skeleton className="h-10 w-1/4 mb-4" />
         <TicketFilters filters={filters} onFilterChange={setFilters} />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-          {[...Array(2)].map((_, i) => (
-             <Skeleton key={i} className="h-[200px] w-full rounded-lg" />
+        {/* Skeleton for the table */}
+        <div className="rounded-md border">
+          <Skeleton className="h-12 w-full" /> {/* Header */}
+          {[...Array(recentTicketsLimit)].map((_, i) => (
+            <Skeleton key={i} className="h-16 w-full border-t" /> 
           ))}
         </div>
       </div>
@@ -106,18 +114,12 @@ export default function DashboardPage() {
       <section>
         <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Tickets Activity</h2>
         <TicketFilters filters={filters} onFilterChange={setFilters} />
-        {displayedTickets.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-            {displayedTickets.map(ticket => (
-              <TicketItem key={ticket.id} ticket={ticket} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-10 text-muted-foreground">
-            <p className="text-lg">No tickets match your current filters.</p>
-            <p>Try adjusting your search or filter criteria.</p>
-          </div>
-        )}
+        <TicketTable 
+            tickets={displayedTickets} 
+            isLoading={isLoading} 
+            onRowClick={handleTicketRowClick} 
+        />
+         {/* The TicketTable component itself handles the "no tickets" message */}
       </section>
     </div>
   );
