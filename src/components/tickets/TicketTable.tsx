@@ -6,7 +6,7 @@ import type { Ticket } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { TicketStatusBadge } from './TicketStatusBadge';
 import { Button } from '@/components/ui/button';
-import { Eye, Clock, Layers, RadioTower, FileText, User, Play, CheckCircle, Link as LinkIcon, Image as ImageIcon, Mail } from 'lucide-react';
+import { Eye, Clock, Layers, RadioTower, FileText, User, Play, CheckCircle, Link as LinkIcon, Image as ImageIcon, Mail, Workflow } from 'lucide-react';
 import { format } from 'date-fns';
 import { enUS } from 'date-fns/locale';
 import Link from 'next/link'; // For clickable links
@@ -68,6 +68,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
               <TableHead className="w-[250px]"><div className="flex items-center gap-1"><RadioTower className="h-4 w-4" /> Media Platform</div></TableHead>
               <TableHead className="w-[180px]"><div className="flex items-center gap-1"><Clock className="h-4 w-4" /> Received</div></TableHead>
               <TableHead className="w-[150px]"><div className="flex items-center gap-1"><User className="h-4 w-4" /> Reported By</div></TableHead>
+              <TableHead className="w-[130px]"><div className="flex items-center gap-1"><Workflow className="h-4 w-4" /> Actions Logged</div></TableHead>
               <TableHead className="w-[180px]"><div className="flex items-center gap-1"><Play className="h-4 w-4" /> Started Processing</div></TableHead>
               <TableHead className="w-[180px]"><div className="flex items-center gap-1"><CheckCircle className="h-4 w-4" /> Closed At</div></TableHead>
               <TableHead className="w-[200px]"><div className="flex items-center gap-1"><LinkIcon className="h-4 w-4" /> Link to Media Content</div></TableHead>
@@ -81,6 +82,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-6 bg-muted rounded w-20 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-full animate-pulse"></div></TableCell>
+                <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
                 <TableCell><div className="h-4 bg-muted rounded w-3/4 animate-pulse"></div></TableCell>
@@ -119,6 +121,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
             <TableHead className="w-[250px]"><div className="flex items-center gap-1"><RadioTower className="h-4 w-4" /> Media Platform</div></TableHead>
             <TableHead className="w-[180px]"><div className="flex items-center gap-1"><Clock className="h-4 w-4" /> Received</div></TableHead>
             <TableHead className="w-[150px]"><div className="flex items-center gap-1"><User className="h-4 w-4" /> Reported By</div></TableHead>
+            <TableHead className="w-[130px]"><div className="flex items-center gap-1"><Workflow className="h-4 w-4" /> Actions Logged</div></TableHead>
             <TableHead className="w-[180px]"><div className="flex items-center gap-1"><Play className="h-4 w-4" /> Started Processing</div></TableHead>
             <TableHead className="w-[180px]"><div className="flex items-center gap-1"><CheckCircle className="h-4 w-4" /> Closed At</div></TableHead>
             <TableHead className="w-[200px]"><div className="flex items-center gap-1"><LinkIcon className="h-4 w-4" /> Link to Media Content</div></TableHead>
@@ -148,6 +151,7 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
               </TableCell>
               <TableCell>{formatDateSafe(ticket.receivedAt)}</TableCell>
               <TableCell>{ticket.reportedBy}</TableCell>
+              <TableCell className="text-center">{ticket.actionsLog.length}</TableCell>
               <TableCell>{formatDateSafe(ticket.startedProcessingAt)}</TableCell>
               <TableCell>{formatDateSafe(ticket.closedAt)}</TableCell>
               <TableCell>
