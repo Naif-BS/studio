@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import TicketTable from '@/components/tickets/TicketTable';
-import TicketDetailsModal from '@/components/tickets/TicketDetailsModal'; // Use the modal again
+// TicketDetailsModal removed
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets } from '@/lib/data';
 import type { Ticket } from '@/types';
@@ -21,8 +21,9 @@ export default function LogbookPage() {
     searchTerm: '',
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [modalTicket, setModalTicket] = useState<Ticket | null>(null); // For modal
-  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
+  // Modal state removed
+  // const [modalTicket, setModalTicket] = useState<Ticket | null>(null); 
+  // const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -47,7 +48,8 @@ export default function LogbookPage() {
             ? ticket.serialNumber.toLowerCase().includes(searchLower) ||
               ticket.description.toLowerCase().includes(searchLower) ||
               (ticket.platform && ticket.platform.toLowerCase().includes(searchLower)) ||
-              (ticket.mediaMaterial && ticket.mediaMaterial.toLowerCase().includes(searchLower))
+              (ticket.mediaMaterial && ticket.mediaMaterial.toLowerCase().includes(searchLower)) ||
+              (ticket.reportedBy && ticket.reportedBy.toLowerCase().includes(searchLower)) // Added reportedBy to search
             : true)
         );
       })
@@ -67,13 +69,14 @@ export default function LogbookPage() {
     }
   };
 
-  const handleViewTicketClick = (ticketId: string) => {
-    const ticket = allTickets.find(t => t.id === ticketId);
-    if (ticket) {
-      setModalTicket(ticket);
-      setIsModalOpen(true);
-    }
-  };
+  // handleViewTicketClick removed as modal is removed
+  // const handleViewTicketClick = (ticketId: string) => {
+  //   const ticket = allTickets.find(t => t.id === ticketId);
+  //   if (ticket) {
+  //     setModalTicket(ticket);
+  //     setIsModalOpen(true);
+  //   }
+  // };
 
   return (
     <div className="space-y-6">
@@ -83,7 +86,8 @@ export default function LogbookPage() {
       <TicketTable 
         tickets={paginatedTickets} 
         isLoading={isLoading} 
-        onRowClick={handleViewTicketClick} 
+        // onRowClick is removed
+        showActionsColumn={false} // Hide actions column
       />
       
       {totalPages > 1 && !isLoading && (
@@ -118,13 +122,14 @@ export default function LogbookPage() {
         </Pagination>
       )}
 
-      {modalTicket && (
+      {/* Modal rendering removed */}
+      {/* {modalTicket && (
         <TicketDetailsModal
           ticket={modalTicket}
           isOpen={isModalOpen}
           onOpenChange={setIsModalOpen}
         />
-      )}
+      )} */}
     </div>
   );
 }
