@@ -30,7 +30,7 @@ export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-lg flex items-center z-40 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-lg flex items-center z-40">
       <TooltipProvider delayDuration={0}>
         <ul className="flex justify-around items-center w-full h-full px-1">
           {navItems.map((item) => (
