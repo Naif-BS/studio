@@ -70,7 +70,7 @@ const ticketFormSchema = z.object({
   const hasScreenshotLink = data.screenshotLink && data.screenshotLink.trim() !== '';
   return hasIssueLink || hasScreenshotLink;
 }, {
-  message: "Please provide either a Link to Issue or Upload a Screenshot.",
+  message: "Please provide either a Link to Media Content or Upload a Screenshot.",
   path: ["issueLink"], // Error message will appear under issueLink field
 });
 
@@ -208,7 +208,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="issueLink"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Link to Issue</FormLabel>
+              <FormLabel>Link to Media Content</FormLabel>
               <FormControl>
                 <Input placeholder="https://example.com/issue" {...field} />
               </FormControl>

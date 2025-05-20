@@ -99,7 +99,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
             {ticket.issueLink && (
               <p className="flex items-center">
                 <LinkIcon className="h-4 w-4 me-1.5" />
-                <strong>Issue Link:</strong>&nbsp;
+                <strong>Link to Media Content:</strong>&nbsp;
                 <a href={ticket.issueLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">
                   {ticket.issueLink}
                 </a>
