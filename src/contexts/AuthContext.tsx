@@ -4,6 +4,7 @@
 import type { User } from 'firebase/auth'; // Using firebase type for structure, but not implementing firebase auth
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast'; // Import useToast
 
 interface AuthContextType {
   user: User | null; // Mocking User type
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<MockUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const { toast } = useToast(); // Initialize toast
 
   useEffect(() => {
     setIsLoading(true);
@@ -35,15 +37,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (storedUserJson) {
         let userObj = JSON.parse(storedUserJson) as MockUser | null;
         if (userObj) {
-          // Ensure displayName is valid and non-empty
           if (!userObj.displayName || userObj.displayName.trim() === '') {
-            userObj.displayName = (userObj.email ? userObj.email.split('@')[0].trim() : null) || 'User';
+            userObj.displayName = (userObj.email ? userObj.email.split('@')[0].trim() : '') || 'User';
           }
-          // Ensure photoURL is consistent with displayName
+          if (!userObj.displayName) userObj.displayName = "User"; // Ensure non-empty
+
           userObj.photoURL = `https://placehold.co/100x100.png?text=${(userObj.displayName[0] || 'U').toUpperCase()}`;
-          
-          // Optional: Update localStorage if changes were made to the loaded user object
-          // localStorage.setItem('mediaScopeUser', JSON.stringify(userObj));
           
           setUser(userObj);
         } else {
@@ -65,8 +64,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       const providedEmail = email || 'user@example.com';
-      const namePart = providedEmail.split('@')[0].trim();
-      const generatedDisplayName = namePart || 'User'; // Ensures displayName is never empty
+      let namePart = providedEmail.split('@')[0].trim();
+      if (!namePart) namePart = 'User'; // Ensure namePart is not empty
+      const generatedDisplayName = namePart;
 
       const mockUser: MockUser = {
         uid: 'mock-user-123',
@@ -88,9 +88,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
       setUser(mockUser);
       localStorage.setItem('mediaScopeUser', JSON.stringify(mockUser));
+      
+      toast({
+        title: "Sign In Successful (Mock)",
+        description: "Redirecting to your dashboard...",
+        variant: "default",
+      });
       router.push('/dashboard');
     } catch (error) {
       console.error("Login process failed:", error);
+      toast({
+        title: "Sign In Failed (Mock)",
+        description: "Could not sign in at this time. Please try again later.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -102,9 +113,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await new Promise(resolve => setTimeout(resolve, 500));
       setUser(null);
       localStorage.removeItem('mediaScopeUser');
+      toast({
+        title: "Signed Out",
+        description: "You have been successfully signed out.",
+        variant: "default",
+      });
       router.push('/login');
     } catch (error) {
       console.error("Logout process failed:", error);
+      toast({
+        title: "Sign Out Failed",
+        description: "Could not sign out at this time.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
