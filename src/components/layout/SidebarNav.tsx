@@ -6,13 +6,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { LayoutDashboard, BookText, HardHat, FilePlus } from 'lucide-react';
-// Tooltip components are removed
-// import {
-//   Tooltip,
-//   TooltipContent,
-//   TooltipProvider,
-//   TooltipTrigger,
-// } from "@/components/ui/tooltip";
 
 interface NavItem {
   href: string;
@@ -23,7 +16,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/logbook', label: 'Logbook', icon: BookText },
-  { href: '/operation-room', label: 'Operation Room', icon: HardHat },
+  { href: '/operation-room', label: 'Incident Center', icon: HardHat },
   { href: '/report-incident', label: 'Report Incident', icon: FilePlus },
 ];
 
@@ -32,11 +25,9 @@ export default function SidebarNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-lg flex items-center z-40">
-      {/* TooltipProvider removed */}
       <ul className="flex justify-around items-center w-full h-full px-1">
         {navItems.map((item) => (
           <li key={item.href} className="flex-1">
-            {/* Tooltip, TooltipTrigger, TooltipContent removed */}
             <Link
               href={item.href}
               className={cn(
