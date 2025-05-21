@@ -67,49 +67,50 @@ body {
   }
 
   .dark {
-    --background: 210 30% 10%; 
-    --foreground: 208 100% 97%;
+    /* SRSA Dark Theme based on guidelines */
+    --background: 220 40% 11%; /* SRSA Dark Blue */
+    --foreground: 210 25% 95%; /* SRSA Light Grey/Off-white */
 
-    --card: 210 30% 12%;
-    --card-foreground: 208 100% 97%;
+    --card: 220 40% 14%; /* Slightly lighter Dark Blue or SRSA Dark Grey */
+    --card-foreground: 210 25% 95%;
 
-    --popover: 210 30% 10%;
-    --popover-foreground: 208 100% 97%;
+    --popover: 220 40% 10%; /* SRSA Dark Blue */
+    --popover-foreground: 210 25% 95%;
 
-    --primary: 207 86% 70%;
-    --primary-foreground: 210 30% 15%;
+    --primary: 210 70% 58%; /* SRSA Medium Blue */
+    --primary-foreground: 210 20% 96%; /* Light text for contrast */
 
-    --secondary: 210 30% 18%;
-    --secondary-foreground: 208 100% 97%;
+    --secondary: 215 30% 22%; /* Muted Dark Blue/Grey */
+    --secondary-foreground: 210 25% 90%;
 
-    --muted: 210 30% 22%;
-    --muted-foreground: 208 60% 80%;
+    --muted: 215 25% 20%; /* Darker Muted Blue/Grey */
+    --muted-foreground: 210 20% 70%; /* Lighter muted text */
 
-    --accent: 197 90% 64%;
-    --accent-foreground: 210 30% 15%;
+    --accent: 175 55% 48%; /* SRSA Teal/Turquoise */
+    --accent-foreground: 210 20% 96%; /* Light text for contrast */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 10 75% 55%; /* SRSA Coral/Salmon for destructive actions */
+    --destructive-foreground: 0 0% 98%; /* White/very light text */
 
-    --border: 210 30% 25%;
-    --input: 210 30% 25%;
-    --ring: 207 86% 70%;
+    --border: 210 30% 28%; /* Subtle dark border */
+    --input: 210 30% 28%;
+    --ring: 210 70% 58%; /* SRSA Medium Blue (same as primary) */
 
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 210 70% 58%; /* SRSA Medium Blue */
+    --chart-2: 175 55% 48%; /* SRSA Teal */
+    --chart-3: 10 75% 55%;  /* SRSA Coral */
+    --chart-4: 45 80% 60%;  /* SRSA Orange/Yellow */
+    --chart-5: 145 50% 50%; /* SRSA Green/Dark Teal */
 
     /* Dark Sidebar specific theme variables */
-    --sidebar-background: 210 30% 8%; 
-    --sidebar-foreground: 208 100% 95%; 
-    --sidebar-primary: 207 86% 70%; 
-    --sidebar-primary-foreground: 210 30% 10%; 
-    --sidebar-accent: 210 30% 15%; 
-    --sidebar-accent-foreground: 207 86% 75%; 
-    --sidebar-border: 210 30% 20%;
-    --sidebar-ring: 207 86% 70%;
+    --sidebar-background: 220 40% 9%;  /* Slightly darker than main background */
+    --sidebar-foreground: 210 25% 92%; 
+    --sidebar-primary: 210 70% 58%; /* SRSA Medium Blue */
+    --sidebar-primary-foreground: 210 20% 96%; 
+    --sidebar-accent: 215 30% 18%; /* Subtle dark accent */
+    --sidebar-accent-foreground: 210 70% 65%; /* Lighter blue for text on accent */
+    --sidebar-border: 210 30% 25%;
+    --sidebar-ring: 210 70% 58%;
   }
 }
 
