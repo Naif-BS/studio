@@ -11,35 +11,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import type { MediaMaterial, Platform } from '@/types';
-import { mediaMaterialOptions, platformOptions } from '@/types';
+import { mediaMaterialOptions, platformOptions, mediaMaterialDisplay, platformDisplay } from '@/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-
-// English display names for enums
-const mediaMaterialDisplay: Record<string, string> = {
-    'Press Release': 'Press Release',
-    'Legal Document': 'Legal Document',
-    'Infographic': 'Infographic',
-    'Image': 'Image',
-    'Video Clip': 'Video Clip',
-    'Audio Clip': 'Audio Clip',
-    'GIF': 'GIF',
-    'Other': 'Other',
-};
-
-const platformDisplay: Record<string, string> = {
-    'Umm Al-Qura Newspaper': 'Umm Al-Qura Newspaper',
-    'Local Media Channel/Platform': 'Local Media Channel/Platform',
-    'International Media Channel/Platform': 'International Media Channel/Platform',
-    'SRSA Website': 'SRSA Website',
-    'Unified Platform': 'Unified Platform',
-    'SRSA Account on Platform X': 'SRSA Account on Platform X',
-    'SRSA Account on Instagram': 'SRSA Account on Instagram',
-    'SRSA Account on TikTok': 'SRSA Account on TikTok',
-    'SRSA Account on LinkedIn': 'SRSA Account on LinkedIn',
-    'Other': 'Other',
-};
 
 const ticketFormSchema = z.object({
   mediaMaterial: z.enum(mediaMaterialOptions, { required_error: "Media material is required." }),
@@ -71,7 +46,7 @@ const ticketFormSchema = z.object({
   return hasIssueLink || hasScreenshotLink;
 }, {
   message: "Please provide either a Link to Media Content or Upload a Screenshot.",
-  path: ["issueLink"], // Error message will appear under issueLink field
+  path: ["issueLink"], 
 });
 
 export type TicketFormValues = z.infer<typeof ticketFormSchema>;
@@ -233,11 +208,11 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
                     if (file) {
                       const reader = new FileReader();
                       reader.onloadend = () => {
-                        field.onChange(reader.result as string); // Set the data URL string
+                        field.onChange(reader.result as string); 
                       };
                       reader.readAsDataURL(file);
                     } else {
-                      field.onChange(''); // Clear if no file selected
+                      field.onChange(''); 
                     }
                   }}
                 />
@@ -252,7 +227,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description of Incident</FormLabel>
+              <FormLabel>Incident Description</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Provide a detailed description of the incident..."

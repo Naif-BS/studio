@@ -5,7 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'MediaScope',
+  title: 'MediaScope - Incident Management Platform',
   description: 'Comprehensive Media Monitoring Platform',
 };
 

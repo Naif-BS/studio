@@ -8,6 +8,7 @@ import { getTickets } from '@/lib/data';
 import type { Ticket } from '@/types';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { useToast } from '@/hooks/use-toast';
+
 const ITEMS_PER_PAGE = 10;
 
 const TicketDetailsModal = lazy(() => import('@/components/tickets/TicketDetailsModal'));
@@ -50,7 +51,7 @@ export default function LogbookPage() {
               ticket.description.toLowerCase().includes(searchLower) ||
               (ticket.platform && ticket.platform.toLowerCase().includes(searchLower)) ||
               (ticket.mediaMaterial && ticket.mediaMaterial.toLowerCase().includes(searchLower)) ||
-              (ticket.reportedBy && ticket.reportedBy.toLowerCase().includes(searchLower)) // Added reportedBy to search
+              (ticket.reportedBy && ticket.reportedBy.toLowerCase().includes(searchLower)) 
             : true)
         );
       })
@@ -68,27 +69,23 @@ export default function LogbookPage() {
 
   const handleViewTicketClick = (ticketId: string) => {
     const ticket = allTickets.find(t => t.id === ticketId);
-    if (ticket) { setModalTicket(ticket); setIsModalOpen(true); }
+    if (ticket) { 
+      setModalTicket(ticket); 
+      setIsModalOpen(true); 
+    }
   };
-  // handleViewTicketClick removed as modal is removed
-  // const handleViewTicketClick = (ticketId: string) => {
-  //   const ticket = allTickets.find(t => t.id === ticketId);
-  //   if (ticket) {
-  //     setModalTicket(ticket);
-  //     setIsModalOpen(true);
-  //   }
-  // };
+  
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Media Logbook</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Incident Logbook</h1>
       <TicketFilters filters={filters} onFilterChange={setFilters} />
 
       <TicketTable
         tickets={paginatedTickets}
         isLoading={isLoading}
-        // onRowClick is removed
-        showActionsColumn={false} // Hide actions column
+        onRowClick={handleViewTicketClick} 
+        showActionsColumn={true} 
       />
       
       {totalPages > 1 && !isLoading && (

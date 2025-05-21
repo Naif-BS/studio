@@ -26,7 +26,7 @@ export type TicketStatus = 'New' | 'Processing' | 'Closed';
 export interface TicketAction {
   timestamp: Date;
   description: string;
-  user: string; // For simplicity, user is a string. In a real app, this would be a user ID or object.
+  user: string; 
 }
 
 export interface Ticket {
@@ -42,7 +42,7 @@ export interface Ticket {
   screenshotLink?: string | null;
   description: string;
   actionsLog: TicketAction[];
-  reportedBy: string; // User who reported it
+  reportedBy: string; 
   otherMediaMaterial?: string | null;
   otherPlatform?: string | null;
 }
@@ -72,3 +72,34 @@ export const platformOptions: Platform[] = [
 ];
 
 export const ticketStatusOptions: TicketStatus[] = ['New', 'Processing', 'Closed'];
+
+// Display names for enums, can be used across components
+export const ticketStatusDisplay: Record<TicketStatus, string> = {
+    'New': 'New',
+    'Processing': 'Processing',
+    'Closed': 'Resolved', // Changed from 'Closed'
+};
+
+export const mediaMaterialDisplay: Record<MediaMaterial, string> = {
+    'Press Release': 'Press Release',
+    'Legal Document': 'Legal Document',
+    'Infographic': 'Infographic',
+    'Image': 'Image',
+    'Video Clip': 'Video Clip',
+    'Audio Clip': 'Audio Clip',
+    'GIF': 'GIF',
+    'Other': 'Other',
+};
+
+export const platformDisplay: Record<Platform, string> = {
+    'Umm Al-Qura Newspaper': 'Umm Al-Qura Newspaper',
+    'Local Media Channel/Platform': 'Local Media Channel/Platform',
+    'International Media Channel/Platform': 'International Media Channel/Platform',
+    'SRSA Website': 'SRSA Website',
+    'Unified Platform': 'Unified Platform',
+    'SRSA Account on Platform X': 'SRSA Account on Platform X',
+    'SRSA Account on Instagram': 'SRSA Account on Instagram',
+    'SRSA Account on TikTok': 'SRSA Account on TikTok',
+    'SRSA Account on LinkedIn': 'SRSA Account on LinkedIn',
+    'Other': 'Other',
+};

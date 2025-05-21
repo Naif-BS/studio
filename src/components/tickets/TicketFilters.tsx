@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { TicketStatus, MediaMaterial, Platform } from '@/types';
-import { ticketStatusOptions, mediaMaterialOptions, platformOptions } from '@/types';
+import { ticketStatusOptions, mediaMaterialOptions, platformOptions, ticketStatusDisplay, mediaMaterialDisplay, platformDisplay } from '@/types';
 import { FilterX } from 'lucide-react';
 
 export interface TicketFiltersState {
@@ -24,38 +24,6 @@ interface TicketFiltersProps {
 }
 
 const ALL_ITEMS_VALUE = "__ALL__";
-
-// English display names for enums
-const ticketStatusDisplay: Record<string, string> = {
-    'New': 'New',
-    'Processing': 'Processing',
-    'Closed': 'Closed',
-};
-
-const mediaMaterialDisplay: Record<string, string> = {
-    'Press Release': 'Press Release',
-    'Legal Document': 'Legal Document',
-    'Infographic': 'Infographic',
-    'Image': 'Image',
-    'Video Clip': 'Video Clip',
-    'Audio Clip': 'Audio Clip',
-    'GIF': 'GIF',
-    'Other': 'Other',
-};
-
-const platformDisplay: Record<string, string> = {
-    'Umm Al-Qura Newspaper': 'Umm Al-Qura Newspaper',
-    'Local Media Channel/Platform': 'Local Media Channel/Platform',
-    'International Media Channel/Platform': 'International Media Channel/Platform',
-    'SRSA Website': 'SRSA Website',
-    'Unified Platform': 'Unified Platform',
-    'SRSA Account on Platform X': 'SRSA Account on Platform X',
-    'SRSA Account on Instagram': 'SRSA Account on Instagram',
-    'SRSA Account on TikTok': 'SRSA Account on TikTok',
-    'SRSA Account on LinkedIn': 'SRSA Account on LinkedIn',
-    'Other': 'Other',
-};
-
 
 export default function TicketFilters({ filters, onFilterChange, showSearch = true }: TicketFiltersProps) {
   const handleStatusChange = (value: string) => {
@@ -85,10 +53,10 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-end">
         {showSearch && (
           <div className="space-y-1.5">
-            <Label htmlFor="search-tickets">Search</Label>
+            <Label htmlFor="search-tickets">Search Incidents</Label>
             <Input
               id="search-tickets"
-              placeholder="Search by keyword, ID..."
+              placeholder="Search by keyword, serial no..."
               value={filters.searchTerm || ''}
               onChange={handleSearchTermChange}
             />
@@ -96,7 +64,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
         )}
         
         <div className="space-y-1.5">
-          <Label htmlFor="filter-status">Status</Label>
+          <Label htmlFor="filter-status">Incident Status</Label>
           <Select value={filters.status || ALL_ITEMS_VALUE} onValueChange={handleStatusChange}>
             <SelectTrigger id="filter-status">
               <SelectValue placeholder="Any Status" />

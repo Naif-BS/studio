@@ -1,11 +1,10 @@
 
-
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
-import dynamic from 'next/dynamic'; // Use dynamic import
+import dynamic from 'next/dynamic'; 
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime } from '@/lib/data';
 import type { Ticket } from '@/types';
@@ -13,9 +12,8 @@ import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3 } from
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
-  // Dynamically import the modal component
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
-    loading: () => <p>Loading modal...</p>, // Fallback while loading
+    loading: () => <p>Loading modal...</p>, 
   });
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -26,8 +24,8 @@ export default function DashboardPage() {
     platform: '',
     searchTerm: '',
   });
-  const [modalTicket, setModalTicket] = useState<Ticket | null>(null); // For modal
-  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
+  const [modalTicket, setModalTicket] = useState<Ticket | null>(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -96,9 +94,8 @@ export default function DashboardPage() {
           ))}
         </div>
         <Skeleton className="h-10 w-1/4 mb-4" />
-        {/* TicketFilters skeleton - not strictly necessary as it's simple inputs */}
         <div className="rounded-md border">
-            <Skeleton className="h-12 w-full" /> {/* Header */}
+            <Skeleton className="h-12 w-full" /> 
             {[...Array(recentTicketsLimit)].map((_, i) => (
             <Skeleton key={i} className="h-16 w-full border-t" /> 
             ))}
@@ -110,19 +107,19 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <section>
-        <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard Overview</h1>
+        <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <StatCard title="Total Tickets" value={stats.total} icon={<FileText className="h-5 w-5" />} />
-          <StatCard title="New Tickets" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} />
-          <StatCard title="Processing Tickets" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} />
-          <StatCard title="Closed Tickets" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} />
-          <StatCard title="Avg. Processing Start Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="From receipt to start"/>
-          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="From receipt to close"/>
+          <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-5 w-5" />} />
+          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} />
+          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} />
+          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} />
+          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="From receipt to first action"/>
+          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="From receipt to resolution"/>
         </div>
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Tickets Activity</h2>
+        <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Incidents</h2>
         <TicketFilters filters={filters} onFilterChange={setFilters} />
         <div className="mt-4">
           <TicketTable
@@ -130,7 +127,7 @@ export default function DashboardPage() {
               isLoading={isLoading}
               onRowClick={handleTicketRowClick}
               visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform']}
-              showActionsColumn={true} // Add the Actions column with the View button
+              showActionsColumn={true} 
           />
         </div>
       </section>

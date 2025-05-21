@@ -30,7 +30,7 @@ export function TicketStatusBadge({ status, className }: TicketStatusBadgeProps)
       icon: CheckCircle2,
       color: 'bg-green-500 hover:bg-green-600',
       textColor: 'text-green-50',
-      label: 'Closed',
+      label: 'Resolved', // Changed from "Closed"
     },
   };
   

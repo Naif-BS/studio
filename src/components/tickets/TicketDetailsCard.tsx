@@ -11,9 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Clock, User, Link as LinkIcon, Image as ImageIcon, Edit3, Send, Workflow } from 'lucide-react';
 import { format } from 'date-fns';
-import { enUS } from 'date-fns/locale'; // Default to enUS
+import { enUS } from 'date-fns/locale'; 
 import { useAuth } from '@/contexts/AuthContext';
-import { ticketStatusOptions } from '@/types';
+import { ticketStatusOptions, ticketStatusDisplay } from '@/types';
 import { Separator } from '../ui/separator';
 import { cn } from '@/lib/utils';
 
@@ -22,7 +22,7 @@ interface TicketDetailsCardProps {
   onUpdateStatus?: (ticketId: string, status: TicketStatus, actionDescription?: string) => void;
   onAddAction?: (ticketId: string, description: string) => void;
   isUpdating?: boolean;
-  isModalVariant?: boolean; // New prop
+  isModalVariant?: boolean; 
 }
 
 export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction, isUpdating, isModalVariant }: TicketDetailsCardProps) {
@@ -35,7 +35,6 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     setNewActionText(''); 
   }, [ticket]);
 
-
   const dateLocale = enUS; 
 
   const handleAddAction = () => {
@@ -47,14 +46,13 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
 
   const handleStatusUpdate = () => {
     if (selectedStatus !== ticket.status && onUpdateStatus) {
-      const actionDesc = `Status changed to ${selectedStatus} by ${user?.displayName || 'User'}`;
+      const actionDesc = `Status changed to ${ticketStatusDisplay[selectedStatus]} by ${user?.displayName || 'User'}`;
       onUpdateStatus(ticket.id, selectedStatus, actionDesc);
     }
   };
   
   const canUpdateStatus = ticket.status !== 'Closed';
   const showActionSection = !!onUpdateStatus && !!onAddAction;
-
 
   const mediaMaterialDisplay: Record<string, string> = {
     'Press Release': 'Press Release',
@@ -80,19 +78,12 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     'Other': 'Other',
   };
 
-  const statusDisplay: Record<TicketStatus, string> = {
-    'New': 'New',
-    'Processing': 'Processing',
-    'Closed': 'Closed',
-  };
-
-
   return (
     <Card className={cn(
       "w-full",
-      isModalVariant ? "" : "shadow-lg border" // Conditionally apply shadow and border
+      isModalVariant ? "" : "shadow-lg border" 
     )}>
-      {!isModalVariant && ( // Only show card header if not in modal variant (modal has its own header)
+      {!isModalVariant && ( 
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <CardTitle className="text-2xl">{ticket.serialNumber}</CardTitle>
@@ -104,7 +95,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           </CardDescription>
         </CardHeader>
       )}
-      <CardContent className={cn(isModalVariant ? "pt-0" : "pt-0")}> {/* Adjust padding if needed for modal */}
+      <CardContent className={cn(isModalVariant ? "pt-0" : "pt-0")}> 
         <div>
           <h3 className="font-semibold text-md mb-1">Incident Details</h3>
           <p className="text-sm text-foreground/90">{ticket.description}</p>
@@ -154,7 +145,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
         <Separator className="my-4" />
 
         <div>
-          <h3 className="font-semibold text-md mb-2 flex items-center"><Workflow className="h-5 w-5 me-2 text-primary" />Actions Log</h3>
+          <h3 className="font-semibold text-md mb-2 flex items-center"><Workflow className="h-5 w-5 me-2 text-primary" />Action Log</h3>
           {ticket.actionsLog.length > 0 ? (
             <ScrollArea className="h-40 border rounded-md p-3 bg-muted/30">
               <ul className="space-y-3">
@@ -178,7 +169,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
             <>
             <Separator className="my-4" />
             <div className="space-y-3">
-              <h3 className="font-semibold text-md flex items-center"><Edit3 className="h-5 w-5 me-2 text-primary"/>Update Ticket</h3>
+              <h3 className="font-semibold text-md flex items-center"><Edit3 className="h-5 w-5 me-2 text-primary"/>Update Incident</h3>
               <div className="flex flex-col sm:flex-row gap-4 items-end">
                   <div className="flex-grow space-y-1.5 w-full sm:w-auto">
                       <label htmlFor="status-select" className="text-sm font-medium text-muted-foreground">Change Status</label>
@@ -189,7 +180,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
                           <SelectContent>
                               {ticketStatusOptions.filter(opt => opt !== 'New' || ticket.status === 'New').map(option => (
                                   <SelectItem key={option} value={option} disabled={option === 'New' && ticket.status !== 'New'}>
-                                      {statusDisplay[option] || option}
+                                      {ticketStatusDisplay[option] || option}
                                   </SelectItem>
                               ))}
                           </SelectContent>
@@ -204,7 +195,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
                  <label htmlFor="action-log" className="text-sm font-medium text-muted-foreground">Log Action</label>
                 <Textarea
                   id="action-log"
-                  placeholder="Log actions taken for this ticket..."
+                  placeholder="Log actions taken for this incident..."
                   value={newActionText}
                   onChange={(e) => setNewActionText(e.target.value)}
                   className="min-h-[80px]"
@@ -212,7 +203,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
                 />
               </div>
               <Button onClick={handleAddAction} disabled={!newActionText.trim() || isUpdating || !canUpdateStatus}>
-                <Send className="h-4 w-4 me-2" /> Add Action to Log
+                <Send className="h-4 w-4 me-2" /> Log Action
               </Button>
             </div>
             </>
@@ -221,7 +212,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
       </CardContent>
       {!isModalVariant && ticket.status === 'Closed' && ticket.closedAt && (
           <CardFooter className="text-sm text-muted-foreground">
-              {`Closed on: ${format(new Date(ticket.closedAt), 'PPp', { locale: dateLocale })}`}
+              {`Resolved on: ${format(new Date(ticket.closedAt), 'PPp', { locale: dateLocale })}`}
           </CardFooter>
       )}
     </Card>

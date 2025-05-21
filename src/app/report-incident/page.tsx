@@ -28,8 +28,8 @@ export default function ReportIncidentPage() {
       };
       const newTicket = addTicket(newTicketData);
       toast({
-        title: "Report Incident Submitted",
-        description: `Ticket ${newTicket.serialNumber} has been successfully submitted.`,
+        title: "Incident Report Submitted",
+        description: `Incident ${newTicket.serialNumber} successfully submitted.`,
         variant: "default",
       });
     } catch (error) {
@@ -41,7 +41,7 @@ export default function ReportIncidentPage() {
       }
       
       toast({
-        title: "Error Reporting Incident",
+        title: "Error Submitting Report",
         description: errorMessage,
         variant: "destructive",
       });
@@ -51,7 +51,7 @@ export default function ReportIncidentPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Report New Incident</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Submit New Incident Report</h1>
       <div className="max-w-2xl">
         <TicketForm onSubmitSuccess={handleFormSubmit} />
       </div>
