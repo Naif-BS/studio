@@ -65,50 +65,50 @@ body {
   }
 
   .dark {
-    /* SRSA Dark Theme based on guidelines */
-    --background: 220 40% 11%; /* SRSA Dark Blue */
-    --foreground: 210 25% 95%; /* SRSA Light Grey/Off-white */
+    /* TEST: Extreme contrast dark theme */
+    --background: 0 0% 0%; /* Black */
+    --foreground: 0 0% 100%; /* White */
 
-    --card: 220 40% 14%; /* Slightly lighter Dark Blue or SRSA Dark Grey */
-    --card-foreground: 210 25% 95%; /* SRSA Light Grey/Off-white for text on cards */
+    --card: 0 0% 10%; /* Very Dark Grey for cards */
+    --card-foreground: 0 0% 90%; /* Light Grey for text on cards */
 
-    --popover: 220 40% 10%; /* SRSA Dark Blue */
-    --popover-foreground: 210 25% 95%;
+    --popover: 0 0% 5%; /* Darker for popover */
+    --popover-foreground: 0 0% 95%; /* Lighter for popover text */
 
-    --primary: 210 70% 58%; /* SRSA Medium Blue */
-    --primary-foreground: 210 20% 96%; /* Light text for contrast */
+    --primary: 300 100% 70%; /* Bright Magenta for primary */
+    --primary-foreground: 0 0% 0%; /* Black text on primary */
 
-    --secondary: 215 30% 22%; /* Muted Dark Blue/Grey (SRSA Dark Grey/Charcoal variant) */
-    --secondary-foreground: 210 25% 90%; /* Lighter Grey */
+    --secondary: 0 0% 15%; /* Dark Grey for secondary */
+    --secondary-foreground: 0 0% 85%; /* Light Grey for secondary text */
 
-    --muted: 215 25% 20%; /* Darker Muted Blue/Grey */
-    --muted-foreground: 210 20% 70%; /* Lighter muted text */
+    --muted: 0 0% 20%; /* Slightly lighter Dark Grey for muted */
+    --muted-foreground: 0 0% 60%; /* Medium Grey for muted text */
 
-    --accent: 175 55% 48%; /* SRSA Teal/Turquoise */
-    --accent-foreground: 210 20% 96%; /* Light text for contrast */
+    --accent: 120 100% 50%; /* Bright Green for accent */
+    --accent-foreground: 0 0% 0%; /* Black text on accent */
 
-    --destructive: 10 75% 55%; /* SRSA Coral/Salmon for destructive actions */
-    --destructive-foreground: 0 0% 98%; /* White/very light text */
+    --destructive: 0 100% 50%; /* Bright Red for destructive */
+    --destructive-foreground: 0 0% 100%; /* White text on destructive */
 
-    --border: 210 30% 28%; /* Subtle dark border (Darker SRSA Dark Grey) */
-    --input: 210 30% 28%; /* Darker SRSA Dark Grey for inputs */
-    --ring: 210 70% 58%; /* SRSA Medium Blue (same as primary) */
+    --border: 0 0% 25%; /* Dark Grey border */
+    --input: 0 0% 25%; /* Dark Grey input */
+    --ring: 300 100% 70%; /* Bright Magenta for rings */
 
-    --chart-1: 210 70% 58%; /* SRSA Medium Blue */
-    --chart-2: 175 55% 48%; /* SRSA Teal */
-    --chart-3: 10 75% 55%;  /* SRSA Coral */
-    --chart-4: 45 80% 60%;  /* SRSA Orange/Yellow */
-    --chart-5: 145 50% 50%; /* SRSA Green/Dark Teal */
+    --chart-1: 210 70% 58%;
+    --chart-2: 175 55% 48%;
+    --chart-3: 10 75% 55%;
+    --chart-4: 45 80% 60%;
+    --chart-5: 145 50% 50%;
 
     /* Dark Sidebar specific theme variables (for bottom nav) */
-    --sidebar-background: 220 40% 9%;  /* Slightly darker than main background */
-    --sidebar-foreground: 210 25% 92%; 
-    --sidebar-primary: 210 70% 58%; /* SRSA Medium Blue */
-    --sidebar-primary-foreground: 210 20% 96%; 
-    --sidebar-accent: 215 30% 18%; /* Subtle dark accent */
-    --sidebar-accent-foreground: 210 70% 65%; /* Lighter blue for text on accent */
-    --sidebar-border: 210 30% 25%;
-    --sidebar-ring: 210 70% 58%;
+    --sidebar-background: 0 0% 3%;  /* Slightly darker than main background */
+    --sidebar-foreground: 0 0% 92%; 
+    --sidebar-primary: 300 100% 70%; 
+    --sidebar-primary-foreground: 0 0% 0%; 
+    --sidebar-accent: 0 0% 18%; 
+    --sidebar-accent-foreground: 300 100% 80%; 
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 300 100% 70%;
   }
 }
 
