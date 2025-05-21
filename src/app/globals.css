@@ -18,33 +18,33 @@ body {
 
 @layer base {
   :root {
-    --background: 208 100% 97%; /* #F0F8FF - SRSA Light Blue/Cyan for light mode */
-    --foreground: 210 30% 25%; /* SRSA Dark Blue for text */
+    --background: 210 60% 97%; /* SRSA Light Grey/Off-white for a clean, airy feel */
+    --foreground: 210 40% 20%; /* SRSA Dark Blue for excellent text contrast */
     
-    --card: 0 0% 100%; /* White for cards */
-    --card-foreground: 210 30% 25%; /* SRSA Dark Blue for text on cards */
+    --card: 0 0% 100%; /* White for cards, maintaining clarity */
+    --card-foreground: 210 40% 20%; /* SRSA Dark Blue for text on cards */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 30% 25%;
+    --popover-foreground: 210 40% 20%;
 
-    --primary: 207 86% 70%; /* SRSA Medium Blue */
-    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary: 205 75% 55%; /* SRSA Medium Blue, vibrant for primary actions */
+    --primary-foreground: 0 0% 100%; /* White text for high contrast on primary blue */
 
-    --secondary: 208 100% 92%; /* SRSA Light Grey/Off-white for secondary elements */
-    --secondary-foreground: 210 30% 30%; /* SRSA Dark Blue for text on secondary */
+    --secondary: 210 30% 92%; /* SRSA Light Grey for secondary buttons/elements */
+    --secondary-foreground: 210 35% 35%; /* Darker SRSA Blue for text on secondary elements */
 
-    --muted: 208 60% 90%; /* SRSA Light Grey */
-    --muted-foreground: 210 25% 45%; /* SRSA Dark Grey for muted text */
+    --muted: 210 30% 88%; /* A softer SRSA Light Grey for muted elements */
+    --muted-foreground: 210 30% 50%; /* Greyer SRSA Blue for muted text, still readable */
 
-    --accent: 197 90% 64%; /* SRSA Teal/Turquoise */
-    --accent-foreground: 0 0% 100%; /* White text on accent */
+    --accent: 184 80% 45%; /* SRSA Teal/Turquoise for accents */
+    --accent-foreground: 0 0% 100%; /* White text on teal accent */
 
-    --destructive: 0 84.2% 60.2%; /* SRSA Coral/Salmon */
+    --destructive: 0 84.2% 60.2%; /* SRSA Coral/Salmon or a standard clear red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 207 40% 85%; /* Lightened SRSA Medium Blue or SRSA Light Grey */
-    --input: 207 40% 92%; /* Slightly darker SRSA Light Grey */
-    --ring: 207 86% 70%; /* SRSA Medium Blue for rings */
+    --border: 210 25% 85%; /* Light grey-blue border, subtle but present */
+    --input: 210 25% 94%; /* Slightly off-white for input fields */
+    --ring: 205 75% 60%; /* SRSA Medium Blue for focus rings, matching primary */
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -53,60 +53,60 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    /* Sidebar specific theme variables (for bottom nav) */
-    --sidebar-background: 210 25% 98%; /* Light neutral gray-blue for sidebar */
-    --sidebar-foreground: 210 30% 20%; /* Darker text for sidebar */
-    --sidebar-primary: 207 86% 65%; /* Primary color, slightly darker for sidebar context */
+    /* Sidebar specific theme variables (for bottom nav - Light Mode) */
+    --sidebar-background: 210 40% 98%; /* Consistent with very light app background */
+    --sidebar-foreground: 210 35% 40%; /* Dark blue for nav items, slightly softer */
+    --sidebar-primary: 205 75% 50%;    /* Active item color - primary blue */
     --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 207 80% 92%; /* Lighter accent for hover in sidebar */
-    --sidebar-accent-foreground: 207 86% 55%; /* Primary color for text on accent hover in sidebar */
-    --sidebar-border: 207 30% 88%;
-    --sidebar-ring: 207 86% 70%;
+    --sidebar-accent: 205 70% 90%;     /* Hover background - lighter primary blue */
+    --sidebar-accent-foreground: 205 75% 45%;/* Text on hover - primary blue */
+    --sidebar-border: 210 25% 88%;      /* Border for the nav bar itself */
+    --sidebar-ring: 205 75% 55%;
   }
 
   .dark {
-    --background: 213 80% 12%; /* Deep SRSA Dark Blue, adjusted for bg */
+    --background: 213 70% 10%; /* Deep, desaturated SRSA Dark Blue for main background */
     --foreground: 203 100% 95%; /* SRSA Light Blue/Cyan for high contrast text */
 
-    --card: 213 70% 16%; /* Slightly lighter/less saturated SRSA Dark Blue for cards */
+    --card: 213 65% 14%; /* Slightly lighter SRSA Dark Blue for cards, subtle depth */
     --card-foreground: 203 100% 95%; /* Consistent light text on cards */
 
-    --popover: 213 70% 14%; /* Similar to card, slightly darker for depth */
+    --popover: 213 60% 12%; /* Darker still for popovers */
     --popover-foreground: 203 100% 95%;
 
-    --primary: 184 100% 40%; /* SRSA Teal/Turquoise, brightened for primary actions */
-    --primary-foreground: 210 30% 10%; /* Dark text for contrast on bright teal */
+    --primary: 184 100% 40%; /* Vibrant SRSA Teal/Turquoise for primary actions */
+    --primary-foreground: 210 30% 10%; /* Very dark text for contrast on bright teal */
 
-    --secondary: 204 100% 37%; /* SRSA Medium Blue for secondary actions */
+    --secondary: 204 90% 37%; /* SRSA Medium Blue for secondary actions, slightly more saturated */
     --secondary-foreground: 203 100% 95%; /* Light text on medium blue */
 
-    --muted: 215 30% 20%; /* Muted, darker blue-grey for less emphasis */
-    --muted-foreground: 210 20% 75%; /* Lighter grey-blue for muted text */
+    --muted: 215 40% 20%; /* Muted, darker blue-grey for less emphasis */
+    --muted-foreground: 210 25% 65%; /* Lighter grey-blue for muted text, good readability */
 
     --accent: 5 100% 69%; /* SRSA Coral/Salmon as a vibrant accent */
     --accent-foreground: 210 30% 10%; /* Dark text on coral/salmon accent */
 
-    --destructive: 0 70% 55%; /* Standard destructive red, distinct from accent */
+    --destructive: 0 70% 55%; /* Standard destructive red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 213 50% 30%; /* Visible but subtle border, derived from dark blue */
-    --input: 213 60% 22%; /* Input background, distinct from main bg */
+    --border: 213 50% 25%; /* Softer, less prominent border */
+    --input: 213 50% 18%; /* Input background, distinct from card and main bg */
     --ring: 184 100% 50%; /* Brighter Teal for focus rings, matches primary hue */
 
-    --chart-1: 184 100% 55%; /* Teal variant */
-    --chart-2: 204 100% 60%; /* Medium Blue variant */
-    --chart-3: 5 100% 75%;   /* Coral/Salmon variant */
-    --chart-4: 42 100% 60%;  /* Orange/Yellow variant */
-    --chart-5: 203 80% 80%; /* Light Blue/Cyan variant */
+    --chart-1: 184 100% 60%; /* Teal variant - lighter for dark bg */
+    --chart-2: 204 100% 65%; /* Medium Blue variant - lighter */
+    --chart-3: 5 100% 78%;   /* Coral/Salmon variant - lighter */
+    --chart-4: 42 100% 70%;  /* Orange/Yellow variant - lighter */
+    --chart-5: 203 80% 85%; /* Light Blue/Cyan variant - lighter */
     
     /* Dark Sidebar specific theme variables (for bottom nav) */
-    --sidebar-background: 213 75% 14%; /* Slightly distinct dark blue for bottom nav */
-    --sidebar-foreground: 203 100% 90%; /* Main text color for nav items */
-    --sidebar-primary: 184 100% 45%;    /* Active item color - SRSA Teal */
+    --sidebar-background: 213 70% 12%; /* Integrated with main bg, slightly distinct */
+    --sidebar-foreground: 203 90% 85%; /* Softer light blue for inactive nav items */
+    --sidebar-primary: 184 100% 45%;    /* Active item color - SRSA Teal, vibrant */
     --sidebar-primary-foreground: 210 30% 10%; /* Dark text on active teal */
-    --sidebar-accent: 213 50% 25%;     /* Hover background for nav items - muted blue */
-    --sidebar-accent-foreground: 184 100% 60%;/* Text color on hover - Lighter Teal */
-    --sidebar-border: 213 50% 28%;      /* Border for the nav bar itself */
+    --sidebar-accent: 213 40% 20%;     /* Hover background for nav items - subtle muted blue */
+    --sidebar-accent-foreground: 184 90% 70%;/* Text color on hover - Lighter Teal */
+    --sidebar-border: 213 45% 25%;      /* Border for the nav bar itself, matches main border */
     --sidebar-ring: 184 100% 50%;
   }
 }
@@ -119,4 +119,4 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
+    
