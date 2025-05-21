@@ -35,7 +35,7 @@ export default function Header() {
         <Link href="/dashboard" className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
           <Image
             src="/srsa-logo.png"
-            alt="SRSA Logo"
+            alt="SRSA Organization Logo"
             width={152}
             height={40}
             data-ai-hint="organization logo"

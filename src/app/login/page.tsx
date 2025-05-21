@@ -22,7 +22,7 @@ export default function LoginPage() {
           <div className="mx-auto">
             <Image
               src="/srsa-logo.png"
-              alt="SRSA Logo"
+              alt="SRSA Organization Logo"
               width={229}
               height={60}
               data-ai-hint="organization logo"
