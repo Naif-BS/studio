@@ -5,7 +5,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'MediaScope - Incident Management Platform',
+  title: 'Saudi Red Sea Authority - Media Monitoring Center',
   description: 'Comprehensive Media Monitoring Platform',
 };
 
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr">
+    <html lang="en" dir="ltr" className="dark">
       <body className="font-sans antialiased">
         <AuthProvider>
           {children}
