@@ -12,7 +12,7 @@ export default function LoginPage() {
   const { login, isLoading: authLoading } = useAuth();
 
   const handleOutlookSignIn = async () => {
-    await login('outlook.user@example.com', 'password');
+    await login('outlook.user@example.com', 'password'); 
   };
 
   return (
@@ -23,8 +23,8 @@ export default function LoginPage() {
             <Image
               src="/srsa-logo.png"
               alt="SRSA Logo"
-              width={229}
-              height={60}
+              width={229} 
+              height={60} 
               priority
             />
           </div>
