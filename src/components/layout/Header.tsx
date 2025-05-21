@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -31,8 +32,14 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
       <div className="flex-1">
-        <Link href="/dashboard" className="text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
-          MediaScope
+        <Link href="/dashboard" className="flex items-center gap-2 text-2xl font-bold text-primary hover:opacity-80 transition-opacity">
+          <Image
+            src="/srsa-logo.png"
+            alt="SRSA Logo"
+            width={152}
+            height={40}
+            priority
+          />
         </Link>
       </div>
       
@@ -44,7 +51,7 @@ export default function Header() {
                 <AvatarImage 
                   src={user.photoURL || undefined} 
                   alt={user.displayName || 'User'} 
-                  data-ai-hint="profile avatar" // Added data-ai-hint
+                  data-ai-hint="profile avatar"
                 />
                 <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
               </Avatar>

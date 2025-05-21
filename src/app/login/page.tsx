@@ -2,6 +2,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,8 +18,16 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-primary">MediaScope</CardTitle>
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto">
+            <Image
+              src="/srsa-logo.png"
+              alt="SRSA Logo"
+              width={229}
+              height={60}
+              priority
+            />
+          </div>
           <CardDescription>Sign in with your Outlook account</CardDescription>
         </CardHeader>
         <CardContent>
