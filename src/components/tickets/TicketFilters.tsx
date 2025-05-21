@@ -56,7 +56,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
             <Label htmlFor="search-tickets">Search Incidents</Label>
             <Input
               id="search-tickets"
-              placeholder="Search by keyword, serial no..."
+              placeholder="Search by keyword, serial, description..."
               value={filters.searchTerm || ''}
               onChange={handleSearchTermChange}
             />

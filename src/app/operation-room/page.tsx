@@ -230,7 +230,7 @@ const TicketDetailsCard = dynamic(() => import('@/components/tickets/TicketDetai
               <div className="text-center text-muted-foreground p-6">
                 <Info className="mx-auto h-12 w-12 mb-3" />
                 <p className="text-lg">No incident selected.</p>
-                <p>Please select an incident from the list to view its details and take action, or check your filters.</p>
+                <p>Select an incident from the queue to view its details and manage it. If the queue appears empty, please check your filters.</p>
               </div>
             </UiCard>
           )}

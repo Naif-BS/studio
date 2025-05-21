@@ -185,7 +185,7 @@ export default function TicketForm({ onSubmitSuccess }: TicketFormProps) {
             <FormItem>
               <FormLabel>Link to Media Content</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/issue" {...field} />
+                <Input placeholder="e.g., https://example.com/article-or-post-name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
