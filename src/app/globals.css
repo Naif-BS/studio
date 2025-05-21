@@ -65,50 +65,49 @@ body {
   }
 
   .dark {
-    /* EXTREMELY OBVIOUS DARK THEME FOR TESTING */
-    --background: 0 0% 0%; /* Black */
-    --foreground: 60 100% 50%; /* Bright Yellow */
+    --background: 220 40% 10%; /* SRSA Dark Blue - Main Background */
+    --foreground: 210 20% 90%; /* SRSA Light Grey/Off-white - Main Text */
 
-    --card: 0 0% 5%; 
-    --card-foreground: 60 100% 60%;
+    --card: 220 40% 15%; /* Slightly Lighter Dark Blue - Card Background */
+    --card-foreground: 210 20% 90%; /* SRSA Light Grey/Off-white - Card Text */
 
-    --popover: 0 0% 3%;
-    --popover-foreground: 60 100% 70%;
+    --popover: 220 40% 13%; /* Similar to Card, slightly darker for depth */
+    --popover-foreground: 210 20% 90%; /* SRSA Light Grey/Off-white - Popover Text */
 
-    --primary: 200 100% 50%; /* Bright Cyan */
-    --primary-foreground: 0 0% 0%; 
+    --primary: 197 90% 50%; /* SRSA Teal/Turquoise - Primary Buttons/Interactive */
+    --primary-foreground: 210 20% 95%; /* White/Very Light Grey - Text on Primary */
 
-    --secondary: 0 0% 10%; 
-    --secondary-foreground: 60 100% 55%;
+    --secondary: 220 30% 25%; /* Muted Dark Blue - Secondary Background Elements */
+    --secondary-foreground: 210 15% 80%; /* Lighter Grey - Text on Secondary */
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 60 100% 45%;
+    --muted: 220 30% 20%; /* Darker Muted Blue - Muted Background */
+    --muted-foreground: 210 15% 70%; /* Lighter Grey - Muted Text */
 
-    --accent: 300 100% 50%; /* Bright Magenta */
-    --accent-foreground: 0 0% 0%;
+    --accent: 207 80% 65%; /* SRSA Medium Blue - Accent Color */
+    --accent-foreground: 0 0% 100%; /* White - Text on Accent */
 
-    --destructive: 0 100% 50%; 
-    --destructive-foreground: 60 100% 50%;
+    --destructive: 0 70% 55%; /* A clear, but not overly bright Red - Destructive Actions */
+    --destructive-foreground: 0 0% 98%; /* White/Very Light Grey - Text on Destructive */
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 200 100% 50%;
+    --border: 220 40% 28%; /* Subtle Border, Lighter than Card/Background */
+    --input: 220 40% 22%; /* Input Background, slightly distinct */
+    --ring: 197 90% 55%; /* SRSA Teal/Turquoise - Focus Rings */
 
-    --chart-1: 210 70% 58%;
-    --chart-2: 175 55% 48%;
-    --chart-3: 10 75% 55%;
-    --chart-4: 45 80% 60%;
-    --chart-5: 145 50% 50%;
-
-    /* Dark Sidebar specific theme variables */
-    --sidebar-background: 0 0% 3%;
-    --sidebar-foreground: 60 100% 80%;
-    --sidebar-primary: 200 100% 60%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 200 100% 70%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 200 100% 50%;
+    --chart-1: 197 90% 60%; /* Teal */
+    --chart-2: 207 80% 70%; /* Medium Blue */
+    --chart-3: 0 70% 65%;   /* Coral/Salmon like */
+    --chart-4: 40 50% 70%;  /* Light Beige like */
+    --chart-5: 210 20% 75%; /* Light Grey */
+    
+    /* Dark Sidebar specific theme variables (for bottom nav) */
+    --sidebar-background: 220 40% 12%; /* Slightly different from main background for separation */
+    --sidebar-foreground: 210 20% 85%; /* Text color for sidebar items */
+    --sidebar-primary: 197 90% 50%;    /* Active item color - SRSA Teal */
+    --sidebar-primary-foreground: 0 0% 100%; /* White */
+    --sidebar-accent: 220 40% 25%;     /* Hover background for sidebar items */
+    --sidebar-accent-foreground: 197 90% 65%;/* Text color on hover - Lighter Teal */
+    --sidebar-border: 220 40% 28%;
+    --sidebar-ring: 197 90% 55%;
   }
 }
 
@@ -118,10 +117,5 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-  }
-
-  /* Force extreme dark theme for body if .dark is on html */
-  .dark body {
-    @apply bg-black text-yellow-400;
   }
 }
