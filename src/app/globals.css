@@ -18,10 +18,10 @@ body {
 
 @layer base {
   :root {
-    --background: 208 100% 97%; /* #F0F8FF - Very light, desaturated blue (SRSA Light Blue/Cyan for light mode) */
-    --foreground: 210 30% 25%; /* Dark blue/gray for readability (SRSA Dark Blue for text) */
+    --background: 208 100% 97%; /* #F0F8FF - SRSA Light Blue/Cyan for light mode */
+    --foreground: 210 30% 25%; /* SRSA Dark Blue for text */
     
-    --card: 0 0% 100%; /* White for cards to stand out */
+    --card: 0 0% 100%; /* White for cards */
     --card-foreground: 210 30% 25%; /* SRSA Dark Blue for text on cards */
 
     --popover: 0 0% 100%;
@@ -30,13 +30,13 @@ body {
     --primary: 207 86% 70%; /* SRSA Medium Blue */
     --primary-foreground: 0 0% 100%; /* White text on primary */
 
-    --secondary: 208 100% 92%; /* Lighter shade of background for secondary elements (SRSA Light Grey/Off-white) */
+    --secondary: 208 100% 92%; /* SRSA Light Grey/Off-white for secondary elements */
     --secondary-foreground: 210 30% 30%; /* SRSA Dark Blue for text on secondary */
 
-    --muted: 208 60% 90%; /* Muted blue-gray (SRSA Light Grey) */
+    --muted: 208 60% 90%; /* SRSA Light Grey */
     --muted-foreground: 210 25% 45%; /* SRSA Dark Grey for muted text */
 
-    --accent: 197 90% 64%; /* SRSA Teal/Turquoise or another vibrant secondary */
+    --accent: 197 90% 64%; /* SRSA Teal/Turquoise */
     --accent-foreground: 0 0% 100%; /* White text on accent */
 
     --destructive: 0 84.2% 60.2%; /* SRSA Coral/Salmon */
@@ -65,34 +65,34 @@ body {
   }
 
   .dark {
-    /* TEST: Extreme contrast dark theme */
+    /* EXTREMELY OBVIOUS DARK THEME FOR TESTING */
     --background: 0 0% 0%; /* Black */
-    --foreground: 0 0% 100%; /* White */
+    --foreground: 60 100% 50%; /* Bright Yellow */
 
-    --card: 0 0% 10%; /* Very Dark Grey for cards */
-    --card-foreground: 0 0% 90%; /* Light Grey for text on cards */
+    --card: 0 0% 5%; 
+    --card-foreground: 60 100% 60%;
 
-    --popover: 0 0% 5%; /* Darker for popover */
-    --popover-foreground: 0 0% 95%; /* Lighter for popover text */
+    --popover: 0 0% 3%;
+    --popover-foreground: 60 100% 70%;
 
-    --primary: 300 100% 70%; /* Bright Magenta for primary */
-    --primary-foreground: 0 0% 0%; /* Black text on primary */
+    --primary: 200 100% 50%; /* Bright Cyan */
+    --primary-foreground: 0 0% 0%; 
 
-    --secondary: 0 0% 15%; /* Dark Grey for secondary */
-    --secondary-foreground: 0 0% 85%; /* Light Grey for secondary text */
+    --secondary: 0 0% 10%; 
+    --secondary-foreground: 60 100% 55%;
 
-    --muted: 0 0% 20%; /* Slightly lighter Dark Grey for muted */
-    --muted-foreground: 0 0% 60%; /* Medium Grey for muted text */
+    --muted: 0 0% 15%;
+    --muted-foreground: 60 100% 45%;
 
-    --accent: 120 100% 50%; /* Bright Green for accent */
-    --accent-foreground: 0 0% 0%; /* Black text on accent */
+    --accent: 300 100% 50%; /* Bright Magenta */
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 100% 50%; /* Bright Red for destructive */
-    --destructive-foreground: 0 0% 100%; /* White text on destructive */
+    --destructive: 0 100% 50%; 
+    --destructive-foreground: 60 100% 50%;
 
-    --border: 0 0% 25%; /* Dark Grey border */
-    --input: 0 0% 25%; /* Dark Grey input */
-    --ring: 300 100% 70%; /* Bright Magenta for rings */
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 200 100% 50%;
 
     --chart-1: 210 70% 58%;
     --chart-2: 175 55% 48%;
@@ -100,15 +100,15 @@ body {
     --chart-4: 45 80% 60%;
     --chart-5: 145 50% 50%;
 
-    /* Dark Sidebar specific theme variables (for bottom nav) */
-    --sidebar-background: 0 0% 3%;  /* Slightly darker than main background */
-    --sidebar-foreground: 0 0% 92%; 
-    --sidebar-primary: 300 100% 70%; 
-    --sidebar-primary-foreground: 0 0% 0%; 
-    --sidebar-accent: 0 0% 18%; 
-    --sidebar-accent-foreground: 300 100% 80%; 
-    --sidebar-border: 0 0% 20%;
-    --sidebar-ring: 300 100% 70%;
+    /* Dark Sidebar specific theme variables */
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 60 100% 80%;
+    --sidebar-primary: 200 100% 60%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 200 100% 70%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 200 100% 50%;
   }
 }
 
@@ -118,5 +118,10 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Force extreme dark theme for body if .dark is on html */
+  .dark body {
+    @apply bg-black text-yellow-400;
   }
 }
