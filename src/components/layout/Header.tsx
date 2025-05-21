@@ -36,21 +36,21 @@ export default function Header() {
           <Image
             src="/srsa-logo.png"
             alt="SRSA Logo"
-            width={152} 
-            height={40} 
-            priority
+            width={152}
+            height={40}
+            data-ai-hint="organization logo"
           />
         </Link>
       </div>
-      
+
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar className="h-9 w-9">
-                <AvatarImage 
-                  src={user.photoURL || undefined} 
-                  alt={user.displayName || 'User'} 
+                <AvatarImage
+                  src={user.photoURL || undefined}
+                  alt={user.displayName || 'User'}
                   data-ai-hint="profile avatar"
                 />
                 <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
