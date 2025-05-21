@@ -25,7 +25,7 @@ export default function TicketDetailsModal({ ticket, isOpen, onOpenChange }: Tic
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col p-0 bg-card">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] flex flex-col p-0 bg-card hide-dialog-close-button">
         <DialogHeader className="p-6 pb-0 border-b">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <DialogTitle className="text-2xl">{ticket.serialNumber}</DialogTitle>

@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React from 'react';
@@ -16,6 +17,7 @@ interface TicketTableProps {
   isLoading?: boolean;
   onRowClick?: (ticketId: string) => void;
   showActionsColumn?: boolean; // New prop
+  visibleColumns?: ('Status' | 'Description' | 'Media Material' | 'Media Platform' | 'Received' | 'SerialNumber' | 'ReportedBy' | 'ActionsLogged' | 'StartedProcessing' | 'ClosedAt' | 'LinkToMedia' | 'Screenshot')[];
 }
 
 const mediaMaterialDisplay: Record<string, string> = {
@@ -43,7 +45,7 @@ const platformDisplay: Record<string, string> = {
 };
 
 
-export default function TicketTable({ tickets, isLoading, onRowClick, showActionsColumn = true }: TicketTableProps) {
+export default function TicketTable({ tickets, isLoading, onRowClick, showActionsColumn = true, visibleColumns }: TicketTableProps) {
   const dateLocale = enUS;
 
   const formatDateSafe = (date: Date | string | null | undefined) => {
@@ -54,6 +56,23 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
       return "Invalid Date";
     }
   };
+
+  const columns = [
+    { key: 'SerialNumber', header: <div className="flex items-center gap-1"><FileText className="h-4 w-4" /> Serial Number</div>, cell: (ticket: Ticket) => ticket.serialNumber },
+    { key: 'Status', header: 'Status', cell: (ticket: Ticket) => <TicketStatusBadge status={ticket.status} /> },
+    { key: 'Description', header: <div className="flex items-center gap-1"><Mail className="h-4 w-4" /> Description</div>, cell: (ticket: Ticket) => <span className="truncate max-w-xs" title={ticket.description}>{ticket.description}</span> },
+    { key: 'Media Material', header: <div className="flex items-center gap-1"><Layers className="h-4 w-4" /> Media Material</div>, cell: (ticket: Ticket) => ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial ? `Other: ${ticket.otherMediaMaterial}` : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial },
+    { key: 'Media Platform', header: <div className="flex items-center gap-1"><RadioTower className="h-4 w-4" /> Media Platform</div>, cell: (ticket: Ticket) => ticket.platform === 'Other' && ticket.otherPlatform ? `Other: ${ticket.otherPlatform}` : platformDisplay[ticket.platform] || ticket.platform },
+    { key: 'Received', header: <div className="flex items-center gap-1"><Clock className="h-4 w-4" /> Received</div>, cell: (ticket: Ticket) => formatDateSafe(ticket.receivedAt) },
+    { key: 'ReportedBy', header: <div className="flex items-center gap-1"><User className="h-4 w-4" /> Reported By</div>, cell: (ticket: Ticket) => ticket.reportedBy },
+    { key: 'ActionsLogged', header: <div className="flex items-center gap-1"><Workflow className="h-4 w-4" /> Actions Logged</div>, cell: (ticket: Ticket) => <span className="text-center">{ticket.actionsLog.length}</span> },
+    { key: 'StartedProcessing', header: <div className="flex items-center gap-1"><Play className="h-4 w-4" /> Started Processing</div>, cell: (ticket: Ticket) => formatDateSafe(ticket.startedProcessingAt) },
+    { key: 'ClosedAt', header: <div className="flex items-center gap-1"><CheckCircle className="h-4 w-4" /> Closed At</div>, cell: (ticket: Ticket) => formatDateSafe(ticket.closedAt) },
+    { key: 'LinkToMedia', header: <div className="flex items-center gap-1"><LinkIcon className="h-4 w-4" /> Link to Media Content</div>, cell: (ticket: Ticket) => ticket.issueLink ? (<Link href={ticket.issueLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate block max-w-[180px]">{ticket.issueLink}</Link>) : ("N/A") },
+    { key: 'Screenshot', header: <div className="flex items-center gap-1"><ImageIcon className="h-4 w-4" /> Screenshot</div>, cell: (ticket: Ticket) => ticket.screenshotLink ? <ImageIcon className="h-5 w-5 text-primary" /> : "No" },
+  ];
+
+  const columnsToDisplay = visibleColumns ? columns.filter(col => visibleColumns.includes(col.key as any)) : columns;
 
   if (isLoading) {
     return (
@@ -113,19 +132,10 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
     <div className="rounded-md border">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[150px]"><div className="flex items-center gap-1"><FileText className="h-4 w-4" /> Serial Number</div></TableHead>
-            <TableHead className="w-[120px]">Status</TableHead>
-            <TableHead><div className="flex items-center gap-1"><Mail className="h-4 w-4" /> Description</div></TableHead>
-            <TableHead className="w-[200px]"><div className="flex items-center gap-1"><Layers className="h-4 w-4" /> Media Material</div></TableHead>
-            <TableHead className="w-[250px]"><div className="flex items-center gap-1"><RadioTower className="h-4 w-4" /> Media Platform</div></TableHead>
-            <TableHead className="w-[180px]"><div className="flex items-center gap-1"><Clock className="h-4 w-4" /> Received</div></TableHead>
-            <TableHead className="w-[150px]"><div className="flex items-center gap-1"><User className="h-4 w-4" /> Reported By</div></TableHead>
-            <TableHead className="w-[130px]"><div className="flex items-center gap-1"><Workflow className="h-4 w-4" /> Actions Logged</div></TableHead>
-            <TableHead className="w-[180px]"><div className="flex items-center gap-1"><Play className="h-4 w-4" /> Started Processing</div></TableHead>
-            <TableHead className="w-[180px]"><div className="flex items-center gap-1"><CheckCircle className="h-4 w-4" /> Closed At</div></TableHead>
-            <TableHead className="w-[200px]"><div className="flex items-center gap-1"><LinkIcon className="h-4 w-4" /> Link to Media Content</div></TableHead>
-            <TableHead className="w-[120px]"><div className="flex items-center gap-1"><ImageIcon className="h-4 w-4" /> Screenshot</div></TableHead>
+          <TableRow className="cursor-default">
+            {columnsToDisplay.map(col => (
+              <TableHead key={col.key}>{col.header}</TableHead>
+            ))}
             {showActionsColumn && <TableHead className="text-right w-[100px]">Actions</TableHead>}
           </TableRow>
         </TableHeader>
@@ -136,36 +146,9 @@ export default function TicketTable({ tickets, isLoading, onRowClick, showAction
               onClick={onRowClick && showActionsColumn ? () => onRowClick(ticket.id) : undefined}
               className={onRowClick && showActionsColumn ? 'cursor-pointer hover:bg-muted/50' : ''}
             >
-              <TableCell>{ticket.serialNumber}</TableCell>
-              <TableCell><TicketStatusBadge status={ticket.status} /></TableCell>
-              <TableCell className="truncate max-w-xs" title={ticket.description}>{ticket.description}</TableCell>
-              <TableCell>
-                {ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial 
-                  ? `Other: ${ticket.otherMediaMaterial}` 
-                  : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}
-              </TableCell>
-              <TableCell>
-                {ticket.platform === 'Other' && ticket.otherPlatform 
-                  ? `Other: ${ticket.otherPlatform}` 
-                  : platformDisplay[ticket.platform] || ticket.platform}
-              </TableCell>
-              <TableCell>{formatDateSafe(ticket.receivedAt)}</TableCell>
-              <TableCell>{ticket.reportedBy}</TableCell>
-              <TableCell className="text-center">{ticket.actionsLog.length}</TableCell>
-              <TableCell>{formatDateSafe(ticket.startedProcessingAt)}</TableCell>
-              <TableCell>{formatDateSafe(ticket.closedAt)}</TableCell>
-              <TableCell>
-                {ticket.issueLink ? (
-                  <Link href={ticket.issueLink} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate block max-w-[180px]">
-                    {ticket.issueLink}
-                  </Link>
-                ) : (
-                  "N/A"
-                )}
-              </TableCell>
-              <TableCell>
-                {ticket.screenshotLink ? <ImageIcon className="h-5 w-5 text-primary" /> : "No"}
-              </TableCell>
+              {columnsToDisplay.map(col => (
+                <TableCell key={col.key}>{col.cell(ticket)}</TableCell>
+              ))}
               {showActionsColumn && (
                 <TableCell className="text-right">
                   <Button 

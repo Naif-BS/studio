@@ -1,4 +1,12 @@
 
+@font-face {
+ font-family: 'Helvetica Nueu';
+  src: url('/fonts/helvetica-neue-regular.woff2') format('woff2'),
+       url('/fonts/helvetica-neue-regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,6 +21,8 @@ body {
     --background: 208 100% 97%; /* #F0F8FF - Very light, desaturated blue */
     --foreground: 210 30% 25%; /* Dark blue/gray for readability */
 
+          
+    
     --card: 0 0% 100%; /* White for cards to stand out */
     --card-foreground: 210 30% 25%;
 

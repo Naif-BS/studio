@@ -1,10 +1,11 @@
 
+
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
-import TicketDetailsModal from '@/components/tickets/TicketDetailsModal'; // Use modal
+import dynamic from 'next/dynamic'; // Use dynamic import
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime } from '@/lib/data';
 import type { Ticket } from '@/types';
@@ -12,6 +13,11 @@ import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3 } from
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
+  // Dynamically import the modal component
+  const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
+    loading: () => <p>Loading modal...</p>, // Fallback while loading
+  });
+
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<TicketFiltersState>({
@@ -119,10 +125,12 @@ export default function DashboardPage() {
         <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Tickets Activity</h2>
         <TicketFilters filters={filters} onFilterChange={setFilters} />
         <div className="mt-4">
-          <TicketTable 
-              tickets={displayedTickets} 
-              isLoading={isLoading} 
-              onRowClick={handleTicketRowClick} 
+          <TicketTable
+              tickets={displayedTickets}
+              isLoading={isLoading}
+              onRowClick={handleTicketRowClick}
+              visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform']}
+              showActionsColumn={true} // Add the Actions column with the View button
           />
         </div>
       </section>

@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import TicketTable from '@/components/tickets/TicketTable';
-import TicketDetailsCard from '@/components/tickets/TicketDetailsCard';
+import dynamic from 'next/dynamic';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets, updateTicketStatus as apiUpdateTicketStatus, addTicketAction as apiAddTicketAction } from '@/lib/data';
 import type { Ticket, TicketStatus } from '@/types';
@@ -108,15 +108,15 @@ export default function OperationRoomPage() {
       .sort((a, b) => { // FIFO: Newest 'New' first, then newest 'Processing'
         const statusOrder = { 'New': 1, 'Processing': 2 } as Record<string, number>; 
         if (statusOrder[a.status] !== statusOrder[b.status]) {
-          return statusOrder[a.status] - statusOrder[b.status]; 
-        }
+          return statusOrder[a.status] - statusOrder[b.status];
+        } 
         // For tickets with the same status, sort by receivedAt (FIFO - oldest first)
         return new Date(a.receivedAt).getTime() - new Date(b.receivedAt).getTime();
       });
   }, [allTickets, filters]);
 
   // Effect to handle auto-selection of tickets and URL updates
-  useEffect(() => {
+   useEffect(() => {
     const ticketIdFromQuery = searchParams.get('ticketId');
 
     if (!isLoading) { // Guard: Only run when not initially loading
@@ -177,9 +177,13 @@ export default function OperationRoomPage() {
     }
   }, [displayedTickets, selectedTicket, isLoading, router, searchParams]);
 
+const TicketDetailsCard = dynamic(() => import('@/components/tickets/TicketDetailsCard'), {
+  loading: () => <TicketDetailsSkeleton />, // Use the skeleton component as a fallback
+});
+
 
   const TicketDetailsSkeleton = () => (
-    <UiCard className="h-full min-h-[300px] p-6 space-y-4">
+    <UiCard className="h-full p-6 space-y-4">
       <div className="flex justify-between items-start">
         <Skeleton className="h-8 w-1/3" /> {/* Serial Number */}
         <Skeleton className="h-6 w-20" /> {/* Status Badge */}
@@ -203,9 +207,10 @@ export default function OperationRoomPage() {
           </div>
         ))}
       </div>
-       {/* Skeletons for update section (optional, as it's conditional) */}
+      {/* Skeletons for update section (optional, as it's conditional) */}
     </UiCard>
   );
+
 
 
   return (
@@ -213,26 +218,38 @@ export default function OperationRoomPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
         <h1 className="text-3xl font-bold tracking-tight">Operation Room</h1>
       </div>
-      
+
       <TicketFilters filters={filters} onFilterChange={setFilters} />
 
+      {/* Main grid container */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* Left column for Ticket Queue */}
         <div className="lg:col-span-2">
-           <h2 className="text-xl font-semibold mb-3">Tickets Queue</h2>
-          <TicketTable tickets={displayedTickets} isLoading={isLoading} onRowClick={handleSelectTicket} />
+          <h2 className="text-xl font-semibold mb-3">Tickets Queue</h2>
+          <TicketTable
+            tickets={displayedTickets}
+            isLoading={isLoading}
+            onRowClick={handleSelectTicket}
+            visibleColumns={['SerialNumber', 'Status', 'Description', 'Media Material', 'Media Platform', 'ReportedBy']}
+            showActionsColumn={true}
+          />
         </div>
-        
+
+        {/* Right column for Ticket Details */}
         <div className="lg:col-span-1">
           <h2 className="text-xl font-semibold mb-3">Ticket Details</h2>
           {isLoading && !selectedTicket ? ( // Show skeleton when loading and no ticket is yet selected
-            <TicketDetailsSkeleton />
+             <TicketDetailsSkeleton />
           ) : selectedTicket ? (
-            <TicketDetailsCard
-              ticket={selectedTicket}
-              onUpdateStatus={handleUpdateStatus}
-              onAddAction={handleAddAction}
-              isUpdating={isUpdating}
-            />
+            <React.Suspense fallback={<TicketDetailsSkeleton />}>
+              <TicketDetailsCard
+                ticket={selectedTicket}
+                onUpdateStatus={handleUpdateStatus}
+                onAddAction={handleAddAction}
+                isUpdating={isUpdating}
+              />
+            </React.Suspense>
           ) : (
             <UiCard className="h-full flex items-center justify-center min-h-[300px] bg-muted/20 border-dashed">
               <div className="text-center text-muted-foreground p-6">
@@ -247,4 +264,3 @@ export default function OperationRoomPage() {
     </div>
   );
 }
-    

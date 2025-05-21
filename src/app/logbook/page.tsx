@@ -1,15 +1,16 @@
 
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import TicketTable from '@/components/tickets/TicketTable';
-// TicketDetailsModal removed
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import { getTickets } from '@/lib/data';
 import type { Ticket } from '@/types';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-
+import { useToast } from '@/hooks/use-toast';
 const ITEMS_PER_PAGE = 10;
+
+const TicketDetailsModal = lazy(() => import('@/components/tickets/TicketDetailsModal'));
 
 export default function LogbookPage() {
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
@@ -20,10 +21,10 @@ export default function LogbookPage() {
     platform: '',
     searchTerm: '',
   });
+  const { toast } = useToast();
   const [currentPage, setCurrentPage] = useState(1);
-  // Modal state removed
-  // const [modalTicket, setModalTicket] = useState<Ticket | null>(null); 
-  // const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -36,7 +37,7 @@ export default function LogbookPage() {
   }, []);
 
   const filteredTickets = useMemo(() => {
-    setCurrentPage(1); 
+    setCurrentPage(1);
     return allTickets
       .filter(ticket => {
         const searchLower = filters.searchTerm?.toLowerCase() || '';
@@ -61,14 +62,14 @@ export default function LogbookPage() {
     return filteredTickets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredTickets, currentPage]);
 
+
   const totalPages = Math.ceil(filteredTickets.length / ITEMS_PER_PAGE);
+  const handlePageChange = (page: number) => setCurrentPage(page);
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
+  const handleViewTicketClick = (ticketId: string) => {
+    const ticket = allTickets.find(t => t.id === ticketId);
+    if (ticket) { setModalTicket(ticket); setIsModalOpen(true); }
   };
-
   // handleViewTicketClick removed as modal is removed
   // const handleViewTicketClick = (ticketId: string) => {
   //   const ticket = allTickets.find(t => t.id === ticketId);
@@ -82,10 +83,10 @@ export default function LogbookPage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">Media Logbook</h1>
       <TicketFilters filters={filters} onFilterChange={setFilters} />
-      
-      <TicketTable 
-        tickets={paginatedTickets} 
-        isLoading={isLoading} 
+
+      <TicketTable
+        tickets={paginatedTickets}
+        isLoading={isLoading}
         // onRowClick is removed
         showActionsColumn={false} // Hide actions column
       />
@@ -102,9 +103,9 @@ export default function LogbookPage() {
             </PaginationItem>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                   <PaginationItem key={page}>
-                    <PaginationLink 
-                        href="#" 
-                        onClick={(e) => { e.preventDefault(); handlePageChange(page);}}
+                    <PaginationLink
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); handlePageChange(page); }}
                         isActive={page === currentPage}
                     >
                         {page}
@@ -122,14 +123,15 @@ export default function LogbookPage() {
         </Pagination>
       )}
 
-      {/* Modal rendering removed */}
-      {/* {modalTicket && (
-        <TicketDetailsModal
-          ticket={modalTicket}
-          isOpen={isModalOpen}
-          onOpenChange={setIsModalOpen}
-        />
-      )} */}
+      <Suspense fallback={<div>Loading modal...</div>}>
+        {modalTicket && (
+          <TicketDetailsModal
+            ticket={modalTicket}
+            isOpen={isModalOpen}
+            onOpenChange={setIsModalOpen}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }
