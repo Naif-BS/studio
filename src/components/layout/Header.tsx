@@ -38,7 +38,6 @@ export default function Header() {
             alt="SRSA Organization Logo"
             width={152}
             height={40}
-            data-ai-hint="organization logo"
           />
         </Link>
       </div>
