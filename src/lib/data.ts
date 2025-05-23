@@ -1,5 +1,6 @@
 
 import type { Ticket, TicketStatus, MediaMaterial, Platform, TicketAction } from '@/types';
+import { isFriday, isSaturday, differenceInMilliseconds, addDays, startOfDay, endOfDay, min } from 'date-fns';
 
 const mediaMaterialToCode: Record<MediaMaterial, string> = {
   'Press Release': 'P',
@@ -29,7 +30,7 @@ let tickets: Ticket[] = [
   {
     id: '1',
     serialNumber: 'BDM-VN0001',
-    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // Approx 5 days ago
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -46,7 +47,7 @@ let tickets: Ticket[] = [
   {
     id: '2',
     serialNumber: 'BDM-PC0001',
-    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Approx 3 days ago
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Press Release',
@@ -62,7 +63,7 @@ let tickets: Ticket[] = [
   {
     id: '3',
     serialNumber: 'BDM-FX0001',
-    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // Approx 1 day ago
     status: 'New',
     mediaMaterial: 'Infographic',
     platform: 'SRSA Account on Platform X',
@@ -74,7 +75,7 @@ let tickets: Ticket[] = [
   {
     id: '4',
     serialNumber: 'BDM-MI0001',
-    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // Approx 12 hours ago
     status: 'New',
     mediaMaterial: 'Image',
     platform: 'SRSA Account on Instagram',
@@ -143,12 +144,11 @@ let tickets: Ticket[] = [
     actionsLog: [],
     reportedBy: 'Internal Audit',
   },
-  // New dummy data starts here
   {
     id: '9',
-    serialNumber: 'BDM-PC0002', // Press Release, Local Channel
-    receivedAt: new Date(Date.now() - 48 * 60 * 60 * 1000), // 2 days ago
-    startedProcessingAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+    serialNumber: 'BDM-PC0002',
+    receivedAt: new Date(Date.now() - 48 * 60 * 60 * 1000), 
+    startedProcessingAt: new Date(Date.now() - 24 * 60 * 60 * 1000), 
     status: 'Processing',
     mediaMaterial: 'Press Release',
     platform: 'Local Media Channel/Platform',
@@ -161,8 +161,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '10',
-    serialNumber: 'BDM-MK0001', // Image, LinkedIn
-    receivedAt: new Date(Date.now() - 72 * 60 * 60 * 1000), // 3 days ago
+    serialNumber: 'BDM-MK0001', 
+    receivedAt: new Date(Date.now() - 72 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 70 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 68 * 60 * 60 * 1000),
     status: 'Closed',
@@ -178,8 +178,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '11',
-    serialNumber: 'BDM-FP0001', // Infographic, Unified Platform
-    receivedAt: new Date(Date.now() - 8 * 60 * 60 * 1000), // 8 hours ago
+    serialNumber: 'BDM-FP0001', 
+    receivedAt: new Date(Date.now() - 8 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Infographic',
     platform: 'Unified Platform',
@@ -190,8 +190,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '12',
-    serialNumber: 'BDM-AN0001', // Audio, International
-    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    serialNumber: 'BDM-AN0001', 
+    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Audio Clip',
@@ -205,8 +205,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '13',
-    serialNumber: 'BDM-GS0001', // GIF, SRSA Website
-    receivedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+    serialNumber: 'BDM-GS0001', 
+    receivedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'GIF',
     platform: 'SRSA Website',
@@ -217,8 +217,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '14',
-    serialNumber: 'BDM-LX0001', // Legal Document, Platform X
-    receivedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
+    serialNumber: 'BDM-LX0001', 
+    receivedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -234,8 +234,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '15',
-    serialNumber: 'BDM-VC0001', // Video Clip, Local Media
-    receivedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
+    serialNumber: 'BDM-VC0002', // Updated based on new format logic (was BDM-VC0001)
+    receivedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Video Clip',
     platform: 'Local Media Channel/Platform',
@@ -246,8 +246,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '16',
-    serialNumber: 'BDM-PS0001', // Press Release, SRSA Website
-    receivedAt: new Date(Date.now() - 26 * 60 * 60 * 1000), // 26 hours ago
+    serialNumber: 'BDM-PS0001', 
+    receivedAt: new Date(Date.now() - 26 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 20 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Press Release',
@@ -261,8 +261,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '17',
-    serialNumber: 'BDM-FU0001', // Infographic, Umm Al-Qura
-    receivedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000), // 12 days ago
+    serialNumber: 'BDM-FU0001', 
+    receivedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -277,8 +277,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '18',
-    serialNumber: 'BDM-VT0001', // Video Clip, TikTok
-    receivedAt: new Date(Date.now() - 3 * 60 * 60 * 1000), // 3 hours ago
+    serialNumber: 'BDM-VT0001', 
+    receivedAt: new Date(Date.now() - 3 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Video Clip',
     platform: 'SRSA Account on TikTok',
@@ -289,8 +289,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '19',
-    serialNumber: 'BDM-ZI0001', // Other, Instagram
-    receivedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
+    serialNumber: 'BDM-ZI0001',
+    receivedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -306,8 +306,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '20',
-    serialNumber: 'BDM-MY0001', // Image, Other Platform
-    receivedAt: new Date(Date.now() - 90 * 60 * 1000), // 1.5 hours ago
+    serialNumber: 'BDM-MY0001', 
+    receivedAt: new Date(Date.now() - 90 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Image',
     platform: 'Other',
@@ -447,15 +447,69 @@ export const addTicketAction = (id: string, description: string, user: string): 
   };
 };
 
+// Helper function to check if a day is a working day (Sunday - Thursday)
+function isWorkingDay(date: Date): boolean {
+  if (!(date instanceof Date) || isNaN(date.getTime())) return false;
+  // Sunday is 0, Thursday is 4. Friday is 5, Saturday is 6.
+  return !isFriday(date) && !isSaturday(date);
+}
+
+// Calculates duration in milliseconds, considering only working days (Sun-Thu), 24 hours per working day.
+function calculateWorkingMilliseconds(startDateParam: Date, endDateParam: Date): number {
+  if (!(startDateParam instanceof Date) || !(endDateParam instanceof Date) || 
+      isNaN(startDateParam.getTime()) || isNaN(endDateParam.getTime()) || 
+      endDateParam.getTime() <= startDateParam.getTime()) {
+    return 0;
+  }
+
+  const startDate = new Date(startDateParam);
+  const endDate = new Date(endDateParam);
+
+  let workingMilliseconds = 0;
+  const calendarDayInMs = 24 * 60 * 60 * 1000;
+
+  let currentDatePointer = startOfDay(startDate); // Start iterating from the beginning of the start day
+
+  // Handle the first (potentially partial) day
+  if (isWorkingDay(startDate)) {
+    const endOfFirstDay = endOfDay(startDate);
+    // If endDate is on the same day as startDate, take diff from startDate to endDate
+    // Otherwise, take diff from startDate to endOfFirstDay
+    const effectiveEndOfFirstDay = min([endOfFirstDay, endDate]);
+    workingMilliseconds += differenceInMilliseconds(effectiveEndOfFirstDay, startDate);
+  }
+  
+  // Move to the start of the next day for full day iteration
+  currentDatePointer = addDays(startOfDay(startDate), 1);
+
+  // Handle full days in between
+  while (currentDatePointer.getTime() < startOfDay(endDate).getTime()) {
+    if (isWorkingDay(currentDatePointer)) {
+      workingMilliseconds += calendarDayInMs;
+    }
+    currentDatePointer = addDays(currentDatePointer, 1);
+  }
+
+  // Handle the last (potentially partial) day, but only if endDate is on a different day than startDate
+  if (startOfDay(startDate).getTime() < startOfDay(endDate).getTime()) {
+    if (isWorkingDay(endDate)) {
+      workingMilliseconds += differenceInMilliseconds(endDate, startOfDay(endDate));
+    }
+  }
+  
+  return Math.max(0, workingMilliseconds);
+}
+
+
 export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => {
-  const processingTickets = allTickets.filter(t => t.startedProcessingAt && t.status !== 'New');
+  const processingTickets = allTickets.filter(t => t.startedProcessingAt && t.status !== 'New' && t.receivedAt);
   if (processingTickets.length === 0) return 'N/A';
 
   const totalProcessingTime = processingTickets.reduce((sum, t) => {
-    if (t.startedProcessingAt) { 
-      const receivedAtTime = t.receivedAt instanceof Date ? t.receivedAt.getTime() : new Date(t.receivedAt).getTime();
-      const startedProcessingAtTime = t.startedProcessingAt instanceof Date ? t.startedProcessingAt.getTime() : new Date(t.startedProcessingAt).getTime();
-      return sum + (startedProcessingAtTime - receivedAtTime);
+    // Ensure startedProcessingAt is not null before using it
+    if (t.startedProcessingAt) {
+      const duration = calculateWorkingMilliseconds(t.receivedAt, t.startedProcessingAt);
+      return sum + duration;
     }
     return sum;
   }, 0);
@@ -465,14 +519,14 @@ export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => 
 };
 
 export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => {
-  const resolvedTickets = allTickets.filter(t => t.status === 'Closed' && t.closedAt);
+  const resolvedTickets = allTickets.filter(t => t.status === 'Closed' && t.closedAt && t.receivedAt);
   if (resolvedTickets.length === 0) return 'N/A';
   
   const totalResolutionTime = resolvedTickets.reduce((sum, t) => {
-    if (t.closedAt) { 
-        const receivedAtTime = t.receivedAt instanceof Date ? t.receivedAt.getTime() : new Date(t.receivedAt).getTime();
-        const closedAtTime = t.closedAt instanceof Date ? t.closedAt.getTime() : new Date(t.closedAt).getTime();
-        return sum + (closedAtTime - receivedAtTime);
+    // Ensure closedAt is not null
+    if (t.closedAt) {
+        const duration = calculateWorkingMilliseconds(t.receivedAt, t.closedAt);
+        return sum + duration;
     }
     return sum;
   }, 0);
@@ -482,19 +536,24 @@ export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => 
 };
 
 const formatDuration = (ms: number): string => {
-  if (ms < 0) ms = 0; // Ensure duration is not negative
-  const seconds = Math.floor((ms / 1000) % 60);
-  const minutes = Math.floor((ms / (1000 * 60)) % 60);
-  const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  if (ms < 0) ms = 0; 
+  const totalSeconds = Math.floor(ms / 1000);
+  const days = Math.floor(totalSeconds / (3600 * 24));
+  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
 
   let duration = '';
   if (days > 0) duration += `${days}d `;
   if (hours > 0) duration += `${hours}h `;
   if (minutes > 0) duration += `${minutes}m `;
-  if (seconds >= 0 && (duration === '' || days > 0 || hours > 0 || minutes > 0 )) { // Show seconds if it's the only unit or if other units are present.
-      duration += `${seconds}s`;
+  if (seconds >= 0 ) { 
+      if (duration === '' || days > 0 || hours > 0 || minutes > 0 || seconds > 0) { // Only add seconds if it's not the sole 0 unit
+           duration += `${seconds}s`;
+      }
   }
   
-  return duration.trim() || '0s'; // Default to 0s if all are zero.
+  return duration.trim() || '0s'; 
 };
+
+
