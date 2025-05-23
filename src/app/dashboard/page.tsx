@@ -30,6 +30,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const loadTickets = async () => {
       setIsLoading(true);
+      // Simulate a network delay
       await new Promise(resolve => setTimeout(resolve, 500));
       const fetchedTickets = getTickets();
       setTickets(fetchedTickets);
@@ -58,10 +59,14 @@ export default function DashboardPage() {
   }, [tickets, filters]);
 
   const stats = useMemo(() => {
+    // Helper function to generate a random percentage between -15% and +15%
+    const getRandomPercentage = () => (Math.random() * 30 - 15);
+
     if (isLoading) {
         return {
             total: '...', new: '...', processing: '...', closed: '...',
-            avgProcessingTime: '...', avgResolutionTime: '...'
+            avgProcessingTime: '...', avgResolutionTime: '...',
+            totalPct: 0, newPct: 0, processingPct: 0, closedPct: 0,
         };
     }
     return {
@@ -71,6 +76,10 @@ export default function DashboardPage() {
       closed: tickets.filter(t => t.status === 'Closed').length,
       avgProcessingTime: calculateAverageProcessingTime(tickets),
       avgResolutionTime: calculateAverageResolutionTime(tickets),
+      totalPct: getRandomPercentage(),
+      newPct: getRandomPercentage(),
+      processingPct: getRandomPercentage(),
+      closedPct: getRandomPercentage(),
     };
   }, [tickets, isLoading]);
 
@@ -109,10 +118,10 @@ export default function DashboardPage() {
       <section>
         <h1 className="text-3xl font-bold tracking-tight mb-6">Dashboard</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-5 w-5" />} />
-          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} />
-          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} />
-          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} />
+          <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-5 w-5" />} percentageChange={stats.totalPct} />
+          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} percentageChange={stats.newPct} />
+          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} percentageChange={stats.processingPct} />
+          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} percentageChange={stats.closedPct} />
           <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="From receipt to first action"/>
           <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="From receipt to resolution"/>
         </div>
@@ -142,4 +151,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-    
