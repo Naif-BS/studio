@@ -91,15 +91,15 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
 
   return (
     <Card className="mb-4 shadow-md">
-      <CardHeader className="pb-3 pt-4 px-4">
-        <CardTitle className="text-lg">Filter by Timeframe</CardTitle>
+      <CardHeader className="pb-2 pt-3 px-3">
+        <CardTitle className="text-base">Filter by Timeframe</CardTitle>
       </CardHeader>
-      <CardContent className="pt-2 pb-3 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-end">
+      <CardContent className="pt-1 pb-2 px-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-end">
           <div className="space-y-1">
             <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
             <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
-              <SelectTrigger id="filter-type" className="h-9">
+              <SelectTrigger id="filter-type" className="h-8 text-xs">
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
               <SelectContent>
@@ -157,11 +157,11 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end gap-2 pt-0 pb-4 px-4">
+      <CardFooter className="flex justify-end gap-1 pt-0 pb-3 px-3">
         {filterType !== 'allTime' && (
-             <Button variant="outline" size="sm" onClick={handleReset}>Reset</Button>
+             <Button variant="outline" size="sm" onClick={handleReset} className="h-8 text-xs">Reset</Button>
         )}
-        <Button onClick={handleApply} size="sm" disabled={filterType === 'allTime' && currentFilterType === 'allTime'}>Apply</Button>
+        <Button onClick={handleApply} size="sm" disabled={filterType === 'allTime' && currentFilterType === 'allTime'} className="h-8 text-xs">Apply</Button>
       </CardFooter>
     </Card>
   );
