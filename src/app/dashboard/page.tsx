@@ -259,7 +259,7 @@ export default function DashboardPage() {
           
           <StatCard
             title="Top Media Materials"
-            value={stats.topMaterials.length > 0 ? stats.topMaterials[0].name : "N/A"}
+            value={stats.topMaterials.length > 0 ? mediaMaterialDisplay[stats.topMaterials[0].name as MediaMaterial] || stats.topMaterials[0].name : "N/A"}
             icon={<Newspaper className="h-6 w-6" />}
             description="Most common types of media generating incidents."
             subStats={topMaterialsSubStats}
@@ -268,7 +268,7 @@ export default function DashboardPage() {
 
           <StatCard
             title="Top Media Platforms"
-            value={stats.topPlatforms.length > 0 ? stats.topPlatforms[0].name : "N/A"}
+            value={stats.topPlatforms.length > 0 ? platformDisplay[stats.topPlatforms[0].name as Platform] || stats.topPlatforms[0].name : "N/A"}
             icon={<RadioTower className="h-6 w-6" />}
             description="Most common platforms where incidents are reported."
             subStats={topPlatformsSubStats}
