@@ -9,7 +9,7 @@ import TicketFilters, { type TicketFiltersState } from '@/components/tickets/Tic
 import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock, Timer } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
 
@@ -160,10 +160,23 @@ export default function DashboardPage() {
     {
       label: "Avg. Resolution Time",
       value: stats.avgResolutionTime,
-      icon: <BarChart3 className="h-4 w-4" />,
+      icon: <Timer className="h-4 w-4" />, // Changed from BarChart3 for thematic consistency
       percentageChange: stats.avgResolutionTimePct,
       comparisonLabel: stats.comparisonLabel,
     }
+  ];
+
+  const effectivenessSubStats = [
+     { 
+      label: "Resolution Rate", 
+      value: stats.resolutionRate, 
+      icon: <Target className="h-4 w-4"/>,
+    },
+    { 
+      label: "Oldest Open Incident Age", 
+      value: stats.oldestOpenIncidentAge, 
+      icon: <CalendarClock className="h-4 w-4"/>,
+    },
   ];
 
   const recentIncidentsLimit = 5;
@@ -181,11 +194,10 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-24 w-full mb-6 rounded-lg" /> {/* Date Filters Skeleton */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"> {/* Adjusted for new card layout */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Total Incidents */}
           <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Key Time Metrics */}
-          <Skeleton className="h-[110px] w-full rounded-lg" /> {/* Resolution Rate */}
-          <Skeleton className="h-[110px] w-full rounded-lg" /> {/* Oldest Open Incident */}
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Resolution & Backlog */}
         </div>
         <Skeleton className="h-10 w-1/4 mb-4" /> {/* Recent Incidents Title Skeleton */}
         <div className="rounded-md border">
@@ -223,16 +235,12 @@ export default function DashboardPage() {
           />
 
           <StatCard 
-            title="Resolution Rate" 
-            value={stats.resolutionRate} 
-            icon={<Target className="h-6 w-6" />} 
-            description="Resolved incidents / Total incidents"
-          />
-          <StatCard 
-            title="Oldest Open Incident Age" 
-            value={stats.oldestOpenIncidentAge} 
-            icon={<CalendarClock className="h-6 w-6" />} 
-            description="Age of the longest open incident (working days)"
+            title="Resolution & Backlog Insights" 
+            value={"..."} 
+            icon={<ShieldCheck className="h-6 w-6" />} 
+            description="Effectiveness in resolving incidents and age of pending items."
+            subStats={effectivenessSubStats}
+            className="md:col-span-2 lg:col-span-2"
           />
         </div>
       </section>
@@ -261,3 +269,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
