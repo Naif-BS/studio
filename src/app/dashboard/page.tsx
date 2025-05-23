@@ -96,7 +96,7 @@ export default function DashboardPage() {
             total: '...', newCount: '...', processingCount: '...', closedCount: '...',
             avgProcessingTime: '...', avgResolutionTime: '...',
             resolutionRate: '...', oldestOpenIncidentAge: '...',
-            totalPct: 0,
+            newPct: undefined, processingPct: undefined, closedPct: undefined,
             comparisonLabel: "from last day",
         };
     }
@@ -115,15 +115,35 @@ export default function DashboardPage() {
       avgResolutionTime: calculateAverageResolutionTime(ticketsForStats),
       resolutionRate: calculateResolutionRate(ticketsForStats),
       oldestOpenIncidentAge: calculateOldestOpenIncidentAge(ticketsForStats),
-      totalPct: showPercentageChange ? getRandomPercentage() : undefined,
+      newPct: showPercentageChange ? getRandomPercentage() : undefined,
+      processingPct: showPercentageChange ? getRandomPercentage() : undefined,
+      closedPct: showPercentageChange ? getRandomPercentage() : undefined,
       comparisonLabel: showPercentageChange ? "from last day" : undefined,
     };
   }, [ticketsFilteredByDate, isLoading, dateFilter.type, allTickets.length]);
 
   const incidentStatusSubStats = [
-    { label: "New", value: stats.newCount, icon: <AlertTriangle /> },
-    { label: "Active", value: stats.processingCount, icon: <Hourglass /> },
-    { label: "Resolved", value: stats.closedCount, icon: <ListChecks /> },
+    { 
+      label: "New", 
+      value: stats.newCount, 
+      icon: <AlertTriangle className="h-4 w-4"/>, 
+      percentageChange: stats.newPct, 
+      comparisonLabel: stats.comparisonLabel 
+    },
+    { 
+      label: "Active", 
+      value: stats.processingCount, 
+      icon: <Hourglass className="h-4 w-4"/>, 
+      percentageChange: stats.processingPct, 
+      comparisonLabel: stats.comparisonLabel 
+    },
+    { 
+      label: "Resolved", 
+      value: stats.closedCount, 
+      icon: <ListChecks className="h-4 w-4"/>, 
+      percentageChange: stats.closedPct, 
+      comparisonLabel: stats.comparisonLabel 
+    },
   ];
 
   const recentIncidentsLimit = 5;
@@ -142,7 +162,7 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <Skeleton className="h-24 w-full mb-6 rounded-lg" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {[...Array(5)].map((_, i) => ( // Reduced skeleton count as cards are combined
+          {[...Array(5)].map((_, i) => ( 
             <Skeleton key={i} className="h-[110px] w-full rounded-lg" />
           ))}
         </div>
@@ -168,13 +188,11 @@ export default function DashboardPage() {
             title="Total Incidents"
             value={stats.total}
             icon={<FileText className="h-6 w-6" />}
-            percentageChange={stats.totalPct}
-            comparisonLabel={stats.comparisonLabel}
+            // No percentageChange or comparisonLabel for the main card
             subStats={incidentStatusSubStats}
-            className="md:col-span-2 lg:col-span-2" // Make this card wider
+            className="md:col-span-2 lg:col-span-2"
           />
-          {/* Individual cards for New, Active, Resolved are removed */}
-
+          
           <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-6 w-6" />} description="Working days, from receipt to first action"/>
           <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-6 w-6" />} description="Working days, from receipt to resolution"/>
 

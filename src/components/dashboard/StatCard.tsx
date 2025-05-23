@@ -8,6 +8,8 @@ interface SubStat {
   label: string;
   value: string | number;
   icon?: React.ReactNode;
+  percentageChange?: number;
+  comparisonLabel?: string;
 }
 
 interface StatCardProps {
@@ -42,7 +44,7 @@ export default function StatCard({ title, value, icon, description, className, p
         {description && (
           <p className="text-xs text-muted-foreground pt-1">{description}</p>
         )}
-        {hasPercentageChange && comparisonLabel && (
+        {hasPercentageChange && comparisonLabel && !subStats && ( // Only show main % change if no subStats
           <div className={cn(
             "text-xs flex items-center mt-1",
             isPositiveChange && "text-green-600",
@@ -56,16 +58,39 @@ export default function StatCard({ title, value, icon, description, className, p
           </div>
         )}
         {subStats && subStats.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-border/60 space-y-1.5">
-            {subStats.map((sub, index) => (
-              <div key={index} className="text-xs flex items-center justify-between text-muted-foreground">
-                <div className="flex items-center">
-                  {sub.icon && React.cloneElement(sub.icon as React.ReactElement, { className: "h-3.5 w-3.5 me-1.5 opacity-80" })}
-                  <span>{sub.label}:</span>
+          <div className="mt-3 pt-3 border-t border-border/60 space-y-2">
+            {subStats.map((sub, index) => {
+              const hasSubPercentageChange = typeof sub.percentageChange === 'number';
+              const isSubPositiveChange = hasSubPercentageChange && sub.percentageChange > 0;
+              const isSubNegativeChange = hasSubPercentageChange && sub.percentageChange < 0;
+
+              return (
+                <div key={index}>
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center text-muted-foreground">
+                      {sub.icon && React.cloneElement(sub.icon as React.ReactElement, { className: "h-4 w-4 me-1.5" })}
+                      <span>{sub.label}:</span>
+                    </div>
+                    <span className="font-semibold text-foreground">
+                      {typeof sub.value === 'number' ? sub.value.toLocaleString() : sub.value}
+                    </span>
+                  </div>
+                  {hasSubPercentageChange && sub.comparisonLabel && (
+                    <div className={cn(
+                      "text-xs flex items-center justify-end mt-0.5",
+                      isSubPositiveChange && "text-green-600",
+                      isSubNegativeChange && "text-red-600",
+                      !isSubPositiveChange && !isSubNegativeChange && "text-muted-foreground"
+                    )}>
+                      {isSubPositiveChange && <ArrowUp className="h-3 w-3 me-0.5" />}
+                      {isSubNegativeChange && <ArrowDown className="h-3 w-3 me-0.5" />}
+                      {sub.percentageChange?.toFixed(1)}%
+                      <span className="ms-1 text-muted-foreground/80">{sub.comparisonLabel}</span>
+                    </div>
+                  )}
                 </div>
-                <span className="font-medium text-foreground/90">{typeof sub.value === 'number' ? sub.value.toLocaleString() : sub.value}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </CardContent>
