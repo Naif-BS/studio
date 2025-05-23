@@ -17,8 +17,8 @@ import {
   getTopMediaPlatforms,
   type TopListItem
 } from '@/lib/data';
-import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck, Newspaper, RadioTower } from 'lucide-react';
+import type { Ticket, MediaMaterial, Platform } from '@/types';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck, Newspaper, RadioTower, Activity } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
 import { mediaMaterialDisplay, platformDisplay } from '@/types';
@@ -163,7 +163,7 @@ export default function DashboardPage() {
     },
   ];
 
-  const timeMetricsSubStats = [
+  const keyPerformanceMetricsSubStats = [
     {
       label: "Avg. Initial Response Time",
       value: stats.avgProcessingTime,
@@ -177,11 +177,8 @@ export default function DashboardPage() {
       icon: <Timer className="h-4 w-4" />,
       percentageChange: stats.avgResolutionTimePct,
       comparisonLabel: stats.comparisonLabel,
-    }
-  ];
-
-  const effectivenessSubStats = [
-     {
+    },
+    {
       label: "Resolution Rate",
       value: stats.resolutionRate,
       icon: <Target className="h-4 w-4"/>,
@@ -196,13 +193,11 @@ export default function DashboardPage() {
   const topMaterialsSubStats = stats.topMaterials.map(item => ({
     label: mediaMaterialDisplay[item.name as MediaMaterial] || item.name,
     value: item.count,
-    // No icon or percentage for these list items for now
   }));
 
   const topPlatformsSubStats = stats.topPlatforms.map(item => ({
     label: platformDisplay[item.name as Platform] || item.name,
     value: item.count,
-    // No icon or percentage for these list items for now
   }));
 
 
@@ -222,7 +217,6 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <Skeleton className="h-24 w-full mb-6 rounded-lg" /> {/* Date Filters Skeleton */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
           <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
           <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
           <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
@@ -255,20 +249,11 @@ export default function DashboardPage() {
           />
 
           <StatCard
-            title="Key Time Metrics"
+            title="Key Performance Metrics"
             value={"..."}
-            icon={<Timer className="h-6 w-6" />}
-            description="Average times for incident handling stages."
-            subStats={timeMetricsSubStats}
-            className="md:col-span-2 lg:col-span-2"
-          />
-
-          <StatCard
-            title="Resolution & Backlog Insights"
-            value={"..."}
-            icon={<ShieldCheck className="h-6 w-6" />}
-            description="Effectiveness in resolving incidents and age of pending items."
-            subStats={effectivenessSubStats}
+            icon={<Activity className="h-6 w-6" />}
+            description="Efficiency and effectiveness of incident handling."
+            subStats={keyPerformanceMetricsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
           
@@ -316,3 +301,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
