@@ -88,7 +88,7 @@ export default function DashboardPage() {
   }, [ticketsFilteredByDate, contentFilters]);
 
   const stats = useMemo(() => {
-    const getRandomPercentage = () => (Math.random() * 30 - 15);
+    const getRandomPercentage = () => (Math.random() * 30 - 15); // Simulates a change between -15% and +15%
     const ticketsForStats = ticketsFilteredByDate;
 
     if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
@@ -97,6 +97,7 @@ export default function DashboardPage() {
             avgProcessingTime: '...', avgResolutionTime: '...',
             resolutionRate: '...', oldestOpenIncidentAge: '...',
             newPct: undefined, processingPct: undefined, closedPct: undefined,
+            avgProcessingTimePct: undefined, avgResolutionTimePct: undefined,
             comparisonLabel: "from last day",
         };
     }
@@ -118,27 +119,29 @@ export default function DashboardPage() {
       newPct: showPercentageChange ? getRandomPercentage() : undefined,
       processingPct: showPercentageChange ? getRandomPercentage() : undefined,
       closedPct: showPercentageChange ? getRandomPercentage() : undefined,
+      avgProcessingTimePct: showPercentageChange ? getRandomPercentage() : undefined,
+      avgResolutionTimePct: showPercentageChange ? getRandomPercentage() : undefined,
       comparisonLabel: showPercentageChange ? "from last day" : undefined,
     };
   }, [ticketsFilteredByDate, isLoading, dateFilter.type, allTickets.length]);
 
   const incidentStatusSubStats = [
     { 
-      label: "New", 
+      label: "New Incidents", 
       value: stats.newCount, 
       icon: <AlertTriangle className="h-4 w-4"/>, 
       percentageChange: stats.newPct, 
       comparisonLabel: stats.comparisonLabel 
     },
     { 
-      label: "Active", 
+      label: "Active Incidents", 
       value: stats.processingCount, 
       icon: <Hourglass className="h-4 w-4"/>, 
       percentageChange: stats.processingPct, 
       comparisonLabel: stats.comparisonLabel 
     },
     { 
-      label: "Resolved", 
+      label: "Resolved Incidents", 
       value: stats.closedCount, 
       icon: <ListChecks className="h-4 w-4"/>, 
       percentageChange: stats.closedPct, 
@@ -188,13 +191,26 @@ export default function DashboardPage() {
             title="Total Incidents"
             value={stats.total}
             icon={<FileText className="h-6 w-6" />}
-            // No percentageChange or comparisonLabel for the main card
             subStats={incidentStatusSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
           
-          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-6 w-6" />} description="Working days, from receipt to first action"/>
-          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-6 w-6" />} description="Working days, from receipt to resolution"/>
+          <StatCard 
+            title="Avg. Initial Response Time" 
+            value={stats.avgProcessingTime} 
+            icon={<Clock className="h-6 w-6" />} 
+            description="Working days, from receipt to first action"
+            percentageChange={stats.avgProcessingTimePct}
+            comparisonLabel={stats.comparisonLabel}
+          />
+          <StatCard 
+            title="Avg. Resolution Time" 
+            value={stats.avgResolutionTime} 
+            icon={<BarChart3 className="h-6 w-6" />} 
+            description="Working days, from receipt to resolution"
+            percentageChange={stats.avgResolutionTimePct}
+            comparisonLabel={stats.comparisonLabel}
+          />
 
           <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target className="h-6 w-6" />} description="Resolved incidents / Total incidents"/>
           <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock className="h-6 w-6" />} description="Age of the longest open incident (working days)"/>
