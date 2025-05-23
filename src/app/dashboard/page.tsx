@@ -12,6 +12,7 @@ import type { Ticket } from '@/types';
 import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear } from 'date-fns';
+import IncidentsByStatusChart from '@/components/dashboard/IncidentsByStatusChart'; // Import the new chart component
 
 export default function DashboardPage() {
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
@@ -133,11 +134,12 @@ export default function DashboardPage() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-24 w-full mb-6 rounded-lg" /> 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> {/* Adjusted grid for 8 cards */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {[...Array(8)].map((_, i) => (
             <Skeleton key={i} className="h-[110px] w-full rounded-lg" /> 
           ))}
         </div>
+        <Skeleton className="h-64 w-full mb-6 rounded-lg" /> {/* Skeleton for chart */}
         <Skeleton className="h-10 w-1/4 mb-4" /> 
         <div className="rounded-md border">
             <Skeleton className="h-12 w-full" /> 
@@ -156,17 +158,21 @@ export default function DashboardPage() {
         <DashboardDateFilters onApplyFilters={setDateFilter} currentFilterType={dateFilter.type} />
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard title="Total Incidents" value={stats.total} icon={<FileText />} percentageChange={stats.totalPct} comparisonLabel={stats.comparisonLabel} />
-          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle />} percentageChange={stats.newPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass />} percentageChange={stats.processingPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks />} percentageChange={stats.closedPct} comparisonLabel={stats.comparisonLabel}/>
+          <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-6 w-6" />} percentageChange={stats.totalPct} comparisonLabel={stats.comparisonLabel} />
+          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-6 w-6" />} percentageChange={stats.newPct} comparisonLabel={stats.comparisonLabel}/>
+          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-6 w-6" />} percentageChange={stats.processingPct} comparisonLabel={stats.comparisonLabel}/>
+          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-6 w-6" />} percentageChange={stats.closedPct} comparisonLabel={stats.comparisonLabel}/>
           
-          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock />} description="Working days, from receipt to first action"/>
-          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 />} description="Working days, from receipt to resolution"/>
+          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-6 w-6" />} description="Working days, from receipt to first action"/>
+          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-6 w-6" />} description="Working days, from receipt to resolution"/>
           
-          <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target />} description="Resolved incidents / Total incidents"/>
-          <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock />} description="Age of the longest open incident (working days)"/>
+          <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target className="h-6 w-6" />} description="Resolved incidents / Total incidents"/>
+          <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock className="h-6 w-6" />} description="Age of the longest open incident (working days)"/>
         </div>
+      </section>
+
+      <section>
+        <IncidentsByStatusChart tickets={ticketsFilteredByDate} />
       </section>
 
       <section>
@@ -193,3 +199,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
