@@ -9,10 +9,9 @@ import TicketFilters, { type TicketFiltersState } from '@/components/tickets/Tic
 import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock, LineChart as LineChartIcon } from 'lucide-react'; // Added LineChartIcon
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear } from 'date-fns';
-import IncidentsOverTimeChart from '@/components/dashboard/IncidentsOverTimeChart'; // Import the new line chart
+import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
 
 export default function DashboardPage() {
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
@@ -48,7 +47,7 @@ export default function DashboardPage() {
     }
     return allTickets.filter(ticket => {
       const ticketDate = new Date(ticket.receivedAt);
-      if (!isValid(ticketDate)) return false; // Ensure date is valid before comparison
+      if (!isValid(ticketDate)) return false;
 
       switch (dateFilter.type) {
         case 'daily':
@@ -141,7 +140,6 @@ export default function DashboardPage() {
             <Skeleton key={i} className="h-[110px] w-full rounded-lg" /> 
           ))}
         </div>
-        <Skeleton className="h-64 w-full mb-6 rounded-lg" /> {/* Skeleton for chart */}
         <Skeleton className="h-10 w-1/4 mb-4" /> 
         <div className="rounded-md border">
             <Skeleton className="h-12 w-full" /> 
@@ -174,10 +172,6 @@ export default function DashboardPage() {
       </section>
 
       <section>
-        <IncidentsOverTimeChart tickets={ticketsFilteredByDate} dateFilter={dateFilter} />
-      </section>
-
-      <section>
         <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Incidents Overview</h2>
         <TicketFilters filters={contentFilters} onFilterChange={setContentFilters} />
         <div className="mt-4">
@@ -201,5 +195,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
