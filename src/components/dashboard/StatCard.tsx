@@ -32,8 +32,8 @@ export default function StatCard({ title, value, icon, description, className, p
         </CardTitle>
         <div className="text-primary">{icon}</div>
       </CardHeader>
-      <CardContent>
-        <div className="text-3xl font-bold">{displayValue}</div>
+      <CardContent className="p-4 pt-0"> {/* Reduced padding */}
+        <div className="text-2xl font-bold">{displayValue}</div> {/* Reduced font size */}
         {description && (
           <p className="text-xs text-muted-foreground pt-1">{description}</p>
         )}
@@ -54,3 +54,4 @@ export default function StatCard({ title, value, icon, description, className, p
     </Card>
   );
 }
+

@@ -1,6 +1,6 @@
 
 import type { Ticket, TicketStatus, MediaMaterial, Platform, TicketAction } from '@/types';
-import { isFriday, isSaturday, differenceInMilliseconds, addDays, startOfDay, endOfDay, min } from 'date-fns';
+import { isFriday, isSaturday, differenceInMilliseconds, addDays, startOfDay, endOfDay, min, formatDistanceToNowStrict } from 'date-fns';
 
 const mediaMaterialToCode: Record<MediaMaterial, string> = {
   'Press Release': 'P',
@@ -527,6 +527,29 @@ export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => 
   return formatDuration(avgTimeMs);
 };
 
+export const calculateResolutionRate = (allTickets: Ticket[]): string => {
+  if (allTickets.length === 0) return 'N/A';
+  const resolvedTickets = allTickets.filter(t => t.status === 'Closed').length;
+  const rate = (resolvedTickets / allTickets.length) * 100;
+  return `${rate.toFixed(1)}%`;
+};
+
+export const calculateOldestOpenIncidentAge = (allTickets: Ticket[]): string => {
+  const openTickets = allTickets.filter(t => t.status === 'New' || t.status === 'Processing');
+  if (openTickets.length === 0) return 'N/A';
+
+  let oldestTicket = openTickets[0];
+  for (let i = 1; i < openTickets.length; i++) {
+    if (new Date(openTickets[i].receivedAt).getTime() < new Date(oldestTicket.receivedAt).getTime()) {
+      oldestTicket = openTickets[i];
+    }
+  }
+  
+  const ageMs = calculateWorkingMilliseconds(new Date(oldestTicket.receivedAt), new Date());
+  return formatDuration(ageMs);
+};
+
+
 const formatDuration = (ms: number): string => {
   if (ms < 0) ms = 0;
   const totalHours = Math.floor(ms / (1000 * 60 * 60));
@@ -537,15 +560,11 @@ const formatDuration = (ms: number): string => {
   if (days > 0) {
     durationParts.push(`${days}d`);
   }
-  // Always show hours, even if 0, if days are also 0 or if hours > 0
-  // This ensures "0h" is shown for durations less than 1 hour,
-  // and "Xd 0h" if it's exactly X days.
-  if (hours > 0 || days === 0 || (days > 0 && hours === 0)) {
+  
+  if (hours > 0 || days === 0 ) { // Show hours if > 0 OR if days are 0 (to display "0h" for sub-hour durations)
     durationParts.push(`${hours}h`);
   }
   
-  // If durationParts is empty (e.g., if ms was 0 and the above logic somehow missed adding "0h"),
-  // default to "0h". However, the current logic should always add "0h" for ms = 0.
-  return durationParts.length > 0 ? durationParts.join(' ') : '0h';
+  return durationParts.length > 0 ? durationParts.join(' ') : '0h'; // Default to 0h if duration is effectively zero
 };
 

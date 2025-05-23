@@ -6,12 +6,12 @@ import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
 import dynamic from 'next/dynamic'; 
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
-import DashboardDateFilters, { type DateFilterValue, type DateFilterType } from '@/components/dashboard/DashboardDateFilters';
-import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime } from '@/lib/data';
+import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
+import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3 } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { isWithinInterval, startOfDay, endOfDay, startOfMonth, endOfMonth, startOfYear, endOfYear, isSameDay, isSameMonth, isSameYear } from 'date-fns';
+import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear } from 'date-fns';
 
 export default function DashboardPage() {
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
@@ -59,7 +59,7 @@ export default function DashboardPage() {
           if (dateFilter.startDate && dateFilter.endDate) {
             return isWithinInterval(ticketDate, { start: startOfDay(dateFilter.startDate), end: endOfDay(dateFilter.endDate) });
           }
-          return false; // Should not happen if validation is correct
+          return false; 
         default:
           return true;
       }
@@ -87,18 +87,19 @@ export default function DashboardPage() {
 
   const stats = useMemo(() => {
     const getRandomPercentage = () => (Math.random() * 30 - 15);
-    const ticketsForStats = ticketsFilteredByDate; // Stats are based on date-filtered tickets
+    const ticketsForStats = ticketsFilteredByDate; 
 
-    if (isLoading && dateFilter.type === 'allTime') { // Only show full skeleton on initial load
+    if (isLoading && dateFilter.type === 'allTime') { 
         return {
             total: '...', new: '...', processing: '...', closed: '...',
             avgProcessingTime: '...', avgResolutionTime: '...',
+            resolutionRate: '...', oldestOpenIncidentAge: '...',
             totalPct: 0, newPct: 0, processingPct: 0, closedPct: 0,
             comparisonLabel: "from last day",
         };
     }
     
-    const showPercentageChange = dateFilter.type === 'allTime'; // Only for 'All Time' for now
+    const showPercentageChange = dateFilter.type === 'allTime'; 
 
     return {
       total: ticketsForStats.length,
@@ -107,6 +108,8 @@ export default function DashboardPage() {
       closed: ticketsForStats.filter(t => t.status === 'Closed').length,
       avgProcessingTime: calculateAverageProcessingTime(ticketsForStats),
       avgResolutionTime: calculateAverageResolutionTime(ticketsForStats),
+      resolutionRate: calculateResolutionRate(ticketsForStats),
+      oldestOpenIncidentAge: calculateOldestOpenIncidentAge(ticketsForStats),
       totalPct: showPercentageChange ? getRandomPercentage() : undefined,
       newPct: showPercentageChange ? getRandomPercentage() : undefined,
       processingPct: showPercentageChange ? getRandomPercentage() : undefined,
@@ -115,30 +118,30 @@ export default function DashboardPage() {
     };
   }, [ticketsFilteredByDate, isLoading, dateFilter.type]);
 
-  const recentTicketsLimit = 5;
-  const displayedTicketsInTable = fullyFilteredTickets.slice(0, recentTicketsLimit);
+  const recentIncidentsLimit = 5;
+  const displayedTicketsInTable = fullyFilteredTickets.slice(0, recentIncidentsLimit);
 
   const handleTicketRowClick = (ticketId: string) => {
-    const ticket = allTickets.find(t => t.id === ticketId); // Find from all tickets to ensure it exists
+    const ticket = allTickets.find(t => t.id === ticketId); 
     if (ticket) {
       setModalTicket(ticket);
       setIsModalOpen(true);
     }
   };
 
-  if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) { // More specific initial loading
+  if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) { 
     return (
       <div className="space-y-6">
-        <Skeleton className="h-24 w-full mb-6 rounded-lg" /> {/* Date Filters Skeleton */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-[126px] w-full rounded-lg" />
+        <Skeleton className="h-24 w-full mb-6 rounded-lg" /> 
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> {/* Adjusted grid for 8 cards */}
+          {[...Array(8)].map((_, i) => (
+            <Skeleton key={i} className="h-[110px] w-full rounded-lg" /> 
           ))}
         </div>
-        <Skeleton className="h-10 w-1/4 mb-4" /> {/* Recent Incidents Title Skeleton */}
+        <Skeleton className="h-10 w-1/4 mb-4" /> 
         <div className="rounded-md border">
-            <Skeleton className="h-12 w-full" /> {/* Ticket Filters Skeleton */}
-            {[...Array(recentTicketsLimit)].map((_, i) => (
+            <Skeleton className="h-12 w-full" /> 
+            {[...Array(recentIncidentsLimit)].map((_, i) => (
             <Skeleton key={i} className="h-16 w-full border-t" /> 
             ))}
         </div>
@@ -152,13 +155,15 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight mb-4">Dashboard</h1>
         <DashboardDateFilters onApplyFilters={setDateFilter} currentFilterType={dateFilter.type} />
         
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"> {/* Reduced gap, adjusted columns */}
           <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-5 w-5" />} percentageChange={stats.totalPct} comparisonLabel={stats.comparisonLabel} />
           <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} percentageChange={stats.newPct} comparisonLabel={stats.comparisonLabel}/>
           <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} percentageChange={stats.processingPct} comparisonLabel={stats.comparisonLabel}/>
           <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} percentageChange={stats.closedPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="From receipt to first action"/>
-          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="From receipt to resolution"/>
+          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="Working days, from receipt to first action"/>
+          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="Working days, from receipt to resolution"/>
+          <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target className="h-5 w-5" />} description="Resolved incidents / Total incidents"/>
+          <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock className="h-5 w-5" />} description="Age of the longest open incident (working days)"/>
         </div>
       </section>
 
@@ -168,7 +173,7 @@ export default function DashboardPage() {
         <div className="mt-4">
           <TicketTable
               tickets={displayedTicketsInTable}
-              isLoading={isLoading && allTickets.length === 0} // Show table skeleton only on initial full load
+              isLoading={isLoading && allTickets.length === 0} 
               onRowClick={handleTicketRowClick}
               visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform']}
               showActionsColumn={true} 
