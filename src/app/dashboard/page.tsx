@@ -9,7 +9,7 @@ import TicketFilters, { type TicketFiltersState } from '@/components/tickets/Tic
 import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock, Timer } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
 
@@ -88,7 +88,7 @@ export default function DashboardPage() {
   }, [ticketsFilteredByDate, contentFilters]);
 
   const stats = useMemo(() => {
-    const getRandomPercentage = () => (Math.random() * 30 - 15); // Simulates a change between -15% and +15%
+    const getRandomPercentage = () => (Math.random() * 30 - 15); 
     const ticketsForStats = ticketsFilteredByDate;
 
     if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
@@ -149,6 +149,23 @@ export default function DashboardPage() {
     },
   ];
 
+  const timeMetricsSubStats = [
+    {
+      label: "Avg. Initial Response Time",
+      value: stats.avgProcessingTime,
+      icon: <Clock className="h-4 w-4" />,
+      percentageChange: stats.avgProcessingTimePct,
+      comparisonLabel: stats.comparisonLabel,
+    },
+    {
+      label: "Avg. Resolution Time",
+      value: stats.avgResolutionTime,
+      icon: <BarChart3 className="h-4 w-4" />,
+      percentageChange: stats.avgResolutionTimePct,
+      comparisonLabel: stats.comparisonLabel,
+    }
+  ];
+
   const recentIncidentsLimit = 5;
   const displayedTicketsInTable = fullyFilteredTickets.slice(0, recentIncidentsLimit);
 
@@ -163,17 +180,18 @@ export default function DashboardPage() {
   if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-24 w-full mb-6 rounded-lg" />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {[...Array(5)].map((_, i) => ( 
-            <Skeleton key={i} className="h-[110px] w-full rounded-lg" />
-          ))}
+        <Skeleton className="h-24 w-full mb-6 rounded-lg" /> {/* Date Filters Skeleton */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"> {/* Adjusted for new card layout */}
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Total Incidents */}
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Key Time Metrics */}
+          <Skeleton className="h-[110px] w-full rounded-lg" /> {/* Resolution Rate */}
+          <Skeleton className="h-[110px] w-full rounded-lg" /> {/* Oldest Open Incident */}
         </div>
-        <Skeleton className="h-10 w-1/4 mb-4" />
+        <Skeleton className="h-10 w-1/4 mb-4" /> {/* Recent Incidents Title Skeleton */}
         <div className="rounded-md border">
-            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" /> {/* Table Header Skeleton */}
             {[...Array(recentIncidentsLimit)].map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full border-t" />
+            <Skeleton key={i} className="h-16 w-full border-t" /> 
             ))}
         </div>
       </div>
@@ -195,25 +213,27 @@ export default function DashboardPage() {
             className="md:col-span-2 lg:col-span-2"
           />
           
-          <StatCard 
-            title="Avg. Initial Response Time" 
-            value={stats.avgProcessingTime} 
-            icon={<Clock className="h-6 w-6" />} 
-            description="Working days, from receipt to first action"
-            percentageChange={stats.avgProcessingTimePct}
-            comparisonLabel={stats.comparisonLabel}
-          />
-          <StatCard 
-            title="Avg. Resolution Time" 
-            value={stats.avgResolutionTime} 
-            icon={<BarChart3 className="h-6 w-6" />} 
-            description="Working days, from receipt to resolution"
-            percentageChange={stats.avgResolutionTimePct}
-            comparisonLabel={stats.comparisonLabel}
+          <StatCard
+            title="Key Time Metrics"
+            value={"..."} 
+            icon={<Timer className="h-6 w-6" />}
+            description="Average times for incident handling stages."
+            subStats={timeMetricsSubStats}
+            className="md:col-span-2 lg:col-span-2"
           />
 
-          <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target className="h-6 w-6" />} description="Resolved incidents / Total incidents"/>
-          <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock className="h-6 w-6" />} description="Age of the longest open incident (working days)"/>
+          <StatCard 
+            title="Resolution Rate" 
+            value={stats.resolutionRate} 
+            icon={<Target className="h-6 w-6" />} 
+            description="Resolved incidents / Total incidents"
+          />
+          <StatCard 
+            title="Oldest Open Incident Age" 
+            value={stats.oldestOpenIncidentAge} 
+            icon={<CalendarClock className="h-6 w-6" />} 
+            description="Age of the longest open incident (working days)"
+          />
         </div>
       </section>
 
