@@ -244,7 +244,7 @@ export default function DashboardPage() {
             title="Total Incidents"
             value={stats.total}
             icon={<FileText className="h-6 w-6" />}
-            description="Summary of all reported incidents and their current status."
+            description="Incident volume and status summary."
             subStats={incidentStatusSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
@@ -253,7 +253,7 @@ export default function DashboardPage() {
             title="Key Performance Metrics"
             value={"..."}
             icon={<Activity className="h-6 w-6" />}
-            description="Key indicators of how efficiently and effectively incidents are being addressed."
+            description="Incident handling efficiency and effectiveness."
             subStats={keyPerformanceMetricsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
@@ -262,7 +262,7 @@ export default function DashboardPage() {
             title="Top Media Materials"
             value={stats.topMaterials.length > 0 ? mediaMaterialDisplay[stats.topMaterials[0].name as MediaMaterial] || stats.topMaterials[0].name : "N/A"}
             icon={<Newspaper className="h-6 w-6" />}
-            description="Most common types of media generating incidents."
+            description="Primary media types causing incidents."
             subStats={topMaterialsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
@@ -271,7 +271,7 @@ export default function DashboardPage() {
             title="Top Media Platforms"
             value={stats.topPlatforms.length > 0 ? platformDisplay[stats.topPlatforms[0].name as Platform] || stats.topPlatforms[0].name : "N/A"}
             icon={<RadioTower className="h-6 w-6" />}
-            description="Most common platforms where incidents are reported."
+            description="Primary platforms of reported incidents."
             subStats={topPlatformsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
@@ -302,4 +302,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
