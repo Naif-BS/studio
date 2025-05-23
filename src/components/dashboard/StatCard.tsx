@@ -34,9 +34,9 @@ export default function StatCard({ title, value, icon, description, className, p
         {hasPercentageChange && (
           <div className={cn(
             "text-xs flex items-center mt-1",
-            isPositiveChange && "text-green-600",
-            isNegativeChange && "text-red-600",
-            !isPositiveChange && !isNegativeChange && "text-muted-foreground"
+            isPositiveChange && "text-green-600", // Green for positive change
+            isNegativeChange && "text-red-600",   // Red for negative change
+            !isPositiveChange && !isNegativeChange && "text-muted-foreground" // Neutral if zero change
           )}>
             {isPositiveChange && <ArrowUp className="h-3 w-3 me-0.5" />}
             {isNegativeChange && <ArrowDown className="h-3 w-3 me-0.5" />}
