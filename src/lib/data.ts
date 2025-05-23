@@ -30,7 +30,7 @@ let tickets: Ticket[] = [
   {
     id: '1',
     serialNumber: 'BDM-VN0001',
-    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
+    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -47,7 +47,7 @@ let tickets: Ticket[] = [
   {
     id: '2',
     serialNumber: 'BDM-PC0001',
-    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), 
+    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Press Release',
@@ -63,7 +63,7 @@ let tickets: Ticket[] = [
   {
     id: '3',
     serialNumber: 'BDM-FX0001',
-    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
+    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Infographic',
     platform: 'SRSA Account on Platform X',
@@ -75,7 +75,7 @@ let tickets: Ticket[] = [
   {
     id: '4',
     serialNumber: 'BDM-MI0001',
-    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), 
+    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Image',
     platform: 'SRSA Account on Instagram',
@@ -147,8 +147,8 @@ let tickets: Ticket[] = [
   {
     id: '9',
     serialNumber: 'BDM-PC0002',
-    receivedAt: new Date(Date.now() - 48 * 60 * 60 * 1000), 
-    startedProcessingAt: new Date(Date.now() - 24 * 60 * 60 * 1000), 
+    receivedAt: new Date(Date.now() - 48 * 60 * 60 * 1000),
+    startedProcessingAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Press Release',
     platform: 'Local Media Channel/Platform',
@@ -161,8 +161,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '10',
-    serialNumber: 'BDM-MK0001', 
-    receivedAt: new Date(Date.now() - 72 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-MK0001',
+    receivedAt: new Date(Date.now() - 72 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 70 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 68 * 60 * 60 * 1000),
     status: 'Closed',
@@ -178,8 +178,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '11',
-    serialNumber: 'BDM-FP0001', 
-    receivedAt: new Date(Date.now() - 8 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-FP0001',
+    receivedAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Infographic',
     platform: 'Unified Platform',
@@ -190,8 +190,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '12',
-    serialNumber: 'BDM-AN0001', 
-    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-AN0001',
+    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Audio Clip',
@@ -205,8 +205,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '13',
-    serialNumber: 'BDM-GS0001', 
-    receivedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-GS0001',
+    receivedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'GIF',
     platform: 'SRSA Website',
@@ -217,8 +217,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '14',
-    serialNumber: 'BDM-LX0001', 
-    receivedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-LX0001',
+    receivedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -234,8 +234,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '15',
-    serialNumber: 'BDM-VC0002', 
-    receivedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-VC0002',
+    receivedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Video Clip',
     platform: 'Local Media Channel/Platform',
@@ -246,8 +246,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '16',
-    serialNumber: 'BDM-PS0001', 
-    receivedAt: new Date(Date.now() - 26 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-PS0001',
+    receivedAt: new Date(Date.now() - 26 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 20 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Press Release',
@@ -261,8 +261,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '17',
-    serialNumber: 'BDM-FU0001', 
-    receivedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-FU0001',
+    receivedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -277,8 +277,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '18',
-    serialNumber: 'BDM-VT0001', 
-    receivedAt: new Date(Date.now() - 3 * 60 * 60 * 1000), 
+    serialNumber: 'BDM-VT0001',
+    receivedAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Video Clip',
     platform: 'SRSA Account on TikTok',
@@ -290,7 +290,7 @@ let tickets: Ticket[] = [
   {
     id: '19',
     serialNumber: 'BDM-ZI0001',
-    receivedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), 
+    receivedAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     startedProcessingAt: new Date(Date.now() - 29 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -306,8 +306,8 @@ let tickets: Ticket[] = [
   },
   {
     id: '20',
-    serialNumber: 'BDM-MY0001', 
-    receivedAt: new Date(Date.now() - 90 * 60 * 1000), 
+    serialNumber: 'BDM-MY0001',
+    receivedAt: new Date(Date.now() - 90 * 60 * 1000),
     status: 'New',
     mediaMaterial: 'Image',
     platform: 'Other',
@@ -343,8 +343,8 @@ export const getTicketById = (id: string): Ticket | undefined => {
 };
 
 const generateNextSerialNumber = (material: MediaMaterial, plat: Platform): string => {
-  const materialCode = mediaMaterialToCode[material] || 'Z';
-  const platformCode = platformToCode[plat] || 'Y';
+  const materialCode = mediaMaterialToCode[material] || 'Z'; // Default to 'Z' if somehow not found
+  const platformCode = platformToCode[plat] || 'Y'; // Default to 'Y'
   const prefix = `BDM-${materialCode}${platformCode}`;
 
   const existingSerialsForPrefix = tickets
@@ -357,15 +357,15 @@ const generateNextSerialNumber = (material: MediaMaterial, plat: Platform): stri
 
   const maxNumber = existingSerialsForPrefix.length > 0 ? Math.max(...existingSerialsForPrefix) : 0;
   const nextNumber = maxNumber + 1;
-  
+
   return `${prefix}${String(nextNumber).padStart(4, '0')}`;
 };
 
 
 export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'receivedAt' | 'status' | 'actionsLog'>): Ticket => {
   const newTicket: Ticket = {
-    id: String(tickets.length + 1 + Math.random()), 
-    serialNumber: generateNextSerialNumber(ticketData.mediaMaterial, ticketData.platform), 
+    id: String(tickets.length + 1 + Math.random()),
+    serialNumber: generateNextSerialNumber(ticketData.mediaMaterial, ticketData.platform),
     receivedAt: new Date(),
     status: 'New',
     actionsLog: [],
@@ -378,8 +378,8 @@ export const addTicket = (ticketData: Omit<Ticket, 'id' | 'serialNumber' | 'rece
     otherMediaMaterial: ticketData.mediaMaterial === 'Other' ? ticketData.otherMediaMaterial : null,
     otherPlatform: ticketData.platform === 'Other' ? ticketData.otherPlatform : null,
   };
-  tickets.unshift(newTicket); 
-  
+  tickets.unshift(newTicket);
+
   const clonedNewTicket = JSON.parse(JSON.stringify(newTicket));
   return {
     ...clonedNewTicket,
@@ -395,13 +395,13 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
   if (ticketIndex === -1) return undefined;
 
   const updatedTicket = { ...JSON.parse(JSON.stringify(tickets[ticketIndex])) };
-  
+
   updatedTicket.status = status;
 
   const actionLogEntry: TicketAction = {
     timestamp: new Date(),
     description: actionDescription || `Status updated to ${status}`,
-    user: 'System User' 
+    user: 'System User'
   };
 
   if (status === 'Processing' && !updatedTicket.startedProcessingAt) {
@@ -411,10 +411,10 @@ export const updateTicketStatus = (id: string, status: TicketStatus, actionDescr
     updatedTicket.closedAt = new Date();
      actionLogEntry.description = actionDescription || `Incident resolved. Status: ${status}`;
   }
-  
+
   updatedTicket.actionsLog = [...updatedTicket.actionsLog, actionLogEntry];
   tickets[ticketIndex] = updatedTicket;
-  
+
   return {
     ...updatedTicket,
     receivedAt: new Date(updatedTicket.receivedAt),
@@ -433,11 +433,11 @@ export const addTicketAction = (id: string, description: string, user: string): 
     description,
     user,
   };
-  
+
   const updatedTicket = { ...JSON.parse(JSON.stringify(tickets[ticketIndex])) };
   updatedTicket.actionsLog.push(newAction);
   tickets[ticketIndex] = updatedTicket;
-  
+
   return {
     ...updatedTicket,
     receivedAt: new Date(updatedTicket.receivedAt),
@@ -456,8 +456,8 @@ function isWorkingDay(date: Date): boolean {
 
 // Calculates duration in milliseconds, considering only working days (Sun-Thu), 24 hours per working day.
 function calculateWorkingMilliseconds(startDateParam: Date, endDateParam: Date): number {
-  if (!(startDateParam instanceof Date) || !(endDateParam instanceof Date) || 
-      isNaN(startDateParam.getTime()) || isNaN(endDateParam.getTime()) || 
+  if (!(startDateParam instanceof Date) || !(endDateParam instanceof Date) ||
+      isNaN(startDateParam.getTime()) || isNaN(endDateParam.getTime()) ||
       endDateParam.getTime() <= startDateParam.getTime()) {
     return 0;
   }
@@ -468,14 +468,14 @@ function calculateWorkingMilliseconds(startDateParam: Date, endDateParam: Date):
   let workingMilliseconds = 0;
   const calendarDayInMs = 24 * 60 * 60 * 1000;
 
-  let currentDatePointer = startOfDay(startDate); 
+  let currentDatePointer = startOfDay(startDate);
 
   if (isWorkingDay(startDate)) {
     const endOfFirstDay = endOfDay(startDate);
     const effectiveEndOfFirstDay = min([endOfFirstDay, endDate]);
     workingMilliseconds += differenceInMilliseconds(effectiveEndOfFirstDay, startDate);
   }
-  
+
   currentDatePointer = addDays(startOfDay(startDate), 1);
 
   while (currentDatePointer.getTime() < startOfDay(endDate).getTime()) {
@@ -485,12 +485,13 @@ function calculateWorkingMilliseconds(startDateParam: Date, endDateParam: Date):
     currentDatePointer = addDays(currentDatePointer, 1);
   }
 
+  // Add milliseconds for the endDate if startDate and endDate are not on the same day
   if (startOfDay(startDate).getTime() < startOfDay(endDate).getTime()) {
     if (isWorkingDay(endDate)) {
       workingMilliseconds += differenceInMilliseconds(endDate, startOfDay(endDate));
     }
   }
-  
+
   return Math.max(0, workingMilliseconds);
 }
 
@@ -506,7 +507,7 @@ export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => 
     }
     return sum;
   }, 0);
-  
+
   const avgTimeMs = totalProcessingTime / processingTickets.length;
   return formatDuration(avgTimeMs);
 };
@@ -514,7 +515,7 @@ export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => 
 export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => {
   const resolvedTickets = allTickets.filter(t => t.status === 'Closed' && t.closedAt && t.receivedAt);
   if (resolvedTickets.length === 0) return 'N/A';
-  
+
   const totalResolutionTime = resolvedTickets.reduce((sum, t) => {
     if (t.closedAt) {
         const duration = calculateWorkingMilliseconds(t.receivedAt, t.closedAt);
@@ -544,7 +545,7 @@ export const calculateOldestOpenIncidentAge = (allTickets: Ticket[]): string => 
       oldestTicket = openTickets[i];
     }
   }
-  
+
   const ageMs = calculateWorkingMilliseconds(new Date(oldestTicket.receivedAt), new Date());
   return formatDuration(ageMs);
 };
@@ -560,11 +561,39 @@ const formatDuration = (ms: number): string => {
   if (days > 0) {
     durationParts.push(`${days}d`);
   }
-  
+
   if (hours > 0 || days === 0 ) { // Show hours if > 0 OR if days are 0 (to display "0h" for sub-hour durations)
     durationParts.push(`${hours}h`);
   }
-  
+
   return durationParts.length > 0 ? durationParts.join(' ') : '0h'; // Default to 0h if duration is effectively zero
+};
+
+export type TopListItem = { name: string; count: number };
+
+export const getTopMediaMaterials = (allTickets: Ticket[], topN: number = 3): TopListItem[] => {
+  if (allTickets.length === 0) return [];
+  const counts: Record<string, number> = {};
+  allTickets.forEach(ticket => {
+    counts[ticket.mediaMaterial] = (counts[ticket.mediaMaterial] || 0) + 1;
+  });
+
+  return Object.entries(counts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, topN);
+};
+
+export const getTopMediaPlatforms = (allTickets: Ticket[], topN: number = 3): TopListItem[] => {
+  if (allTickets.length === 0) return [];
+  const counts: Record<string, number> = {};
+  allTickets.forEach(ticket => {
+    counts[ticket.platform] = (counts[ticket.platform] || 0) + 1;
+  });
+
+  return Object.entries(counts)
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, topN);
 };
 

@@ -7,11 +7,22 @@ import TicketTable from '@/components/tickets/TicketTable';
 import dynamic from 'next/dynamic';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
-import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
+import { 
+  getTickets, 
+  calculateAverageProcessingTime, 
+  calculateAverageResolutionTime, 
+  calculateResolutionRate, 
+  calculateOldestOpenIncidentAge,
+  getTopMediaMaterials,
+  getTopMediaPlatforms,
+  type TopListItem
+} from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck, Newspaper, RadioTower } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
+import { mediaMaterialDisplay, platformDisplay } from '@/types';
+
 
 export default function DashboardPage() {
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
@@ -88,7 +99,7 @@ export default function DashboardPage() {
   }, [ticketsFilteredByDate, contentFilters]);
 
   const stats = useMemo(() => {
-    const getRandomPercentage = () => (Math.random() * 30 - 15); 
+    const getRandomPercentage = () => (Math.random() * 30 - 15);
     const ticketsForStats = ticketsFilteredByDate;
 
     if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
@@ -96,6 +107,7 @@ export default function DashboardPage() {
             total: '...', newCount: '...', processingCount: '...', closedCount: '...',
             avgProcessingTime: '...', avgResolutionTime: '...',
             resolutionRate: '...', oldestOpenIncidentAge: '...',
+            topMaterials: [], topPlatforms: [],
             newPct: undefined, processingPct: undefined, closedPct: undefined,
             avgProcessingTimePct: undefined, avgResolutionTimePct: undefined,
             comparisonLabel: "from last day",
@@ -116,6 +128,8 @@ export default function DashboardPage() {
       avgResolutionTime: calculateAverageResolutionTime(ticketsForStats),
       resolutionRate: calculateResolutionRate(ticketsForStats),
       oldestOpenIncidentAge: calculateOldestOpenIncidentAge(ticketsForStats),
+      topMaterials: getTopMediaMaterials(ticketsForStats, 3),
+      topPlatforms: getTopMediaPlatforms(ticketsForStats, 3),
       newPct: showPercentageChange ? getRandomPercentage() : undefined,
       processingPct: showPercentageChange ? getRandomPercentage() : undefined,
       closedPct: showPercentageChange ? getRandomPercentage() : undefined,
@@ -126,26 +140,26 @@ export default function DashboardPage() {
   }, [ticketsFilteredByDate, isLoading, dateFilter.type, allTickets.length]);
 
   const incidentStatusSubStats = [
-    { 
-      label: "New Incidents", 
-      value: stats.newCount, 
-      icon: <AlertTriangle className="h-4 w-4"/>, 
-      percentageChange: stats.newPct, 
-      comparisonLabel: stats.comparisonLabel 
+    {
+      label: "New Incidents",
+      value: stats.newCount,
+      icon: <AlertTriangle className="h-4 w-4"/>,
+      percentageChange: stats.newPct,
+      comparisonLabel: stats.comparisonLabel
     },
-    { 
-      label: "Active Incidents", 
-      value: stats.processingCount, 
-      icon: <Hourglass className="h-4 w-4"/>, 
-      percentageChange: stats.processingPct, 
-      comparisonLabel: stats.comparisonLabel 
+    {
+      label: "Active Incidents",
+      value: stats.processingCount,
+      icon: <Hourglass className="h-4 w-4"/>,
+      percentageChange: stats.processingPct,
+      comparisonLabel: stats.comparisonLabel
     },
-    { 
-      label: "Resolved Incidents", 
-      value: stats.closedCount, 
-      icon: <ListChecks className="h-4 w-4"/>, 
-      percentageChange: stats.closedPct, 
-      comparisonLabel: stats.comparisonLabel 
+    {
+      label: "Resolved Incidents",
+      value: stats.closedCount,
+      icon: <ListChecks className="h-4 w-4"/>,
+      percentageChange: stats.closedPct,
+      comparisonLabel: stats.comparisonLabel
     },
   ];
 
@@ -160,24 +174,37 @@ export default function DashboardPage() {
     {
       label: "Avg. Resolution Time",
       value: stats.avgResolutionTime,
-      icon: <Timer className="h-4 w-4" />, // Changed from BarChart3 for thematic consistency
+      icon: <Timer className="h-4 w-4" />,
       percentageChange: stats.avgResolutionTimePct,
       comparisonLabel: stats.comparisonLabel,
     }
   ];
 
   const effectivenessSubStats = [
-     { 
-      label: "Resolution Rate", 
-      value: stats.resolutionRate, 
+     {
+      label: "Resolution Rate",
+      value: stats.resolutionRate,
       icon: <Target className="h-4 w-4"/>,
     },
-    { 
-      label: "Oldest Open Incident Age", 
-      value: stats.oldestOpenIncidentAge, 
+    {
+      label: "Oldest Open Incident Age",
+      value: stats.oldestOpenIncidentAge,
       icon: <CalendarClock className="h-4 w-4"/>,
     },
   ];
+
+  const topMaterialsSubStats = stats.topMaterials.map(item => ({
+    label: mediaMaterialDisplay[item.name as MediaMaterial] || item.name,
+    value: item.count,
+    // No icon or percentage for these list items for now
+  }));
+
+  const topPlatformsSubStats = stats.topPlatforms.map(item => ({
+    label: platformDisplay[item.name as Platform] || item.name,
+    value: item.count,
+    // No icon or percentage for these list items for now
+  }));
+
 
   const recentIncidentsLimit = 5;
   const displayedTicketsInTable = fullyFilteredTickets.slice(0, recentIncidentsLimit);
@@ -195,15 +222,17 @@ export default function DashboardPage() {
       <div className="space-y-6">
         <Skeleton className="h-24 w-full mb-6 rounded-lg" /> {/* Date Filters Skeleton */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Total Incidents */}
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Key Time Metrics */}
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> {/* Resolution & Backlog */}
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
+          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
         </div>
         <Skeleton className="h-10 w-1/4 mb-4" /> {/* Recent Incidents Title Skeleton */}
         <div className="rounded-md border">
             <Skeleton className="h-12 w-full" /> {/* Table Header Skeleton */}
             {[...Array(recentIncidentsLimit)].map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full border-t" /> 
+            <Skeleton key={i} className="h-16 w-full border-t" />
             ))}
         </div>
       </div>
@@ -224,22 +253,40 @@ export default function DashboardPage() {
             subStats={incidentStatusSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
-          
+
           <StatCard
             title="Key Time Metrics"
-            value={"..."} 
+            value={"..."}
             icon={<Timer className="h-6 w-6" />}
             description="Average times for incident handling stages."
             subStats={timeMetricsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
 
-          <StatCard 
-            title="Resolution & Backlog Insights" 
-            value={"..."} 
-            icon={<ShieldCheck className="h-6 w-6" />} 
+          <StatCard
+            title="Resolution & Backlog Insights"
+            value={"..."}
+            icon={<ShieldCheck className="h-6 w-6" />}
             description="Effectiveness in resolving incidents and age of pending items."
             subStats={effectivenessSubStats}
+            className="md:col-span-2 lg:col-span-2"
+          />
+          
+          <StatCard
+            title="Top Media Materials"
+            value={stats.topMaterials.length > 0 ? stats.topMaterials[0].name : "N/A"}
+            icon={<Newspaper className="h-6 w-6" />}
+            description="Most common types of media generating incidents."
+            subStats={topMaterialsSubStats}
+            className="md:col-span-2 lg:col-span-2"
+          />
+
+          <StatCard
+            title="Top Media Platforms"
+            value={stats.topPlatforms.length > 0 ? stats.topPlatforms[0].name : "N/A"}
+            icon={<RadioTower className="h-6 w-6" />}
+            description="Most common platforms where incidents are reported."
+            subStats={topPlatformsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
         </div>
@@ -269,4 +316,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
