@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import StatCard from '@/components/dashboard/StatCard';
 import TicketTable from '@/components/tickets/TicketTable';
-import dynamic from 'next/dynamic'; 
+import dynamic from 'next/dynamic';
 import TicketFilters, { type TicketFiltersState } from '@/components/tickets/TicketFilters';
 import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
@@ -15,7 +15,7 @@ import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameY
 
 export default function DashboardPage() {
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
-    loading: () => <p>Loading modal...</p>, 
+    loading: () => <p>Loading modal...</p>,
   });
 
   const [allTickets, setAllTickets] = useState<Ticket[]>([]);
@@ -27,8 +27,8 @@ export default function DashboardPage() {
     searchTerm: '',
   });
   const [dateFilter, setDateFilter] = useState<DateFilterValue>({ type: 'allTime' });
-  const [modalTicket, setModalTicket] = useState<Ticket | null>(null); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [modalTicket, setModalTicket] = useState<Ticket | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -61,7 +61,7 @@ export default function DashboardPage() {
           if (dateFilter.startDate && dateFilter.endDate) {
             return isWithinInterval(ticketDate, { start: startOfDay(dateFilter.startDate), end: endOfDay(dateFilter.endDate) });
           }
-          return false; 
+          return false;
         default:
           return true;
       }
@@ -89,62 +89,68 @@ export default function DashboardPage() {
 
   const stats = useMemo(() => {
     const getRandomPercentage = () => (Math.random() * 30 - 15);
-    const ticketsForStats = ticketsFilteredByDate; 
+    const ticketsForStats = ticketsFilteredByDate;
 
-    if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) { 
+    if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
         return {
-            total: '...', new: '...', processing: '...', closed: '...',
+            total: '...', newCount: '...', processingCount: '...', closedCount: '...',
             avgProcessingTime: '...', avgResolutionTime: '...',
             resolutionRate: '...', oldestOpenIncidentAge: '...',
-            totalPct: 0, newPct: 0, processingPct: 0, closedPct: 0,
+            totalPct: 0,
             comparisonLabel: "from last day",
         };
     }
-    
-    const showPercentageChange = dateFilter.type === 'allTime'; 
+
+    const showPercentageChange = dateFilter.type === 'allTime';
+    const newIncidentsCount = ticketsForStats.filter(t => t.status === 'New').length;
+    const processingIncidentsCount = ticketsForStats.filter(t => t.status === 'Processing').length;
+    const closedIncidentsCount = ticketsForStats.filter(t => t.status === 'Closed').length;
 
     return {
       total: ticketsForStats.length,
-      new: ticketsForStats.filter(t => t.status === 'New').length,
-      processing: ticketsForStats.filter(t => t.status === 'Processing').length,
-      closed: ticketsForStats.filter(t => t.status === 'Closed').length,
+      newCount: newIncidentsCount,
+      processingCount: processingIncidentsCount,
+      closedCount: closedIncidentsCount,
       avgProcessingTime: calculateAverageProcessingTime(ticketsForStats),
       avgResolutionTime: calculateAverageResolutionTime(ticketsForStats),
       resolutionRate: calculateResolutionRate(ticketsForStats),
       oldestOpenIncidentAge: calculateOldestOpenIncidentAge(ticketsForStats),
       totalPct: showPercentageChange ? getRandomPercentage() : undefined,
-      newPct: showPercentageChange ? getRandomPercentage() : undefined,
-      processingPct: showPercentageChange ? getRandomPercentage() : undefined,
-      closedPct: showPercentageChange ? getRandomPercentage() : undefined,
       comparisonLabel: showPercentageChange ? "from last day" : undefined,
     };
   }, [ticketsFilteredByDate, isLoading, dateFilter.type, allTickets.length]);
+
+  const incidentStatusSubStats = [
+    { label: "New", value: stats.newCount, icon: <AlertTriangle /> },
+    { label: "Active", value: stats.processingCount, icon: <Hourglass /> },
+    { label: "Resolved", value: stats.closedCount, icon: <ListChecks /> },
+  ];
 
   const recentIncidentsLimit = 5;
   const displayedTicketsInTable = fullyFilteredTickets.slice(0, recentIncidentsLimit);
 
   const handleTicketRowClick = (ticketId: string) => {
-    const ticket = allTickets.find(t => t.id === ticketId); 
+    const ticket = allTickets.find(t => t.id === ticketId);
     if (ticket) {
       setModalTicket(ticket);
       setIsModalOpen(true);
     }
   };
 
-  if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) { 
+  if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-24 w-full mb-6 rounded-lg" /> 
+        <Skeleton className="h-24 w-full mb-6 rounded-lg" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {[...Array(8)].map((_, i) => (
-            <Skeleton key={i} className="h-[110px] w-full rounded-lg" /> 
+          {[...Array(5)].map((_, i) => ( // Reduced skeleton count as cards are combined
+            <Skeleton key={i} className="h-[110px] w-full rounded-lg" />
           ))}
         </div>
-        <Skeleton className="h-10 w-1/4 mb-4" /> 
+        <Skeleton className="h-10 w-1/4 mb-4" />
         <div className="rounded-md border">
-            <Skeleton className="h-12 w-full" /> 
+            <Skeleton className="h-12 w-full" />
             {[...Array(recentIncidentsLimit)].map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full border-t" /> 
+            <Skeleton key={i} className="h-16 w-full border-t" />
             ))}
         </div>
       </div>
@@ -156,16 +162,22 @@ export default function DashboardPage() {
       <section>
         <h1 className="text-3xl font-bold tracking-tight mb-4">Dashboard</h1>
         <DashboardDateFilters onApplyFilters={setDateFilter} currentFilterType={dateFilter.type} />
-        
+
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-6 w-6" />} percentageChange={stats.totalPct} comparisonLabel={stats.comparisonLabel} />
-          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-6 w-6" />} percentageChange={stats.newPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-6 w-6" />} percentageChange={stats.processingPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-6 w-6" />} percentageChange={stats.closedPct} comparisonLabel={stats.comparisonLabel}/>
-          
+          <StatCard
+            title="Total Incidents"
+            value={stats.total}
+            icon={<FileText className="h-6 w-6" />}
+            percentageChange={stats.totalPct}
+            comparisonLabel={stats.comparisonLabel}
+            subStats={incidentStatusSubStats}
+            className="md:col-span-2 lg:col-span-2" // Make this card wider
+          />
+          {/* Individual cards for New, Active, Resolved are removed */}
+
           <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-6 w-6" />} description="Working days, from receipt to first action"/>
           <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-6 w-6" />} description="Working days, from receipt to resolution"/>
-          
+
           <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target className="h-6 w-6" />} description="Resolved incidents / Total incidents"/>
           <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock className="h-6 w-6" />} description="Age of the longest open incident (working days)"/>
         </div>
@@ -177,10 +189,10 @@ export default function DashboardPage() {
         <div className="mt-4">
           <TicketTable
               tickets={displayedTicketsInTable}
-              isLoading={isLoading && allTickets.length === 0} 
+              isLoading={isLoading && allTickets.length === 0}
               onRowClick={handleTicketRowClick}
               visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform']}
-              showActionsColumn={true} 
+              showActionsColumn={true}
           />
         </div>
       </section>
