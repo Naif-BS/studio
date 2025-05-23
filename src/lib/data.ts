@@ -30,7 +30,7 @@ let tickets: Ticket[] = [
   {
     id: '1',
     serialNumber: 'BDM-VN0001',
-    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // Approx 5 days ago
+    receivedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     closedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     status: 'Closed',
@@ -47,7 +47,7 @@ let tickets: Ticket[] = [
   {
     id: '2',
     serialNumber: 'BDM-PC0001',
-    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // Approx 3 days ago
+    receivedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), 
     startedProcessingAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     status: 'Processing',
     mediaMaterial: 'Press Release',
@@ -63,7 +63,7 @@ let tickets: Ticket[] = [
   {
     id: '3',
     serialNumber: 'BDM-FX0001',
-    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // Approx 1 day ago
+    receivedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Infographic',
     platform: 'SRSA Account on Platform X',
@@ -75,7 +75,7 @@ let tickets: Ticket[] = [
   {
     id: '4',
     serialNumber: 'BDM-MI0001',
-    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // Approx 12 hours ago
+    receivedAt: new Date(Date.now() - 12 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Image',
     platform: 'SRSA Account on Instagram',
@@ -234,7 +234,7 @@ let tickets: Ticket[] = [
   },
   {
     id: '15',
-    serialNumber: 'BDM-VC0002', // Updated based on new format logic (was BDM-VC0001)
+    serialNumber: 'BDM-VC0002', 
     receivedAt: new Date(Date.now() - 6 * 60 * 60 * 1000), 
     status: 'New',
     mediaMaterial: 'Video Clip',
@@ -468,21 +468,16 @@ function calculateWorkingMilliseconds(startDateParam: Date, endDateParam: Date):
   let workingMilliseconds = 0;
   const calendarDayInMs = 24 * 60 * 60 * 1000;
 
-  let currentDatePointer = startOfDay(startDate); // Start iterating from the beginning of the start day
+  let currentDatePointer = startOfDay(startDate); 
 
-  // Handle the first (potentially partial) day
   if (isWorkingDay(startDate)) {
     const endOfFirstDay = endOfDay(startDate);
-    // If endDate is on the same day as startDate, take diff from startDate to endDate
-    // Otherwise, take diff from startDate to endOfFirstDay
     const effectiveEndOfFirstDay = min([endOfFirstDay, endDate]);
     workingMilliseconds += differenceInMilliseconds(effectiveEndOfFirstDay, startDate);
   }
   
-  // Move to the start of the next day for full day iteration
   currentDatePointer = addDays(startOfDay(startDate), 1);
 
-  // Handle full days in between
   while (currentDatePointer.getTime() < startOfDay(endDate).getTime()) {
     if (isWorkingDay(currentDatePointer)) {
       workingMilliseconds += calendarDayInMs;
@@ -490,7 +485,6 @@ function calculateWorkingMilliseconds(startDateParam: Date, endDateParam: Date):
     currentDatePointer = addDays(currentDatePointer, 1);
   }
 
-  // Handle the last (potentially partial) day, but only if endDate is on a different day than startDate
   if (startOfDay(startDate).getTime() < startOfDay(endDate).getTime()) {
     if (isWorkingDay(endDate)) {
       workingMilliseconds += differenceInMilliseconds(endDate, startOfDay(endDate));
@@ -506,7 +500,6 @@ export const calculateAverageProcessingTime = (allTickets: Ticket[]): string => 
   if (processingTickets.length === 0) return 'N/A';
 
   const totalProcessingTime = processingTickets.reduce((sum, t) => {
-    // Ensure startedProcessingAt is not null before using it
     if (t.startedProcessingAt) {
       const duration = calculateWorkingMilliseconds(t.receivedAt, t.startedProcessingAt);
       return sum + duration;
@@ -523,7 +516,6 @@ export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => 
   if (resolvedTickets.length === 0) return 'N/A';
   
   const totalResolutionTime = resolvedTickets.reduce((sum, t) => {
-    // Ensure closedAt is not null
     if (t.closedAt) {
         const duration = calculateWorkingMilliseconds(t.receivedAt, t.closedAt);
         return sum + duration;
@@ -536,24 +528,24 @@ export const calculateAverageResolutionTime = (allTickets: Ticket[]): string => 
 };
 
 const formatDuration = (ms: number): string => {
-  if (ms < 0) ms = 0; 
-  const totalSeconds = Math.floor(ms / 1000);
-  const days = Math.floor(totalSeconds / (3600 * 24));
-  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
+  if (ms < 0) ms = 0;
+  const totalHours = Math.floor(ms / (1000 * 60 * 60));
+  const days = Math.floor(totalHours / 24);
+  const hours = totalHours % 24;
 
-  let duration = '';
-  if (days > 0) duration += `${days}d `;
-  if (hours > 0) duration += `${hours}h `;
-  if (minutes > 0) duration += `${minutes}m `;
-  if (seconds >= 0 ) { 
-      if (duration === '' || days > 0 || hours > 0 || minutes > 0 || seconds > 0) { // Only add seconds if it's not the sole 0 unit
-           duration += `${seconds}s`;
-      }
+  const durationParts: string[] = [];
+  if (days > 0) {
+    durationParts.push(`${days}d`);
+  }
+  // Always show hours, even if 0, if days are also 0 or if hours > 0
+  // This ensures "0h" is shown for durations less than 1 hour,
+  // and "Xd 0h" if it's exactly X days.
+  if (hours > 0 || days === 0 || (days > 0 && hours === 0)) {
+    durationParts.push(`${hours}h`);
   }
   
-  return duration.trim() || '0s'; 
+  // If durationParts is empty (e.g., if ms was 0 and the above logic somehow missed adding "0h"),
+  // default to "0h". However, the current logic should always add "0h" for ms = 0.
+  return durationParts.length > 0 ? durationParts.join(' ') : '0h';
 };
-
 
