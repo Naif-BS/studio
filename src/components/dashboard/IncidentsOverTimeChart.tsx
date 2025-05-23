@@ -7,8 +7,6 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
   type ChartConfig,
 } from "@/components/ui/chart"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -49,10 +47,11 @@ const chartConfig = {
 
 export default function IncidentsOverTimeChart({ tickets, dateFilter }: IncidentsOverTimeChartProps) {
   const processedChartData = React.useMemo(() => {
-    if (dateFilter.type === 'daily' && dateFilter.date) {
-      // For a single day, line chart is not ideal. Aggregate by hour if possible, or just show total for the day.
-      // For now, let's group by the single day.
-      const dayTickets = tickets.filter(t => isValid(new Date(t.receivedAt)) && format(new Date(t.receivedAt), "yyyy-MM-dd") === format(dateFilter.date!, "yyyy-MM-dd"));
+    if (dateFilter.type === 'daily' && dateFilter.date && isValid(dateFilter.date)) {
+      const dayTickets = tickets.filter(t => {
+        const ticketDate = new Date(t.receivedAt);
+        return isValid(ticketDate) && format(ticketDate, "yyyy-MM-dd") === format(dateFilter.date!, "yyyy-MM-dd");
+      });
       return [{
         date: format(dateFilter.date!, "MMM d"),
         count: dayTickets.length,
@@ -65,14 +64,19 @@ export default function IncidentsOverTimeChart({ tickets, dateFilter }: Incident
     let granularity: "day" | "month" = "day";
 
     if (dateFilter.type === 'monthly' && dateFilter.month !== undefined && dateFilter.year !== undefined) {
-      startDate = startOfMonth(new Date(dateFilter.year, dateFilter.month));
-      endDate = endOfMonth(new Date(dateFilter.year, dateFilter.month));
+      const baseDate = new Date(dateFilter.year, dateFilter.month);
+      if (!isValid(baseDate)) return [];
+      startDate = startOfMonth(baseDate);
+      endDate = endOfMonth(baseDate);
       granularity = "day";
     } else if (dateFilter.type === 'yearly' && dateFilter.year !== undefined) {
-      startDate = startOfYear(new Date(dateFilter.year, 0, 1));
-      endDate = endOfYear(new Date(dateFilter.year, 0, 1));
+      const baseDate = new Date(dateFilter.year, 0, 1);
+      if (!isValid(baseDate)) return [];
+      startDate = startOfYear(baseDate);
+      endDate = endOfYear(baseDate);
       granularity = "month";
     } else if (dateFilter.type === 'period' && dateFilter.startDate && dateFilter.endDate) {
+      if(!isValid(dateFilter.startDate) || !isValid(dateFilter.endDate)) return [];
       startDate = startOfDay(dateFilter.startDate);
       endDate = endOfDay(dateFilter.endDate);
       const diff = differenceInDays(endDate, startDate);
@@ -112,11 +116,10 @@ export default function IncidentsOverTimeChart({ tickets, dateFilter }: Incident
     const chartData: ChartDataItem[] = [];
     dateMap.forEach((count, dateStr) => {
         let displayFormat = "MMM d";
-        let originalDt = new Date(dateStr); // Works for yyyy-MM-dd
+        let originalDt: Date;
 
         if (granularity === 'month') {
             displayFormat = "MMM yyyy";
-            // dateStr is yyyy-MM, convert to start of month for Date object
             const [year, month] = dateStr.split('-').map(Number);
             originalDt = startOfMonth(new Date(year, month -1));
         } else { // day granularity
@@ -135,33 +138,37 @@ export default function IncidentsOverTimeChart({ tickets, dateFilter }: Incident
 
   }, [tickets, dateFilter]);
 
-  if (dateFilter.type === 'daily' && processedChartData.length === 1 && tickets.length > 0) {
-     // For a single day, a bar chart might be more appropriate if we had hourly data.
-     // For now, showing a single point line chart or a bar chart for total.
+  if (dateFilter.type === 'daily' && processedChartData.length === 1 && dateFilter.date && isValid(dateFilter.date)) {
     return (
        <Card>
         <CardHeader>
           <CardTitle>Incidents on {processedChartData[0].date}</CardTitle>
-          <CardDescription>Total incidents reported on this day.</CardDescription>
+          <CardDescription>Total new incidents reported on this day.</CardDescription>
         </CardHeader>
         <CardContent className="h-[300px] pb-0">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={processedChartData} margin={{ top: 5, right: 20, left: -25, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-              />
-              <YAxis tickLine={false} axisLine={false} tickMargin={8} allowDecimals={false} />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent hideLabel />}
-              />
-              <Bar dataKey="count" fill="hsl(var(--chart-1))" radius={4} />
-            </BarChart>
-          </ResponsiveContainer>
+          {processedChartData[0].count > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={processedChartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={true}
+                  tickMargin={8}
+                />
+                <YAxis tickLine={false} axisLine={true} tickMargin={8} allowDecimals={false} width={30} />
+                <ChartTooltip
+                  cursor={true}
+                  content={<ChartTooltipContent />}
+                />
+                <Bar dataKey="count" fill="hsl(var(--chart-1))" radius={4} barSize={Math.min(60, processedChartData.length * 10)} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex h-full items-center justify-center">
+                <p className="text-muted-foreground">No new incidents reported on {processedChartData[0].date}.</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     )
@@ -194,28 +201,27 @@ export default function IncidentsOverTimeChart({ tickets, dateFilter }: Incident
             data={processedChartData}
             margin={{
               top: 5,
-              right: 20, // Increased right margin for labels
-              left: -25,  // Negative margin to pull Y-axis labels closer
+              right: 20, 
+              left: -20, 
               bottom: 5,
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={false} strokeDasharray="3 3"/>
             <XAxis
               dataKey="date"
               tickLine={false}
-              axisLine={false}
+              axisLine={true}
               tickMargin={8}
-              // tickFormatter={(value) => value} // Handled by formatted date in data
             />
             <YAxis
               tickLine={false}
-              axisLine={false}
+              axisLine={true}
               tickMargin={8}
               allowDecimals={false}
-              // tickFormatter={(value) => value.toString()}
+              width={30}
             />
             <ChartTooltip
-              cursor={false}
+              cursor={true}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Line
@@ -224,10 +230,13 @@ export default function IncidentsOverTimeChart({ tickets, dateFilter }: Incident
               stroke="hsl(var(--chart-1))"
               strokeWidth={2}
               dot={{
+                r: 3, // Smaller dots
                 fill: "hsl(var(--chart-1))",
+                strokeWidth: 1,
               }}
               activeDot={{
-                r: 6,
+                r: 5, // Slightly larger active dot
+                strokeWidth: 2,
               }}
             />
           </LineChart>
@@ -236,5 +245,3 @@ export default function IncidentsOverTimeChart({ tickets, dateFilter }: Incident
     </Card>
   )
 }
-
-    
