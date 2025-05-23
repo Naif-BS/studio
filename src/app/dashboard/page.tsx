@@ -9,10 +9,10 @@ import TicketFilters, { type TicketFiltersState } from '@/components/tickets/Tic
 import DashboardDateFilters, { type DateFilterValue } from '@/components/dashboard/DashboardDateFilters';
 import { getTickets, calculateAverageProcessingTime, calculateAverageResolutionTime, calculateResolutionRate, calculateOldestOpenIncidentAge } from '@/lib/data';
 import type { Ticket } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, BarChart3, Target, CalendarClock, LineChart as LineChartIcon } from 'lucide-react'; // Added LineChartIcon
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear } from 'date-fns';
-import IncidentsByStatusChart from '@/components/dashboard/IncidentsByStatusChart'; // Import the new chart component
+import IncidentsOverTimeChart from '@/components/dashboard/IncidentsOverTimeChart'; // Import the new line chart
 
 export default function DashboardPage() {
   const TicketDetailsModal = dynamic(() => import('@/components/tickets/TicketDetailsModal'), {
@@ -48,6 +48,8 @@ export default function DashboardPage() {
     }
     return allTickets.filter(ticket => {
       const ticketDate = new Date(ticket.receivedAt);
+      if (!isValid(ticketDate)) return false; // Ensure date is valid before comparison
+
       switch (dateFilter.type) {
         case 'daily':
           return dateFilter.date && isSameDay(ticketDate, dateFilter.date);
@@ -90,7 +92,7 @@ export default function DashboardPage() {
     const getRandomPercentage = () => (Math.random() * 30 - 15);
     const ticketsForStats = ticketsFilteredByDate; 
 
-    if (isLoading && dateFilter.type === 'allTime') { 
+    if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) { 
         return {
             total: '...', new: '...', processing: '...', closed: '...',
             avgProcessingTime: '...', avgResolutionTime: '...',
@@ -117,7 +119,7 @@ export default function DashboardPage() {
       closedPct: showPercentageChange ? getRandomPercentage() : undefined,
       comparisonLabel: showPercentageChange ? "from last day" : undefined,
     };
-  }, [ticketsFilteredByDate, isLoading, dateFilter.type]);
+  }, [ticketsFilteredByDate, isLoading, dateFilter.type, allTickets.length]);
 
   const recentIncidentsLimit = 5;
   const displayedTicketsInTable = fullyFilteredTickets.slice(0, recentIncidentsLimit);
@@ -172,7 +174,7 @@ export default function DashboardPage() {
       </section>
 
       <section>
-        <IncidentsByStatusChart tickets={ticketsFilteredByDate} />
+        <IncidentsOverTimeChart tickets={ticketsFilteredByDate} dateFilter={dateFilter} />
       </section>
 
       <section>
@@ -200,3 +202,4 @@ export default function DashboardPage() {
   );
 }
 
+    

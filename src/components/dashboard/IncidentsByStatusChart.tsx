@@ -37,14 +37,14 @@ export default function IncidentsByStatusChart({ tickets }: IncidentsByStatusCha
     return Object.entries(statusCounts).map(([status, count]) => ({
       status: ticketStatusDisplay[status as Ticket["status"]] || status,
       count: count,
-      fill: `hsl(var(--chart-${Object.keys(ticketStatusDisplay).indexOf(status as Ticket["status"]) + 1}))`
+      fill: `hsl(var(--chart-${Object.keys(ticketStatusDisplay).indexOf(status as Ticket["status"]) + 1}))` // Ensure fill corresponds to chart color variables
     }))
   }, [tickets])
 
   const chartConfig = React.useMemo(() => {
      const config: ChartConfig = {};
      chartData.forEach((item, index) => {
-        config[item.status] = {
+        config[item.status] = { // Use the display status name as key for config
             label: item.status,
             color: `hsl(var(--chart-${index + 1}))`
         }
@@ -83,13 +83,13 @@ export default function IncidentsByStatusChart({ tickets }: IncidentsByStatusCha
             <Pie
               data={chartData}
               dataKey="count"
-              nameKey="status"
+              nameKey="status" // This should match the key in chartData objects that holds the display name
               innerRadius={60}
               strokeWidth={5}
             >
             </Pie>
             <ChartLegend
-                content={<ChartLegendContent nameKey="status" />}
+                content={<ChartLegendContent nameKey="status" />} // This should match the key used for nameKey in <Pie>
                 className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
             />
           </PieChart>
@@ -98,3 +98,5 @@ export default function IncidentsByStatusChart({ tickets }: IncidentsByStatusCha
     </Card>
   )
 }
+
+    

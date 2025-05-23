@@ -40,8 +40,9 @@ const ChartContainer = React.forwardRef<
     children: React.ComponentProps<
       typeof RechartsPrimitive.ResponsiveContainer
     >["children"]
+    containerClassName?: string // New prop for ResponsiveContainer class
   }
->(({ id, className, children, config, ...props }, ref) => {
+>(({ id, className, children, config, containerClassName, ...props }, ref) => { // Added containerClassName
   const uniqueId = React.useId()
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
 
@@ -57,7 +58,7 @@ const ChartContainer = React.forwardRef<
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <RechartsPrimitive.ResponsiveContainer>
+        <RechartsPrimitive.ResponsiveContainer width="100%" height="100%" className={containerClassName}>
           {children}
         </RechartsPrimitive.ResponsiveContainer>
       </div>
@@ -187,12 +188,12 @@ const ChartTooltipContent = React.forwardRef<
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
             
             // Prefer item's fill color, then itemConfig's color, then the passed 'color' prop, then item.color
-            const indicatorColor = item.payload.fill || itemConfig?.color || color || item.color;
+            const indicatorColor = item.payload?.fill || itemConfig?.color || color || item.color;
 
 
             return (
               <div
-                key={item.dataKey || index} // Ensure key is always unique
+                key={item.dataKey?.toString() ?? item.name?.toString() ?? index} // Ensure key is always unique and string
                 className={cn(
                   "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                   indicator === "dot" && "items-center"
@@ -363,3 +364,5 @@ export {
   ChartLegendContent,
   ChartStyle,
 }
+
+    
