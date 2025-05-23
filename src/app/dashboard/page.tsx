@@ -244,6 +244,7 @@ export default function DashboardPage() {
             title="Total Incidents"
             value={stats.total}
             icon={<FileText className="h-6 w-6" />}
+            description="Summary of all reported incidents and their current status."
             subStats={incidentStatusSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
@@ -252,7 +253,7 @@ export default function DashboardPage() {
             title="Key Performance Metrics"
             value={"..."}
             icon={<Activity className="h-6 w-6" />}
-            description="Efficiency and effectiveness of incident handling."
+            description="Key indicators of how efficiently and effectively incidents are being addressed."
             subStats={keyPerformanceMetricsSubStats}
             className="md:col-span-2 lg:col-span-2"
           />
