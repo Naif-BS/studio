@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { startOfMonth, endOfMonth, startOfYear, endOfYear, subDays, isValid } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
@@ -29,8 +29,8 @@ interface DashboardDateFiltersProps {
 export default function DashboardDateFilters({ onApplyFilters, currentFilterType }: DashboardDateFiltersProps) {
   const [filterType, setFilterType] = useState<DateFilterType>(currentFilterType);
   const [dailyDate, setDailyDate] = useState<Date | undefined>(new Date());
-  const [monthlyDate, setMonthlyDate] = useState<Date | undefined>(new Date()); // Used for month/year picker
-  const [yearlyDate, setYearlyDate] = useState<Date | undefined>(new Date()); // Used for year picker
+  const [monthlyDate, setMonthlyDate] = useState<Date | undefined>(new Date());
+  const [yearlyDate, setYearlyDate] = useState<Date | undefined>(new Date());
   const [periodStartDate, setPeriodStartDate] = useState<Date | undefined>(subDays(new Date(), 7));
   const [periodEndDate, setPeriodEndDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
@@ -90,77 +90,80 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
   }
 
   return (
-    <div className="mb-6 p-4 bg-card border rounded-lg shadow-sm space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
-        <div className="space-y-1.5">
-          <Label htmlFor="filter-type">Filter by Timeframe</Label>
-          <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
-            <SelectTrigger id="filter-type">
-              <SelectValue placeholder="Select timeframe" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="allTime">All Time</SelectItem>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="yearly">Yearly</SelectItem>
-              <SelectItem value="period">Specific Period</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {filterType === 'daily' && (
+    <Card className="mb-6 shadow-md">
+      <CardHeader>
+        <CardTitle className="text-xl">Filter Dashboard by Timeframe</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-2 pb-4 px-6"> {/* Adjusted padding */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
           <div className="space-y-1.5">
-            <Label htmlFor="daily-date">Select Date</Label>
-            <DatePicker date={dailyDate} setDate={setDailyDate} />
+            <Label htmlFor="filter-type">Filter Type</Label>
+            <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
+              <SelectTrigger id="filter-type">
+                <SelectValue placeholder="Select timeframe" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="allTime">All Time</SelectItem>
+                <SelectItem value="daily">Daily</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="yearly">Yearly</SelectItem>
+                <SelectItem value="period">Specific Period</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        )}
 
-        {filterType === 'monthly' && (
-          <div className="space-y-1.5">
-            <Label htmlFor="monthly-date">Select Month & Year</Label>
-             <DatePicker 
-                date={monthlyDate} 
-                setDate={setMonthlyDate} 
-                placeholder="Pick a month"
-            />
-            {/* For a dedicated month/year picker, you might need a custom component or use separate inputs */}
-            {/* Example: <Input type="month" value={...} onChange={...} /> but styling can be inconsistent */}
-          </div>
-        )}
-
-        {filterType === 'yearly' && (
-          <div className="space-y-1.5">
-            <Label htmlFor="yearly-date">Select Year</Label>
-            <DatePicker 
-                date={yearlyDate}
-                setDate={setYearlyDate}
-                placeholder="Pick a year"
-            />
-             {/* Example: <Input type="number" placeholder="YYYY" ... /> */}
-          </div>
-        )}
-
-        {filterType === 'period' && (
-          <>
+          {filterType === 'daily' && (
             <div className="space-y-1.5">
-              <Label htmlFor="start-date">Start Date</Label>
-              <DatePicker date={periodStartDate} setDate={setPeriodStartDate} />
+              <Label htmlFor="daily-date">Select Date</Label>
+              <DatePicker date={dailyDate} setDate={setDailyDate} />
             </div>
+          )}
+
+          {filterType === 'monthly' && (
             <div className="space-y-1.5">
-              <Label htmlFor="end-date">End Date</Label>
-              <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
-                disabled={(date) => periodStartDate ? date < periodStartDate : false}
+              <Label htmlFor="monthly-date">Select Month & Year</Label>
+              <DatePicker 
+                  date={monthlyDate} 
+                  setDate={setMonthlyDate} 
+                  placeholder="Pick a month"
               />
             </div>
-          </>
-        )}
-      </div>
-      <div className="flex justify-end gap-2 mt-4">
+          )}
+
+          {filterType === 'yearly' && (
+            <div className="space-y-1.5">
+              <Label htmlFor="yearly-date">Select Year</Label>
+              <DatePicker 
+                  date={yearlyDate}
+                  setDate={setYearlyDate}
+                  placeholder="Pick a year"
+              />
+            </div>
+          )}
+
+          {filterType === 'period' && (
+            <>
+              <div className="space-y-1.5">
+                <Label htmlFor="start-date">Start Date</Label>
+                <DatePicker date={periodStartDate} setDate={setPeriodStartDate} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="end-date">End Date</Label>
+                <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
+                  disabled={(date) => periodStartDate ? date < periodStartDate : false}
+                />
+              </div>
+            </>
+          )}
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-end gap-2 pt-0 pb-6 px-6"> {/* Adjusted padding */}
         {filterType !== 'allTime' && (
              <Button variant="outline" onClick={handleReset}>Reset to All Time</Button>
         )}
         <Button onClick={handleApply} disabled={filterType === 'allTime' && currentFilterType === 'allTime'}>Apply Filters</Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
+
