@@ -30,7 +30,8 @@ export default function StatCard({ title, value, icon, description, className, p
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
         </CardTitle>
-        <div className="text-primary">{icon}</div>
+        {/* Ensure icon has appropriate size styling if not inherently sized by Lucide */}
+        {React.cloneElement(icon as React.ReactElement, { className: "h-5 w-5 text-primary" })}
       </CardHeader>
       <CardContent className="p-4 pt-0"> {/* Reduced padding */}
         <div className="text-2xl font-bold">{displayValue}</div> {/* Reduced font size */}
@@ -54,4 +55,3 @@ export default function StatCard({ title, value, icon, description, className, p
     </Card>
   );
 }
-

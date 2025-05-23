@@ -155,15 +155,17 @@ export default function DashboardPage() {
         <h1 className="text-3xl font-bold tracking-tight mb-4">Dashboard</h1>
         <DashboardDateFilters onApplyFilters={setDateFilter} currentFilterType={dateFilter.type} />
         
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"> {/* Reduced gap, adjusted columns */}
-          <StatCard title="Total Incidents" value={stats.total} icon={<FileText className="h-5 w-5" />} percentageChange={stats.totalPct} comparisonLabel={stats.comparisonLabel} />
-          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle className="h-5 w-5" />} percentageChange={stats.newPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass className="h-5 w-5" />} percentageChange={stats.processingPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks className="h-5 w-5" />} percentageChange={stats.closedPct} comparisonLabel={stats.comparisonLabel}/>
-          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock className="h-5 w-5" />} description="Working days, from receipt to first action"/>
-          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 className="h-5 w-5" />} description="Working days, from receipt to resolution"/>
-          <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target className="h-5 w-5" />} description="Resolved incidents / Total incidents"/>
-          <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock className="h-5 w-5" />} description="Age of the longest open incident (working days)"/>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <StatCard title="Total Incidents" value={stats.total} icon={<FileText />} percentageChange={stats.totalPct} comparisonLabel={stats.comparisonLabel} />
+          <StatCard title="New Incidents" value={stats.new} icon={<AlertTriangle />} percentageChange={stats.newPct} comparisonLabel={stats.comparisonLabel}/>
+          <StatCard title="Active Incidents" value={stats.processing} icon={<Hourglass />} percentageChange={stats.processingPct} comparisonLabel={stats.comparisonLabel}/>
+          <StatCard title="Resolved Incidents" value={stats.closed} icon={<ListChecks />} percentageChange={stats.closedPct} comparisonLabel={stats.comparisonLabel}/>
+          
+          <StatCard title="Avg. Initial Response Time" value={stats.avgProcessingTime} icon={<Clock />} description="Working days, from receipt to first action"/>
+          <StatCard title="Avg. Resolution Time" value={stats.avgResolutionTime} icon={<BarChart3 />} description="Working days, from receipt to resolution"/>
+          
+          <StatCard title="Resolution Rate" value={stats.resolutionRate} icon={<Target />} description="Resolved incidents / Total incidents"/>
+          <StatCard title="Oldest Open Incident Age" value={stats.oldestOpenIncidentAge} icon={<CalendarClock />} description="Age of the longest open incident (working days)"/>
         </div>
       </section>
 
