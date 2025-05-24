@@ -17,12 +17,11 @@ import {
   type TopListItem
 } from '@/lib/data';
 import type { Ticket, MediaMaterial, Platform } from '@/types';
-import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck, Newspaper, RadioTower, Activity, Eye } from 'lucide-react';
+import { ListChecks, Clock, AlertTriangle, Hourglass, FileText, Target, CalendarClock, Timer, ShieldCheck, Newspaper, RadioTower, Activity } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
 import { mediaMaterialDisplay, platformDisplay } from '@/types';
-import { Button } from '@/components/ui/button';
-import { TicketStatusBadge } from '@/components/tickets/TicketStatusBadge';
+import TicketTable from '@/components/tickets/TicketTable';
 
 
 export default function DashboardPage() {
@@ -224,14 +223,16 @@ export default function DashboardPage() {
           <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
         </div>
         <Skeleton className="h-10 w-1/4 mb-4" /> {/* Recent Incidents Title Skeleton */}
+        {/* Skeleton for TicketTable */}
         <div className="rounded-md border">
+            <div className="flex items-center justify-between p-3 border-b bg-muted/50">
+                {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-5 w-1/6 rounded" />)} 
+                <Skeleton className="h-5 w-[100px] rounded" />
+            </div>
             {[...Array(recentIncidentsLimit)].map((_, i) => (
             <div key={i} className="flex items-center justify-between p-3 border-b last:border-b-0">
-                <div className="flex items-center space-x-2 flex-grow">
-                    <Skeleton className="h-6 w-20 rounded" />
-                    <Skeleton className="h-4 w-3/4 rounded" />
-                </div>
-                <Skeleton className="h-8 w-24 rounded-md" />
+                 {[...Array(6)].map((_, j) => <Skeleton key={j} className="h-4 w-1/6 rounded" />)}
+                <Skeleton className="h-8 w-[100px] rounded-md" />
             </div>
             ))}
         </div>
@@ -287,53 +288,12 @@ export default function DashboardPage() {
       <section>
         <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Incidents Overview</h2>
         <TicketFilters filters={contentFilters} onFilterChange={setContentFilters} />
-        <div className="mt-4 rounded-md border bg-card shadow-lg">
-          {isLoading && allTickets.length === 0 ? (
-             [...Array(recentIncidentsLimit)].map((_, i) => (
-                <div key={i} className="flex items-center justify-between p-3 border-b last:border-b-0">
-                    <div className="flex items-center space-x-2 flex-grow">
-                        <Skeleton className="h-6 w-20 rounded" />
-                        <Skeleton className="h-4 w-3/4 rounded" />
-                    </div>
-                    <Skeleton className="h-8 w-24 rounded-md" />
-                </div>
-            ))
-          ) : displayedTicketsInTable.length > 0 ? (
-            displayedTicketsInTable.map((ticket) => (
-              <div
-                key={ticket.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-3 border-b last:border-b-0 hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-start space-x-3 flex-grow mb-2 sm:mb-0">
-                  <TicketStatusBadge status={ticket.status} className="mt-0.5" />
-                  <div className="flex-grow">
-                    <p className="text-sm font-medium text-foreground truncate" title={ticket.description}>
-                      {ticket.description}
-                    </p>
-                    <div className="text-xs text-muted-foreground space-x-2">
-                      <span>{mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}</span>
-                      <span>&bull;</span>
-                      <span>{platformDisplay[ticket.platform] || ticket.platform}</span>
-                    </div>
-                  </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleTicketRowClick(ticket.id)}
-                  className="w-full sm:w-auto sm:ms-4 flex-shrink-0"
-                >
-                  <Eye className="me-2 h-4 w-4" /> View Details
-                </Button>
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-10">
-              <p className="text-lg text-muted-foreground">No recent incidents found.</p>
-              <p className="text-sm text-muted-foreground">Try adjusting your filters or check back later.</p>
-            </div>
-          )}
-        </div>
+        <TicketTable
+            tickets={displayedTicketsInTable}
+            isLoading={isLoading && allTickets.length === 0}
+            onRowClick={handleTicketRowClick}
+            // No visibleColumns prop, so it uses default columns
+        />
       </section>
 
       {modalTicket && (
@@ -346,3 +306,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
