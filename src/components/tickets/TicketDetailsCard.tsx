@@ -7,13 +7,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { TicketStatusBadge } from './TicketStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+// Removed Select imports as they are no longer used here
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Clock, User, Link as LinkIcon, Image as ImageIcon, Edit3, Send, Workflow } from 'lucide-react';
+import { Clock, User, Link as LinkIcon, Image as ImageIcon, Edit3, Send, Workflow, CheckCircle2 } from 'lucide-react'; // Added CheckCircle2
 import { format } from 'date-fns';
-import { enUS } from 'date-fns/locale'; 
+import { enUS } from 'date-fns/locale';
 import { useAuth } from '@/contexts/AuthContext';
-import { ticketStatusOptions, ticketStatusDisplay } from '@/types';
+import { ticketStatusDisplay } from '@/types'; // ticketStatusOptions removed as it's not used
 import { Separator } from '../ui/separator';
 import { cn } from '@/lib/utils';
 
@@ -22,20 +22,20 @@ interface TicketDetailsCardProps {
   onUpdateStatus?: (ticketId: string, status: TicketStatus, actionDescription?: string) => void;
   onAddAction?: (ticketId: string, description: string) => void;
   isUpdating?: boolean;
-  isModalVariant?: boolean; 
+  isModalVariant?: boolean;
 }
 
 export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction, isUpdating, isModalVariant }: TicketDetailsCardProps) {
   const { user } = useAuth();
   const [newActionText, setNewActionText] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState<TicketStatus>(ticket.status);
+  // Removed selectedStatus state as it's no longer needed
 
   React.useEffect(() => {
-    setSelectedStatus(ticket.status);
-    setNewActionText(''); 
+    // setSelectedStatus(ticket.status); // Removed
+    setNewActionText('');
   }, [ticket]);
 
-  const dateLocale = enUS; 
+  const dateLocale = enUS;
 
   const handleAddAction = () => {
     if (newActionText.trim() && user?.displayName && onAddAction) {
@@ -44,14 +44,14 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     }
   };
 
-  const handleStatusUpdate = () => {
-    if (selectedStatus !== ticket.status && onUpdateStatus) {
-      const actionDesc = `Status changed to ${ticketStatusDisplay[selectedStatus]} by ${user?.displayName || 'User'}`;
-      onUpdateStatus(ticket.id, selectedStatus, actionDesc);
+  const handleCloseIncident = () => {
+    if (onUpdateStatus && ticket.status !== 'Closed') {
+      const actionDesc = `Incident closed by ${user?.displayName || 'User'}.`;
+      onUpdateStatus(ticket.id, 'Closed', actionDesc);
     }
   };
-  
-  const canUpdateStatus = ticket.status !== 'Closed';
+
+  const canUpdateStatus = ticket.status !== 'Closed'; // This now primarily means "can log action" or "can close"
   const showActionSection = !!onUpdateStatus && !!onAddAction;
 
   const mediaMaterialDisplay: Record<string, string> = {
@@ -81,12 +81,12 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
   return (
     <Card className={cn(
       "w-full",
-      isModalVariant ? "" : "shadow-lg border" 
+      isModalVariant ? "" : "shadow-lg border animate-in fade-in zoom-in-80 slide-in-from-bottom-4 duration-500"
     )}>
-      {!isModalVariant && ( 
+      {!isModalVariant && (
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-            <CardTitle className="text-2xl">{ticket.serialNumber}</CardTitle>
+            <CardTitle className="text-2xl font-bold">{ticket.serialNumber}</CardTitle>
             <TicketStatusBadge status={ticket.status} className="px-3 py-1.5 text-sm" />
           </div>
           <CardDescription className="text-sm text-muted-foreground flex items-center pt-1">
@@ -95,19 +95,19 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           </CardDescription>
         </CardHeader>
       )}
-      <CardContent className={cn(isModalVariant ? "pt-0" : "pt-0")}> 
+      <CardContent className={cn(isModalVariant ? "pt-0" : "pt-0")}>
         <div>
           <h3 className="font-semibold text-md mb-1">Incident Details</h3>
           <p className="text-sm text-foreground/90">{ticket.description}</p>
           <div className="mt-2 space-y-1 text-sm text-muted-foreground">
-            <p><strong>Media Material:</strong> 
-              {ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial 
-                ? `Other: ${ticket.otherMediaMaterial}` 
+            <p><strong>Media Material:</strong>
+              {ticket.mediaMaterial === 'Other' && ticket.otherMediaMaterial
+                ? `Other: ${ticket.otherMediaMaterial}`
                 : mediaMaterialDisplay[ticket.mediaMaterial] || ticket.mediaMaterial}
             </p>
-            <p><strong>Media Platform:</strong> 
-              {ticket.platform === 'Other' && ticket.otherPlatform 
-                ? `Other: ${ticket.otherPlatform}` 
+            <p><strong>Media Platform:</strong>
+              {ticket.platform === 'Other' && ticket.otherPlatform
+                ? `Other: ${ticket.otherPlatform}`
                 : platformDisplay[ticket.platform] || ticket.platform}
             </p>
             {ticket.issueLink && (
@@ -164,33 +164,13 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
             <p className="text-sm text-muted-foreground italic">No actions logged yet.</p>
           )}
         </div>
-        
-        {showActionSection && canUpdateStatus && (
+
+        {showActionSection && ( // canUpdateStatus check is now within button disable logic
             <>
             <Separator className="my-4" />
             <div className="space-y-3">
               <h3 className="font-semibold text-md flex items-center"><Edit3 className="h-5 w-5 me-2 text-primary"/>Update Incident</h3>
-              <div className="flex flex-col sm:flex-row gap-4 items-end">
-                  <div className="flex-grow space-y-1.5 w-full sm:w-auto">
-                      <label htmlFor="status-select" className="text-sm font-medium text-muted-foreground">Change Status</label>
-                      <Select value={selectedStatus} onValueChange={(value) => setSelectedStatus(value as TicketStatus)} disabled={isUpdating || !canUpdateStatus}>
-                          <SelectTrigger id="status-select">
-                              <SelectValue placeholder="Select..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                              {ticketStatusOptions.filter(opt => opt !== 'New' || ticket.status === 'New').map(option => (
-                                  <SelectItem key={option} value={option} disabled={option === 'New' && ticket.status !== 'New'}>
-                                      {ticketStatusDisplay[option] || option}
-                                  </SelectItem>
-                              ))}
-                          </SelectContent>
-                      </Select>
-                  </div>
-                  <Button onClick={handleStatusUpdate} disabled={isUpdating || selectedStatus === ticket.status || !canUpdateStatus}>
-                      {isUpdating ? "Updating..." : "Update Status"}
-                  </Button>
-              </div>
-              
+              {/* Status Select and Update Button Removed */}
               <div className="space-y-1.5">
                  <label htmlFor="action-log" className="text-sm font-medium text-muted-foreground">Log Action</label>
                 <Textarea
@@ -202,9 +182,14 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
                   disabled={isUpdating || !canUpdateStatus}
                 />
               </div>
-              <Button onClick={handleAddAction} disabled={!newActionText.trim() || isUpdating || !canUpdateStatus}>
-                <Send className="h-4 w-4 me-2" /> Log Action
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Button onClick={handleAddAction} disabled={!newActionText.trim() || isUpdating || !canUpdateStatus} className="flex-1 sm:flex-auto">
+                  <Send className="h-4 w-4 me-2" /> Log Action
+                </Button>
+                <Button variant="destructive" onClick={handleCloseIncident} disabled={isUpdating || !canUpdateStatus} className="flex-1 sm:flex-auto">
+                  <CheckCircle2 className="h-4 w-4 me-2" /> Close Incident
+                </Button>
+              </div>
             </div>
             </>
         )}
@@ -218,4 +203,3 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     </Card>
   );
 }
-    
