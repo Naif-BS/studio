@@ -25,57 +25,56 @@ body {
     --srsa-pure-white: 0 0% 100%; /* #FFFFFF */
     --srsa-sky-blue: 190 70% 50%; /* #25C1DE - For charts or accents */
 
-    /* Greys for borders, inputs, muted backgrounds etc. */
-    /* Using a lighter Deep Sea Blue for borders/inputs now */
-    --srsa-light-blue-border: 212 70% 85%; /* Lighter Deep Sea Blue for borders - Increased lightness */
-    --srsa-light-grey-muted-bg: 0 0% 90%; /* Approx #E6E6E6 */
-    --srsa-light-grey-secondary-bg: 0 0% 95%; /* Approx #F2F2F2 */
-    --srsa-muted-text: 212 70% 45%; /* Lighter Deep Sea Blue for muted text */
+    /* Greys and other derived colors */
+    --srsa-light-blue-border: 212 70% 85%; /* Lighter Deep Sea Blue for borders */
+    --srsa-neutral-grey-muted-bg: 0 0% 90%; /* Neutral grey for muted backgrounds */
+    --srsa-neutral-grey-muted-text: 0 0% 45%; /* Neutral grey for muted text */
+    --srsa-light-grey-secondary-bg: 0 0% 95%;
 
 
     /* ShadCN Theme Variables Mapping - Light Theme */
     --background: var(--srsa-cruise-white);
     --foreground: var(--srsa-deep-sea-blue);
 
-    --card: var(--srsa-cruise-white); /* Cards use Cruise White */
+    --card: var(--srsa-pure-white); /* Cards use Pure White for header/footer */
     --card-foreground: var(--srsa-deep-sea-blue);
 
-    --popover: var(--srsa-pure-white); /* Popovers pure white */
+    --popover: var(--srsa-pure-white);
     --popover-foreground: var(--srsa-deep-sea-blue);
 
-    --primary: var(--srsa-deep-sea-blue); /* Deep Sea Blue as new primary */
-    --primary-foreground: var(--srsa-cruise-white); /* Cruise White text on Deep Sea Blue */
+    --primary: var(--srsa-deep-sea-blue); /* Deep Sea Blue for primary buttons */
+    --primary-foreground: var(--srsa-cruise-white);
 
-    --secondary: var(--srsa-light-grey-secondary-bg); /* Light grey for secondary backgrounds */
+    --secondary: var(--srsa-light-grey-secondary-bg);
     --secondary-foreground: var(--srsa-deep-sea-blue);
 
-    --muted: var(--srsa-light-grey-muted-bg); /* Muted background */
-    --muted-foreground: var(--srsa-muted-text); /* Muted text (lighter deep sea blue) */
+    --muted: var(--srsa-neutral-grey-muted-bg); /* Using neutral grey for muted background */
+    --muted-foreground: var(--srsa-neutral-grey-muted-text); /* Using neutral grey for muted text */
 
-    --accent: var(--srsa-clown-fish-yellow); /* Clown Fish Yellow */
-    --accent-foreground: var(--srsa-deep-sea-blue); /* Deep blue text on yellow */
+    --accent: var(--srsa-clown-fish-yellow);
+    --accent-foreground: var(--srsa-deep-sea-blue);
 
     --destructive: 0 84.2% 60.2%; /* Default red */
     --destructive-foreground: var(--srsa-cruise-white);
 
-    --border: var(--srsa-light-blue-border); /* Lighter Deep Sea Blue for borders */
-    --input: var(--srsa-light-blue-border); /* Lighter Deep Sea Blue for input borders */
-    --ring: var(--srsa-sky-blue); /* Focus ring color, Sky Blue for visibility */
+    --border: var(--srsa-light-blue-border);
+    --input: var(--srsa-light-blue-border);
+    --ring: var(--srsa-sky-blue); /* Focus ring color */
 
     --radius: 0.5rem;
 
     /* Standard Chart Colors */
-    --chart-1: var(--srsa-deep-sea-blue); /* Deep Sea Blue first */
+    --chart-1: var(--srsa-deep-sea-blue);
     --chart-2: var(--srsa-clown-fish-yellow);
-    --chart-3: var(--srsa-sky-blue);
-    --chart-4: var(--srsa-marine-green); /* Marine Green */
+    --chart-3: var(--srsa-marine-green);
+    --chart-4: var(--srsa-sky-blue);
     --chart-5: hsl(184, 100%, 36%); /* Lighter Marine Green */
 
 
-    /* Sidebar specific theme variables */
+    /* Sidebar specific theme variables (Header & Footer Nav) */
     --sidebar-background: var(--srsa-deep-sea-blue);
     --sidebar-foreground: var(--srsa-cruise-white);
-    --sidebar-border: var(--srsa-muted-text); /* Border for sidebar itself, slightly lighter blue */
+    --sidebar-border: hsl(212, 70%, 25%); /* Slightly lighter blue for header/footer borders */
     --sidebar-active-icon: var(--srsa-clown-fish-yellow);
     --sidebar-active-text: var(--srsa-cruise-white);
     --sidebar-inactive-opacity: 0.7;
@@ -89,5 +88,6 @@ body {
   body {
     @apply bg-background text-foreground;
     min-height: 100vh;
+    /* background: linear-gradient(to bottom, hsl(210, 40%, 97%), hsl(210, 40%, 93%)); */ /* Reverted to solid background */
   }
 }
