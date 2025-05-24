@@ -33,13 +33,6 @@ export default function Header() {
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
       <div className="flex-1">
         <Link href="/dashboard" className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
-          {/* <Image
-            src="/srsa-logo.png"
-            alt="SRSA Organization Logo"
-            width={480} 
-            height={96} 
-            className="h-auto" 
-          /> */}
            <div className="flex flex-col">
             <span className="text-lg font-semibold leading-tight">Saudi Red Sea Authority</span>
             <span className="text-xs text-muted-foreground leading-tight">Media Monitoring Center</span>

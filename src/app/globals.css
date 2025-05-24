@@ -33,10 +33,10 @@ body {
     --srsa-beach-beige: 45 50% 82%; /* #EAD8B9 */
     
     /* Light Theme based on SRSA */
-    --background: hsl(210, 20%, 96%); /* Light cool grey for general page background */
+    --background: hsl(210, 40%, 97%); /* Lighter end of the body gradient */
     --foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue */
     
-    --card: hsl(var(--srsa-cruise-white)); /* White for cards - was 0 0% 100% */
+    --card: hsl(var(--srsa-cruise-white)); /* White for card base color (before opacity) - was 0 0% 100% */
     --card-foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue for text on cards */
 
     --popover: hsl(var(--srsa-cruise-white)); /* White */
@@ -57,8 +57,8 @@ body {
     --destructive: hsl(var(--srsa-coral-red)); /* Coral Red */
     --destructive-foreground: hsl(var(--srsa-cruise-white)); /* Cruise White */
 
-    --border: hsl(212, 25%, 80%); /* Slightly darker for more pronounced borders */
-    --input: hsl(212, 25%, 80%); /* Consistent border for inputs, matching new border */
+    --border: hsl(212, 25%, 80%); /* Soft, visible border */
+    --input: hsl(var(--border)); /* Input border matches general border */
     --ring: hsl(216, 75%, 40%); /* Slightly brighter Sea Blue for focus rings */
 
     --chart-1: hsl(var(--srsa-sea-blue));
@@ -85,7 +85,8 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background-image: linear-gradient(to bottom, hsl(210, 40%, 97%), hsl(210, 40%, 93%));
     min-height: 100vh;
   }
 }
