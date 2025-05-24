@@ -33,13 +33,13 @@ body {
     --srsa-beach-beige: 45 50% 82%; /* #EAD8B9 */
     
     /* Light Theme based on SRSA */
-    --background: var(--srsa-cruise-white); /* Cruise White */
+    --background: hsl(210, 20%, 96%); /* Light cool grey for general page background */
     --foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue */
     
-    --card: 0 0% 100%; /* White for cards */
+    --card: hsl(0, 0%, 100%); /* White for cards */
     --card-foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue for text on cards */
 
-    --popover: 0 0% 100%; /* White */
+    --popover: hsl(0, 0%, 100%); /* White */
     --popover-foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue */
 
     --primary: var(--srsa-sea-blue); /* Sea Blue - for primary actions */
@@ -48,18 +48,18 @@ body {
     --secondary: var(--srsa-shores-turquoise); /* Shores Turquoise - for secondary buttons/elements */
     --secondary-foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue text on Shores Turquoise */
 
-    --muted: 45 50% 92%; /* Lighter, desaturated Beach Beige for muted elements */
+    --muted: hsl(45, 50%, 92%); /* Lighter, desaturated Beach Beige for muted elements */
     --muted-foreground: var(--srsa-dolphins-grey); /* Darker Dolphins Grey for muted text, still readable */
 
     --accent: var(--srsa-sky-blue); /* Sky Blue - for accents */
-    --accent-foreground: 0 0% 100%; /* White text on Sky Blue accent */
+    --accent-foreground: hsl(0, 0%, 100%); /* White text on Sky Blue accent */
 
     --destructive: var(--srsa-coral-red); /* Coral Red */
     --destructive-foreground: var(--srsa-cruise-white); /* Cruise White */
 
-    --border: 212 30% 88%; /* A soft, light grey-blue border */
-    --input: 212 30% 88%; /* Consistent border for inputs */
-    --ring: 216 75% 40%; /* Slightly brighter Sea Blue for focus rings */
+    --border: hsl(212, 30%, 88%); /* A soft, light grey-blue border */
+    --input: hsl(212, 30%, 88%); /* Consistent border for inputs */
+    --ring: hsl(216, 75%, 40%); /* Slightly brighter Sea Blue for focus rings */
 
     --chart-1: var(--srsa-sea-blue);
     --chart-2: var(--srsa-shores-turquoise);
@@ -70,12 +70,12 @@ body {
 
     /* Sidebar specific theme variables (for bottom nav - Light Mode) */
     --sidebar-background: var(--srsa-cruise-white); /* Cruise White - Consistent with app background */
-    --sidebar-foreground: 212 70% 25%; /* Slightly softer Deep Sea Blue for nav items */
+    --sidebar-foreground: hsl(212, 70%, 25%); /* Slightly softer Deep Sea Blue for nav items */
     --sidebar-primary: var(--srsa-sea-blue);    /* Sea Blue - Active item color */
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 216 70% 90%;     /* Hover background - lighter Sea Blue/Sky Blue hue */
-    --sidebar-accent-foreground: 216 75% 30%;/* Text on hover - Sea Blue */
-    --sidebar-border: 212 30% 88%;      /* Border for the nav bar itself */
+    --sidebar-primary-foreground: hsl(0, 0%, 100%); /* White */
+    --sidebar-accent: hsl(216, 70%, 90%);     /* Hover background - lighter Sea Blue/Sky Blue hue */
+    --sidebar-accent-foreground: hsl(216, 75%, 30%);/* Text on hover - Sea Blue */
+    --sidebar-border: hsl(212, 30%, 88%);      /* Border for the nav bar itself */
     --sidebar-ring: var(--srsa-sea-blue); /* Sea Blue */
   }
 }
@@ -85,8 +85,10 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    /* Subtle gradient background */
+    background-image: linear-gradient(to bottom, hsl(210, 40%, 97%), hsl(210, 40%, 93%));
+    min-height: 100vh; /* Ensure gradient covers full height */
   }
 }
     
-
