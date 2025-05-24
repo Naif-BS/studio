@@ -1,3 +1,4 @@
+// src/types.ts
 
 export type MediaMaterial =
   | 'Press Release'
@@ -26,7 +27,7 @@ export type TicketStatus = 'New' | 'Processing' | 'Closed';
 export interface TicketAction {
   timestamp: Date;
   description: string;
-  user: string; 
+  user: string;
 }
 
 export interface Ticket {
@@ -42,12 +43,13 @@ export interface Ticket {
   screenshotLink?: string | null;
   description: string;
   actionsLog: TicketAction[];
-  reportedBy: string; 
+  reportedBy: string;
   otherMediaMaterial?: string | null;
   otherPlatform?: string | null;
 }
 
-export const mediaMaterialOptions: MediaMaterial[] = [
+// CORRECTED LINES: Added `as const` to treat these as tuples
+export const mediaMaterialOptions = [
   'Press Release',
   'Legal Document',
   'Infographic',
@@ -56,9 +58,9 @@ export const mediaMaterialOptions: MediaMaterial[] = [
   'Audio Clip',
   'GIF',
   'Other',
-];
+] as const;
 
-export const platformOptions: Platform[] = [
+export const platformOptions = [
   'Umm Al-Qura Newspaper',
   'Local Media Channel/Platform',
   'International Media Channel/Platform',
@@ -69,7 +71,7 @@ export const platformOptions: Platform[] = [
   'SRSA Account on TikTok',
   'SRSA Account on LinkedIn',
   'Other',
-];
+] as const;
 
 export const ticketStatusOptions: TicketStatus[] = ['New', 'Processing', 'Closed'];
 

@@ -1,100 +1,79 @@
-
+// src/components/dashboard/StatCard.tsx (This is where this code BELONGS)
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { ArrowUp, ArrowDown } from 'lucide-react';
-
-interface SubStat {
-  label: string;
-  value: string | number;
-  icon?: React.ReactNode;
-  percentageChange?: number;
-  comparisonLabel?: string;
-}
+// You might need to import your SubStat type definition if it's external
+// Example: import { SubStat } from '@/types'; // Adjust path if needed
 
 interface StatCardProps {
   title: string;
   value: string | number;
-  icon: React.ReactNode;
-  description?: string;
-  className?: string;
-  percentageChange?: number; // For the main KPI
-  comparisonLabel?: string; // For the main KPI
-  subStats?: SubStat[];
-  glassEffect?: boolean;
+  percentageChange?: number;
+  description: string;
+  icon?: React.ReactNode;
+  subStats?: { label: string; value: string | number; percentageChange?: number; }[];
 }
 
-export default function StatCard({ title, value, icon, description, className, percentageChange, comparisonLabel, subStats, glassEffect }: StatCardProps) {
+export default function StatCard({
+  title,
+  value,
+  percentageChange,
+  description,
+  icon,
+  subStats,
+}: StatCardProps) {
   const hasPercentageChange = typeof percentageChange === 'number';
   const isPositiveChange = hasPercentageChange && percentageChange > 0;
   const isNegativeChange = hasPercentageChange && percentageChange < 0;
 
-  const displayValue = (typeof value === 'string' && value === '...') ? '...' :
-                       (typeof value === 'number' ? value.toLocaleString() : value);
-  
-  const cardClasses = cn(
-    "shadow-sm", // Default shadow
-    glassEffect && "bg-opacity-50 backdrop-blur-xl !border-white/30 shadow-lg", // Glass effect overrides
-    className
-  );
-
   return (
-    <Card className={cardClasses}>
+    <Card className="flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-foreground">
+        <CardTitle className="text-sm font-medium">
           {title}
         </CardTitle>
-        {React.cloneElement(icon as React.ReactElement, { className: "h-10 w-10 text-marine-green", strokeWidth: "1.25" })}
+        {icon && <span className="h-4 w-4 text-muted-foreground">{icon}</span>}
       </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <div className="text-2xl font-bold">{displayValue}</div>
-        {description && (
-          <p className="text-xs text-muted-foreground pt-1">{description}</p>
-        )}
-        {hasPercentageChange && comparisonLabel && !subStats && ( // Only show main % change if no subStats or if it's a card without subStats
-          <div className={cn(
-            "text-xs flex items-center mt-1",
-            isPositiveChange && "text-green-600",
-            isNegativeChange && "text-red-600",
-            !isPositiveChange && !isNegativeChange && "text-muted-foreground"
-          )}>
-            {isPositiveChange && <ArrowUp className="h-3 w-3 me-0.5" />}
-            {isNegativeChange && <ArrowDown className="h-3 w-3 me-0.5" />}
-            {percentageChange?.toFixed(1)}%
-            <span className="ms-1 text-muted-foreground/80">{comparisonLabel}</span>
+      <CardContent className="flex-grow flex flex-col justify-between">
+        <div>
+          <div className="text-2xl font-bold">
+            {typeof value === 'number' ? value.toLocaleString() : value}
+            {hasPercentageChange && (
+              <span className={cn(
+                "ml-2 text-sm font-semibold",
+                isPositiveChange && "text-green-500",
+                isNegativeChange && "text-red-500"
+              )}>
+                ({percentageChange > 0 ? '+' : ''}{percentageChange.toFixed(1)}%)
+              </span>
+            )}
           </div>
-        )}
+          <p className="text-xs text-muted-foreground">
+            {description}
+          </p>
+        </div>
+
         {subStats && subStats.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-border/60 space-y-2">
+          <div className="mt-4 space-y-2">
+            <h4 className="text-xs font-semibold text-muted-foreground">Sub-Statistics:</h4>
             {subStats.map((sub, index) => {
-              const hasSubPercentageChange = typeof sub.percentageChange === 'number';
-              const isSubPositiveChange = hasSubPercentageChange && sub.percentageChange > 0;
-              const isSubNegativeChange = hasSubPercentageChange && sub.percentageChange < 0;
+              const isSubPositiveChange = typeof sub.percentageChange === 'number' && sub.percentageChange > 0;
+              const isSubNegativeChange = typeof sub.percentageChange === 'number' && sub.percentageChange < 0;
 
               return (
-                <div key={index}>
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex items-center text-muted-foreground">
-                      {sub.icon && React.cloneElement(sub.icon as React.ReactElement, { className: "h-4 w-4 me-1.5" })}
-                      <span>{sub.label}:</span>
-                    </div>
-                    <span className="font-semibold text-foreground">
-                      {typeof sub.value === 'number' ? sub.value.toLocaleString() : sub.value}
-                    </span>
-                  </div>
-                  {hasSubPercentageChange && sub.comparisonLabel && (
-                    <div className={cn(
-                      "text-xs flex items-center justify-end mt-0.5",
-                      isSubPositiveChange && "text-green-600",
-                      isSubNegativeChange && "text-red-600",
-                      !isSubPositiveChange && !isSubNegativeChange && "text-muted-foreground"
-                    )}>
-                      {isSubPositiveChange && <ArrowUp className="h-3 w-3 me-0.5" />}
-                      {isSubNegativeChange && <ArrowDown className="h-3 w-3 me-0.5" />}
-                      {sub.percentageChange?.toFixed(1)}%
-                      <span className="ms-1 text-muted-foreground/80">{sub.comparisonLabel}</span>
-                    </div>
-                  )}
+                <div key={index} className="flex justify-between text-sm text-muted-foreground">
+                  <span>{sub.label}</span>
+                  <span className={cn(
+                    isSubPositiveChange && "text-green-500",
+                    isSubNegativeChange && "text-red-500"
+                  )}>
+                    {typeof sub.value === 'number' ? sub.value.toLocaleString() : sub.value}
+                    {typeof sub.percentageChange === 'number' && (
+                      <span className="ml-1">
+                        ({sub.percentageChange > 0 ? '+' : ''}{sub.percentageChange.toFixed(1)}%)
+                      </span>
+                    )}
+                  </span>
                 </div>
               );
             })}

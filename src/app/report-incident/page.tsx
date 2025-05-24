@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -8,6 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/AuthContext';
 import type { TicketFormValues as IncidentReportFormValues } from '@/components/tickets/TicketForm';
 import { cn } from '@/lib/utils';
+// ADDED IMPORT: Make sure this line exists
+import type { MediaMaterial, Platform } from '@/types'; // Import MediaMaterial and Platform types
+
 
 export default function ReportIncidentPage() {
   const { toast } = useToast();
@@ -25,6 +27,9 @@ export default function ReportIncidentPage() {
     try {
       const newTicketData = {
         ...data,
+        // CORRECTED LINES: Added type assertions here
+        mediaMaterial: data.mediaMaterial as MediaMaterial, // Assert type
+        platform: data.platform as Platform,             // Assert type
         reportedBy: user.displayName,
       };
       const newTicket = addTicket(newTicketData);
@@ -40,7 +45,7 @@ export default function ReportIncidentPage() {
       } else if (typeof error === 'string' && error.trim() !== '') {
         errorMessage = error;
       }
-      
+
       toast({
         title: "Error Submitting Report",
         description: errorMessage,
@@ -54,7 +59,7 @@ export default function ReportIncidentPage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">Submit New Incident Report</h1>
       <div className={cn(
-          "max-w-2xl p-6 rounded-lg border bg-card text-card-foreground shadow-sm" // Changed shadow-lg to shadow-sm
+          "max-w-2xl p-6 rounded-lg border bg-card text-card-foreground shadow-sm"
         )}>
         <TicketForm onSubmitSuccess={handleFormSubmit} />
       </div>

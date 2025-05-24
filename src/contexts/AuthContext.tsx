@@ -1,147 +1,197 @@
-
+// src/contexts/AuthContext.tsx
 "use client";
 
-import type { User } from 'firebase/auth'; // Using firebase type for structure, but not implementing firebase auth
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast'; // Import useToast
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import {
+  getAuth,
+  onAuthStateChanged,
+  User,
+  IdTokenResult,
+  signInWithEmailAndPassword,
+  signOut,
+  AuthError,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { app } from "@/lib/firebase"; // Make sure this path is correct and src/lib/firebase.ts exists and exports 'app'
+import { useToast } from "@/hooks/use-toast"; // Assuming you have a toast notification system
 
 interface AuthContextType {
-  user: User | null; // Mocking User type
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email?: string, password?: string) => Promise<void>; // Mock login
+  error: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
+// Create a mock user for cases where Firebase might not be fully initialized
+// or for environments where auth is not strictly needed (e.g., build time checks)
+const MOCK_USER: User = {
+  uid: "mock-uid",
+  email: "mock@example.com",
+  displayName: "Mock User",
+  emailVerified: true,
+  isAnonymous: false,
+  phoneNumber: null,
+  photoURL: null,
+  providerData: [],
+  tenantId: null,
+  refreshToken: 'mock-refresh-token',
+  // ADDED MISSING PROPERTIES FOR User type
+  metadata: {
+    creationTime: new Date().toISOString(),
+    lastSignInTime: new Date().toISOString(),
+  },
+  providerId: 'firebase', // Example providerId
+
+  // Mock methods required by User type
+  delete: async () => {},
+  getIdToken: async () => 'mock-id-token',
+  getIdTokenResult: async () => ({
+    token: 'mock-id-token',
+    claims: {},
+    expirationTime: new Date(Date.now() + 3600 * 1000).toISOString(), // 1 hour from now
+    issuedAtTime: new Date().toISOString(),
+    authTime: new Date().toISOString(), // This was the previously missing property
+    signInProvider: null,
+    signInSecondFactor: null
+  }),
+  reload: async () => {},
+  toJSON: () => ({}),
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Mock User data structure
-interface MockUser extends User {
-  displayName: string | null;
-  email: string | null;
-  photoURL: string | null;
-  uid: string;
-}
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<MockUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const { toast } = useToast(); // Initialize toast
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+  const auth = getAuth(app); // Initialize Firebase Auth instance
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      setIsLoading(false);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [auth]);
+
+  const login = async (email: string, password: string) => {
+    setError(null);
     setIsLoading(true);
     try {
-      const storedUserJson = localStorage.getItem('mediaScopeUser');
-      if (storedUserJson) {
-        let userObj = JSON.parse(storedUserJson) as MockUser | null;
-        if (userObj) {
-          if (!userObj.displayName || userObj.displayName.trim() === '') {
-            userObj.displayName = (userObj.email ? userObj.email.split('@')[0].trim() : '') || 'User';
-          }
-          if (!userObj.displayName) userObj.displayName = "User"; // Ensure non-empty
-
-          userObj.photoURL = `https://placehold.co/100x100.png?text=${(userObj.displayName[0] || 'U').toUpperCase()}`;
-          
-          setUser(userObj);
-        } else {
-          setUser(null); 
-        }
-      }
-    } catch (error) {
-      console.error("Failed to load user from localStorage:", error);
-      localStorage.removeItem('mediaScopeUser');
-      setUser(null); 
+      await signInWithEmailAndPassword(auth, email, password);
+      toast({
+        title: "Logged In Successfully!",
+        description: "Welcome back to MediaScope.",
+        variant: "default",
+      });
+    } catch (err) {
+      const firebaseError = err as AuthError;
+      setError(firebaseError.message);
+      toast({
+        title: "Login Failed",
+        description: firebaseError.message,
+        variant: "destructive",
+      });
+      console.error("Login error:", firebaseError);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  };
 
-  const login = async (email?: string, password?: string) => {
+  const signup = async (email: string, password: string, displayName: string) => {
+    setError(null);
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const providedEmail = email || 'user@example.com';
-      let namePart = providedEmail.split('@')[0].trim();
-      if (!namePart) namePart = 'User'; // Ensure namePart is not empty
-      const generatedDisplayName = namePart;
-
-      const mockUser: MockUser = {
-        uid: 'mock-user-123',
-        email: providedEmail,
-        displayName: generatedDisplayName,
-        photoURL: `https://placehold.co/100x100.png?text=${(generatedDisplayName[0] || 'U').toUpperCase()}`,
-        emailVerified: true,
-        isAnonymous: false,
-        metadata: {},
-        providerData: [],
-        providerId: 'password', 
-        refreshToken: 'mock-refresh-token',
-        tenantId: null,
-        delete: async () => {},
-        getIdToken: async () => 'mock-id-token',
-        getIdTokenResult: async () => ({ token: 'mock-id-token', claims: {}, expirationTime: '', issuedAtTime: '', signInProvider: null, signInSecondFactor: null}),
-        reload: async () => {},
-        toJSON: () => ({}),
-      };
-      setUser(mockUser);
-      localStorage.setItem('mediaScopeUser', JSON.stringify(mockUser));
-      
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, { displayName });
+        setUser(userCredential.user); // Update user state with displayName
+        setIsAuthenticated(true);
+        toast({
+          title: "Account Created!",
+          description: "Welcome to MediaScope. Your account has been successfully created.",
+          variant: "default",
+        });
+      }
+    } catch (err) {
+      const firebaseError = err as AuthError;
+      setError(firebaseError.message);
       toast({
-        title: "Sign In Successful (Mock)",
-        description: "Redirecting to your dashboard...",
-        variant: "default",
-      });
-      router.push('/dashboard');
-    } catch (error) {
-      console.error("Login process failed:", error);
-      toast({
-        title: "Sign In Failed (Mock)",
-        description: "Could not sign in at this time. Please try again later.",
+        title: "Signup Failed",
+        description: firebaseError.message,
         variant: "destructive",
       });
+      console.error("Signup error:", firebaseError);
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = async () => {
+    setError(null);
     setIsLoading(true);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setUser(null);
-      localStorage.removeItem('mediaScopeUser');
+      await signOut(auth);
       toast({
-        title: "Signed Out",
-        description: "You have been successfully signed out.",
+        title: "Logged Out",
+        description: "You have been successfully logged out.",
         variant: "default",
       });
-      router.push('/login');
-    } catch (error) {
-      console.error("Logout process failed:", error);
+    } catch (err) {
+      const firebaseError = err as AuthError;
+      setError(firebaseError.message);
       toast({
-        title: "Sign Out Failed",
-        description: "Could not sign out at this time.",
+        title: "Logout Failed",
+        description: firebaseError.message,
         variant: "destructive",
       });
+      console.error("Logout error:", firebaseError);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const contextValue: AuthContextType = {
+    user: user || MOCK_USER,
+    isAuthenticated,
+    isLoading,
+    error,
+    login,
+    signup,
+    logout,
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, login, logout }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

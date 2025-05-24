@@ -1,3 +1,5 @@
+// src/components/ui/card.tsx
+"use client"; // <--- ADD THIS LINE AT THE VERY TOP
 
 import * as React from "react"
 
@@ -37,7 +39,7 @@ const CardTitle = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "text-2xl font-bold leading-none tracking-tight", // Changed from font-semibold
+      "text-2xl font-bold leading-none tracking-tight",
       className
     )}
     {...props}
