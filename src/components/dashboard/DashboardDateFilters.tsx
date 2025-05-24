@@ -89,13 +89,15 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
     onApplyFilters({ type: 'allTime' });
   }
 
+  const datePickerTriggerClass = "h-8 text-xs";
+
   return (
     <Card className="mb-4 shadow-md">
-      <CardHeader className="pb-2 pt-3 px-3">
-        <CardTitle className="text-base">Filter by Timeframe</CardTitle>
+      <CardHeader className="pb-1 pt-2 px-3">
+        <CardTitle className="text-sm">Filter by Timeframe</CardTitle>
       </CardHeader>
-      <CardContent className="pt-1 pb-2 px-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-end">
+      <CardContent className="pt-2 pb-2 px-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 items-end">
           <div className="space-y-1">
             <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
             <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
@@ -115,7 +117,7 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
           {filterType === 'daily' && (
             <div className="space-y-1">
               <Label htmlFor="daily-date" className="text-xs">Select Date</Label>
-              <DatePicker date={dailyDate} setDate={setDailyDate} />
+              <DatePicker date={dailyDate} setDate={setDailyDate} triggerClassName={datePickerTriggerClass} />
             </div>
           )}
 
@@ -126,6 +128,7 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
                   date={monthlyDate} 
                   setDate={setMonthlyDate} 
                   placeholder="Pick a month"
+                  triggerClassName={datePickerTriggerClass}
               />
             </div>
           )}
@@ -137,6 +140,7 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
                   date={yearlyDate}
                   setDate={setYearlyDate}
                   placeholder="Pick a year"
+                  triggerClassName={datePickerTriggerClass}
               />
             </div>
           )}
@@ -145,23 +149,24 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
             <>
               <div className="space-y-1">
                 <Label htmlFor="start-date" className="text-xs">Start Date</Label>
-                <DatePicker date={periodStartDate} setDate={setPeriodStartDate} />
+                <DatePicker date={periodStartDate} setDate={setPeriodStartDate} triggerClassName={datePickerTriggerClass} />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="end-date" className="text-xs">End Date</Label>
                 <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
                   disabled={(date) => periodStartDate ? date < periodStartDate : false}
+                  triggerClassName={datePickerTriggerClass}
                 />
               </div>
             </>
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end gap-1 pt-0 pb-3 px-3">
+      <CardFooter className="flex justify-end gap-1 pt-0 pb-2 px-3">
         {filterType !== 'allTime' && (
-             <Button variant="outline" size="sm" onClick={handleReset} className="h-8 text-xs">Reset</Button>
+             <Button variant="outline" onClick={handleReset} className="h-8 text-xs px-2">Reset</Button>
         )}
-        <Button onClick={handleApply} size="sm" disabled={filterType === 'allTime' && currentFilterType === 'allTime'} className="h-8 text-xs">Apply</Button>
+        <Button onClick={handleApply} disabled={filterType === 'allTime' && currentFilterType === 'allTime'} className="h-8 text-xs px-3">Apply</Button>
       </CardFooter>
     </Card>
   );
