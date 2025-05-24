@@ -288,7 +288,7 @@ export default function DashboardPage() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold tracking-tight mb-4">Recent Incidents Overview</h2>
+        <h2 className="text-2xl font-bold tracking-tight mb-4">Recent Incidents Overview</h2>
         <TicketFilters filters={contentFilters} onFilterChange={setContentFilters} />
         <TicketTable
             tickets={displayedTicketsInTable}

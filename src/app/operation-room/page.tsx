@@ -231,7 +231,7 @@ const TicketDetailsCard = dynamic(() => import('@/components/tickets/TicketDetai
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-3">Incident Queue</h2>
+          <h2 className="text-xl font-bold tracking-tight mb-3">Incident Queue</h2>
           <TicketTable
             tickets={displayedTickets}
             isLoading={isLoading}
@@ -242,7 +242,7 @@ const TicketDetailsCard = dynamic(() => import('@/components/tickets/TicketDetai
         </div>
 
         <div className="lg:col-span-1">
-          <h2 className="text-xl font-semibold mb-3">Incident Details</h2>
+          <h2 className="text-xl font-bold tracking-tight mb-3">Incident Details</h2>
           {isLoading && !selectedTicket ? ( 
              <TicketDetailsSkeleton />
           ) : selectedTicket ? (
