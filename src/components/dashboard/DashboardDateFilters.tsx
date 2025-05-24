@@ -6,8 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { startOfMonth, endOfMonth, startOfYear, endOfYear, subDays, isValid } from 'date-fns';
+import { subDays, isValid } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -93,79 +92,77 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
   const datePickerTriggerClass = "h-8 text-xs";
 
   return (
-    <Card className="mb-3"> {/* Removed shadow-lg to use default from Card component */}
-      <CardContent className="pt-3 pb-2 px-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 items-end">
-          <div className="space-y-1">
-            <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
-            <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
-              <SelectTrigger id="filter-type" className={cn("bg-background border-input", datePickerTriggerClass)}>
-                <SelectValue placeholder="Select timeframe" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="allTime">All Time</SelectItem>
-                <SelectItem value="daily">Daily</SelectItem>
-                <SelectItem value="monthly">Monthly</SelectItem>
-                <SelectItem value="yearly">Yearly</SelectItem>
-                <SelectItem value="period">Specific Period</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {filterType === 'daily' && (
-            <div className="space-y-1">
-              <Label htmlFor="daily-date" className="text-xs">Select Date</Label>
-              <DatePicker date={dailyDate} setDate={setDailyDate} triggerClassName={datePickerTriggerClass} />
-            </div>
-          )}
-
-          {filterType === 'monthly' && (
-            <div className="space-y-1">
-              <Label htmlFor="monthly-date" className="text-xs">Select Month & Year</Label>
-              <DatePicker 
-                  date={monthlyDate} 
-                  setDate={setMonthlyDate} 
-                  placeholder="Pick a month"
-                  triggerClassName={datePickerTriggerClass}
-              />
-            </div>
-          )}
-
-          {filterType === 'yearly' && (
-            <div className="space-y-1">
-              <Label htmlFor="yearly-date" className="text-xs">Select Year</Label>
-              <DatePicker 
-                  date={yearlyDate}
-                  setDate={setYearlyDate}
-                  placeholder="Pick a year"
-                  triggerClassName={datePickerTriggerClass}
-              />
-            </div>
-          )}
-
-          {filterType === 'period' && (
-            <>
-              <div className="space-y-1">
-                <Label htmlFor="start-date" className="text-xs">Start Date</Label>
-                <DatePicker date={periodStartDate} setDate={setPeriodStartDate} triggerClassName={datePickerTriggerClass} />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="end-date" className="text-xs">End Date</Label>
-                <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
-                  disabled={(date) => periodStartDate ? date < periodStartDate : false}
-                  triggerClassName={datePickerTriggerClass}
-                />
-              </div>
-            </>
-          )}
+    <div className="p-3 mb-4 border-b">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-end">
+        <div className="space-y-1.5">
+          <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
+          <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
+            <SelectTrigger id="filter-type" className={cn("bg-background border-input", datePickerTriggerClass)}>
+              <SelectValue placeholder="Select timeframe" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="allTime">All Time</SelectItem>
+              <SelectItem value="daily">Daily</SelectItem>
+              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="yearly">Yearly</SelectItem>
+              <SelectItem value="period">Specific Period</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </CardContent>
-      <CardFooter className="flex justify-end gap-1 pt-0 pb-2 px-3">
+
+        {filterType === 'daily' && (
+          <div className="space-y-1.5">
+            <Label htmlFor="daily-date" className="text-xs">Select Date</Label>
+            <DatePicker date={dailyDate} setDate={setDailyDate} triggerClassName={datePickerTriggerClass} />
+          </div>
+        )}
+
+        {filterType === 'monthly' && (
+          <div className="space-y-1.5">
+            <Label htmlFor="monthly-date" className="text-xs">Select Month & Year</Label>
+            <DatePicker 
+                date={monthlyDate} 
+                setDate={setMonthlyDate} 
+                placeholder="Pick a month"
+                triggerClassName={datePickerTriggerClass}
+            />
+          </div>
+        )}
+
+        {filterType === 'yearly' && (
+          <div className="space-y-1.5">
+            <Label htmlFor="yearly-date" className="text-xs">Select Year</Label>
+            <DatePicker 
+                date={yearlyDate}
+                setDate={setYearlyDate}
+                placeholder="Pick a year"
+                triggerClassName={datePickerTriggerClass}
+            />
+          </div>
+        )}
+
+        {filterType === 'period' && (
+          <>
+            <div className="space-y-1.5">
+              <Label htmlFor="start-date" className="text-xs">Start Date</Label>
+              <DatePicker date={periodStartDate} setDate={setPeriodStartDate} triggerClassName={datePickerTriggerClass} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="end-date" className="text-xs">End Date</Label>
+              <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
+                disabled={(date) => periodStartDate ? date < periodStartDate : false}
+                triggerClassName={datePickerTriggerClass}
+              />
+            </div>
+          </>
+        )}
+      </div>
+      <div className="flex justify-end gap-1.5 mt-3">
         {filterType !== 'allTime' && (
              <Button variant="outline" onClick={handleReset} className="h-8 text-xs px-2">Reset</Button>
         )}
         <Button onClick={handleApply} disabled={filterType === 'allTime' && currentFilterType === 'allTime'} className="h-8 text-xs px-3">Apply</Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }
