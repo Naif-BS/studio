@@ -25,7 +25,7 @@ export default function OperationRoomPage() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const ticketIdFromQuery = searchParams.get('ticketId'); // Extract primitive value
+  const ticketIdFromQuery = searchParams.get('ticketId'); 
 
   const [filters, setFilters] = useState<TicketFiltersState>({
     status: '', 
@@ -62,7 +62,7 @@ export default function OperationRoomPage() {
     const updatedTicket = apiUpdateTicketStatus(ticketId, status, actionDescription);
     if (updatedTicket) {
       setAllTickets(prev => prev.map(t => t.id === ticketId ? updatedTicket : t));
-      if (selectedTicket?.id === ticketId) { // Also update selectedTicket if it's the one being changed
+      if (selectedTicket?.id === ticketId) { 
         setSelectedTicket(updatedTicket);
       }
       toast({ 
@@ -85,19 +85,18 @@ export default function OperationRoomPage() {
     }
 
     setIsUpdating(true);
-    // Log the action first
+    
     let resultingTicket = apiAddTicketAction(ticketId, description, currentUserDisplayName);
 
     if (resultingTicket) {
       toast({ title: 'Action Logged', description: 'New action added to incident.' });
 
-      // If the original status was 'New', update it to 'Processing'
       if (ticketToUpdateOriginalState.status === 'New') {
         const statusUpdateMessage = `Status automatically changed to Processing by ${currentUserDisplayName} after action was logged.`;
         const ticketAfterStatusUpdate = apiUpdateTicketStatus(ticketId, 'Processing', statusUpdateMessage);
         
         if (ticketAfterStatusUpdate) {
-          resultingTicket = ticketAfterStatusUpdate; // This is now the most current version
+          resultingTicket = ticketAfterStatusUpdate; 
           toast({
             title: "Incident Status Updated",
             description: `Incident ${resultingTicket.serialNumber} status automatically changed to ${ticketStatusDisplay[resultingTicket.status]}.`
@@ -106,9 +105,7 @@ export default function OperationRoomPage() {
           toast({ title: 'Error', description: 'Failed to automatically update incident status after logging action.', variant: 'destructive' });
         }
       }
-
-      // Update UI state with the latest ticket data
-      // Ensure resultingTicket is not undefined before using it for state updates
+      
       if (resultingTicket) {
         setAllTickets(prev => prev.map(t => (t.id === ticketId ? resultingTicket! : t)));
         if (selectedTicket?.id === ticketId) {
@@ -142,7 +139,7 @@ export default function OperationRoomPage() {
         if (statusOrder[a.status] !== statusOrder[b.status]) {
           return statusOrder[a.status] - statusOrder[b.status];
         } 
-        return new Date(a.receivedAt).getTime() - new Date(b.receivedAt).getTime(); // FIFO for same status
+        return new Date(a.receivedAt).getTime() - new Date(b.receivedAt).getTime(); 
       });
   }, [allTickets, filters]);
 
@@ -190,7 +187,7 @@ export default function OperationRoomPage() {
          router.replace(desiredFullPath, { scroll: false });
       }
     }
-  }, [displayedTickets, selectedTicket, isLoading, router, ticketIdFromQuery]); // Use ticketIdFromQuery here
+  }, [displayedTickets, selectedTicket, isLoading, router, ticketIdFromQuery]); 
 
 const TicketDetailsCard = dynamic(() => import('@/components/tickets/TicketDetailsCard'), {
   loading: () => <TicketDetailsSkeleton />, 
