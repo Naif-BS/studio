@@ -1,0 +1,3 @@
+plaintext
+User-agent: *
+Allow: /
