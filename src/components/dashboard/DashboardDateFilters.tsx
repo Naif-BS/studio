@@ -93,13 +93,13 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
   const datePickerTriggerClass = "h-8 text-xs";
 
   return (
-    <Card className="mb-4 shadow-lg">
+    <Card className="mb-3 shadow-lg">
       <CardContent className="pt-3 pb-2 px-3">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 items-end">
           <div className="space-y-1">
             <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
             <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
-              <SelectTrigger id="filter-type" className={cn("bg-background", datePickerTriggerClass)}>
+              <SelectTrigger id="filter-type" className={cn("bg-card border-input", datePickerTriggerClass)}>
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
               <SelectContent>
