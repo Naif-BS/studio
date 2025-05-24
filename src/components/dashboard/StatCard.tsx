@@ -44,7 +44,7 @@ export default function StatCard({ title, value, icon, description, className, p
         <CardTitle className="text-sm font-medium text-foreground">
           {title}
         </CardTitle>
-        {React.cloneElement(icon as React.ReactElement, { className: "h-8 w-8 text-marine-green", strokeWidth: "1.5" })}
+        {React.cloneElement(icon as React.ReactElement, { className: "h-16 w-16 text-marine-green", strokeWidth: "1" })}
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="text-2xl font-bold">{displayValue}</div>
