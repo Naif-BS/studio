@@ -43,7 +43,7 @@ body {
     --destructive-foreground: 0 0% 97%; /* Cruise White */
 
     --border: 212 30% 88%; /* Light blue-grey border, subtle but present */
-    --input: 45 50% 95%; /* Very light Beach Beige for input fields */
+    --input: 212 30% 88%; /* Matched with --border for better visibility */
     --ring: 216 75% 40%; /* Slightly brighter Sea Blue for focus rings */
 
     --chart-1: 216 75% 33%; /* Sea Blue */
