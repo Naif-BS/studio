@@ -98,7 +98,7 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
           <div className="space-y-1">
             <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
             <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
-              <SelectTrigger id="filter-type" className="h-8 text-xs">
+              <SelectTrigger id="filter-type"> {/* Removed custom className here */}
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
               <SelectContent>
