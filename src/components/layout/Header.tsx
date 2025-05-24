@@ -36,9 +36,9 @@ export default function Header() {
           {/* <Image
             src="/srsa-logo.png"
             alt="SRSA Organization Logo"
-            width={240} // Increased width
-            height={48} // Increased height (maintaining 5:1 aspect ratio)
-            className="h-auto" // Added for responsive height
+            width={480} 
+            height={96} 
+            className="h-auto" 
           /> */}
            <div className="flex flex-col">
             <span className="text-lg font-semibold leading-tight">Saudi Red Sea Authority</span>
