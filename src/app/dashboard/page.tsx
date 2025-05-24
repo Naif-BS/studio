@@ -226,13 +226,15 @@ export default function DashboardPage() {
         {/* Skeleton for TicketTable */}
         <div className="rounded-md border">
             <div className="flex items-center justify-between p-3 border-b bg-muted/50">
-                {[...Array(6)].map((_, i) => <Skeleton key={i} className="h-5 w-1/6 rounded" />)} 
-                <Skeleton className="h-5 w-[100px] rounded" />
+                {/* Adjusted skeleton for fewer columns */}
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-5 w-1/4 rounded" />)} 
+                <Skeleton className="h-5 w-[100px] rounded" /> {/* Actions column */}
             </div>
             {[...Array(recentIncidentsLimit)].map((_, i) => (
             <div key={i} className="flex items-center justify-between p-3 border-b last:border-b-0">
-                 {[...Array(6)].map((_, j) => <Skeleton key={j} className="h-4 w-1/6 rounded" />)}
-                <Skeleton className="h-8 w-[100px] rounded-md" />
+                 {/* Adjusted skeleton for fewer columns */}
+                 {[...Array(4)].map((_, j) => <Skeleton key={j} className="h-4 w-1/4 rounded" />)}
+                <Skeleton className="h-8 w-[100px] rounded-md" /> {/* Actions column */}
             </div>
             ))}
         </div>
@@ -292,7 +294,7 @@ export default function DashboardPage() {
             tickets={displayedTicketsInTable}
             isLoading={isLoading && allTickets.length === 0}
             onRowClick={handleTicketRowClick}
-            // No visibleColumns prop, so it uses default columns
+            visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform']}
         />
       </section>
 
@@ -307,3 +309,5 @@ export default function DashboardPage() {
   );
 }
 
+
+    
