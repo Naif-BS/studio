@@ -55,7 +55,6 @@ export default function Header() {
                 <AvatarImage
                   src={user.photoURL || undefined}
                   alt={user.displayName || 'User'}
-                  data-ai-hint="profile avatar"
                 />
                 <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
               </Avatar>

@@ -24,7 +24,7 @@ export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t shadow-xl flex items-center z-40">
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-xl flex items-center z-40">
       <ul className="flex justify-around items-center w-full h-full px-1">
         {navItems.map((item) => (
           <li key={item.href} className="flex-1">
@@ -32,10 +32,10 @@ export default function SidebarNav() {
               href={item.href}
               className={cn(
                 "flex flex-col items-center justify-center h-full p-1 rounded-md text-xs font-medium transition-colors w-full",
-                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", // Using sidebar theme vars for hover as they are defined
+                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", 
                 (pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href)))
-                  ? "text-primary" // Active item uses primary theme color
-                  : "text-muted-foreground" // Inactive uses muted theme color
+                  ? "text-primary" 
+                  : "text-muted-foreground" 
               )}
             >
               <item.icon className="h-5 w-5 mb-0.5" />
