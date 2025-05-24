@@ -49,8 +49,8 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
   const hasActiveFilters = filters.status || filters.mediaMaterial || filters.platform || (showSearch && filters.searchTerm);
 
   return (
-    <div className="mb-4 p-3 bg-card border rounded-lg shadow-sm">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+    <div className="mb-3 p-3 bg-card border rounded-lg shadow-lg"> {/* Reduced mb, changed shadow-sm to shadow-lg */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-end"> {/* Reduced gap */}
         {showSearch && (
           <div className="space-y-1.5">
             <Label htmlFor="search-tickets">Search Incidents</Label>
@@ -110,7 +110,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
       </div>
       
       {hasActiveFilters && (
-        <div className="mt-4 flex justify-end">
+        <div className="mt-3 flex justify-end"> {/* Reduced mt */}
           <Button variant="ghost" onClick={clearFilters} className="w-full sm:w-auto">
             <FilterX className="me-2 h-4 w-4" /> Clear Filters
           </Button>
