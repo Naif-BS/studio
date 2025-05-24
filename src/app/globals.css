@@ -85,10 +85,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply text-foreground;
-    /* Subtle gradient background */
-    background-image: linear-gradient(to bottom, hsl(210, 40%, 97%), hsl(210, 40%, 93%));
-    min-height: 100vh; /* Ensure gradient covers full height */
+    @apply bg-background text-foreground;
+    min-height: 100vh;
   }
 }
-    

@@ -49,7 +49,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
   const hasActiveFilters = filters.status || filters.mediaMaterial || filters.platform || (showSearch && filters.searchTerm);
 
   return (
-    <div className="mb-3 p-3 rounded-lg border border-white/30 bg-card text-card-foreground shadow-lg bg-opacity-50 backdrop-blur-xl">
+    <div className="mb-3 p-3 rounded-lg border bg-card text-card-foreground shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
         {showSearch && (
           <div className="space-y-1.5">
