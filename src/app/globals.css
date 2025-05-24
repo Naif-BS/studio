@@ -19,7 +19,6 @@ body {
   :root {
     /* SRSA Brand Colors (as HSL) */
     --srsa-deep-sea-blue: 212 70% 15%; /* #0B2142 */
-    /* --srsa-shores-turquoise: 170 60% 40%; /* #26B9A4 */ /* Removed */
     --srsa-clown-fish-yellow: 40 95% 55%; /* #FAAD1C */
     --srsa-marine-green: 184 100% 26%; /* #007983 */
     --srsa-cruise-white: 0 0% 97%; /* #F8F8F8 */
@@ -28,7 +27,7 @@ body {
 
     /* Greys for borders, inputs, muted backgrounds etc. */
     /* Using a lighter Deep Sea Blue for borders/inputs now */
-    --srsa-light-blue-border: 212 70% 65%; /* Lighter Deep Sea Blue for borders */
+    --srsa-light-blue-border: 212 70% 85%; /* Lighter Deep Sea Blue for borders - Increased lightness */
     --srsa-light-grey-muted-bg: 0 0% 90%; /* Approx #E6E6E6 */
     --srsa-light-grey-secondary-bg: 0 0% 95%; /* Approx #F2F2F2 */
     --srsa-muted-text: 212 70% 45%; /* Lighter Deep Sea Blue for muted text */
