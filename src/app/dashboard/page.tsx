@@ -227,13 +227,13 @@ export default function DashboardPage() {
         <div className="rounded-md border">
             <div className="flex items-center justify-between p-3 border-b bg-muted/50">
                 {/* Adjusted skeleton for fewer columns */}
-                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-5 w-1/4 rounded" />)} 
+                {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-5 w-1/5 rounded" />)} 
                 <Skeleton className="h-5 w-[100px] rounded" /> {/* Actions column */}
             </div>
             {[...Array(recentIncidentsLimit)].map((_, i) => (
             <div key={i} className="flex items-center justify-between p-3 border-b last:border-b-0">
                  {/* Adjusted skeleton for fewer columns */}
-                 {[...Array(4)].map((_, j) => <Skeleton key={j} className="h-4 w-1/4 rounded" />)}
+                 {[...Array(5)].map((_, j) => <Skeleton key={j} className="h-4 w-1/5 rounded" />)}
                 <Skeleton className="h-8 w-[100px] rounded-md" /> {/* Actions column */}
             </div>
             ))}
@@ -294,7 +294,7 @@ export default function DashboardPage() {
             tickets={displayedTicketsInTable}
             isLoading={isLoading && allTickets.length === 0}
             onRowClick={handleTicketRowClick}
-            visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform']}
+            visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform', 'Received']}
         />
       </section>
 
