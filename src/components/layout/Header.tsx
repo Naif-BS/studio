@@ -34,7 +34,7 @@ export default function Header() {
         <Link href="/dashboard" className="flex items-center gap-2 text-sidebar-foreground hover:opacity-80 transition-opacity">
            <div className="flex flex-col">
             <span className="text-lg font-semibold leading-tight">Saudi Red Sea Authority</span>
-            <span className="text-xs text-muted-foreground opacity-80 leading-tight">Media Monitoring Center</span>
+            <span className="text-xs text-accent opacity-80 leading-tight">Media Monitoring Center</span>
           </div>
         </Link>
       </div>
