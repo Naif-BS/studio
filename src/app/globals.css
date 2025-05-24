@@ -17,28 +17,28 @@ body {
 
 @layer base {
   :root {
-    /* SRSA Brand Colors */
-    --srsa-deep-sea-blue: 212 70% 15%;
-    --srsa-shores-turquoise: 170 60% 40%;
-    --srsa-clown-fish-yellow: 40 95% 55%;
-    --srsa-marine-green: 184 100% 26%;
+    /* SRSA Brand Colors (as HSL) */
+    --srsa-deep-sea-blue: 212 70% 15%; /* #0B2142 */
+    --srsa-shores-turquoise: 170 60% 40%; /* #26B9A4 */
+    --srsa-clown-fish-yellow: 40 95% 55%; /* #FAAD1C */
+    --srsa-marine-green: 184 100% 26%; /* #007983 */
     --srsa-cruise-white: 0 0% 97%; /* #F8F8F8 */
     --srsa-pure-white: 0 0% 100%;
-    --srsa-light-grey-border: 0 0% 88%;
-    --srsa-light-grey-input: 0 0% 92%;
+    --srsa-light-grey-border: 0 0% 88%; /* Adjusted for softer borders */
+    --srsa-light-grey-input: 0 0% 88%; /* Consistent with border */
     --srsa-light-grey-muted-bg: 0 0% 90%;
     --srsa-light-grey-secondary-bg: 0 0% 95%;
     --srsa-muted-text: 212 70% 45%; /* Lighter Deep Sea Blue for muted text */
 
 
-    /* ShadCN Theme Variables Mapping */
+    /* ShadCN Theme Variables Mapping - Light Theme */
     --background: var(--srsa-cruise-white);
     --foreground: var(--srsa-deep-sea-blue);
 
-    --card: var(--srsa-pure-white); /* Cards slightly whiter than main background */
+    --card: var(--srsa-cruise-white); /* Cards same as background, rely on shadow/border */
     --card-foreground: var(--srsa-deep-sea-blue);
 
-    --popover: var(--srsa-pure-white);
+    --popover: var(--srsa-pure-white); /* Popovers can be pure white */
     --popover-foreground: var(--srsa-deep-sea-blue);
 
     --primary: var(--srsa-shores-turquoise);
