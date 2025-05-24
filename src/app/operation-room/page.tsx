@@ -25,6 +25,7 @@ export default function OperationRoomPage() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const ticketIdFromQuery = searchParams.get('ticketId'); // Extract primitive value
 
   const [filters, setFilters] = useState<TicketFiltersState>({
     status: '', 
@@ -48,9 +49,9 @@ export default function OperationRoomPage() {
   const handleSelectTicket = (ticketId: string) => {
     const ticket = allTickets.find(t => t.id === ticketId);
     setSelectedTicket(ticket || null);
-    if (ticket && searchParams.get('ticketId') !== ticket.id) {
+    if (ticket && ticketIdFromQuery !== ticket.id) {
       router.push(`/operation-room?ticketId=${ticketId}`, { scroll: false });
-    } else if (!ticket && searchParams.get('ticketId')) {
+    } else if (!ticket && ticketIdFromQuery) {
       router.push(`/operation-room`, { scroll: false });
     }
   };
@@ -146,8 +147,6 @@ export default function OperationRoomPage() {
   }, [allTickets, filters]);
 
    useEffect(() => {
-    const ticketIdFromQuery = searchParams.get('ticketId');
-
     if (!isLoading) { 
       let newSelectedTicketToSet = selectedTicket; 
       let newUrlTicketId = ticketIdFromQuery; 
@@ -191,7 +190,7 @@ export default function OperationRoomPage() {
          router.replace(desiredFullPath, { scroll: false });
       }
     }
-  }, [displayedTickets, selectedTicket, isLoading, router, searchParams]);
+  }, [displayedTickets, selectedTicket, isLoading, router, ticketIdFromQuery]); // Use ticketIdFromQuery here
 
 const TicketDetailsCard = dynamic(() => import('@/components/tickets/TicketDetailsCard'), {
   loading: () => <TicketDetailsSkeleton />, 
