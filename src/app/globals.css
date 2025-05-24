@@ -17,52 +17,67 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* SRSA Brand Colors */
+    --srsa-deep-sea-blue: 212 70% 15%;
+    --srsa-shores-turquoise: 170 60% 40%;
+    --srsa-clown-fish-yellow: 40 95% 55%;
+    --srsa-marine-green: 184 100% 26%;
+    --srsa-cruise-white: 0 0% 97%; /* #F8F8F8 */
+    --srsa-pure-white: 0 0% 100%;
+    --srsa-light-grey-border: 0 0% 88%;
+    --srsa-light-grey-input: 0 0% 92%;
+    --srsa-light-grey-muted-bg: 0 0% 90%;
+    --srsa-light-grey-secondary-bg: 0 0% 95%;
+    --srsa-muted-text: 212 70% 45%; /* Lighter Deep Sea Blue for muted text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* ShadCN Theme Variables Mapping */
+    --background: var(--srsa-cruise-white);
+    --foreground: var(--srsa-deep-sea-blue);
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --card: var(--srsa-pure-white); /* Cards slightly whiter than main background */
+    --card-foreground: var(--srsa-deep-sea-blue);
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --popover: var(--srsa-pure-white);
+    --popover-foreground: var(--srsa-deep-sea-blue);
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --primary: var(--srsa-shores-turquoise);
+    --primary-foreground: var(--srsa-pure-white); /* White text on turquoise */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --secondary: var(--srsa-light-grey-secondary-bg);
+    --secondary-foreground: var(--srsa-deep-sea-blue);
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --muted: var(--srsa-light-grey-muted-bg);
+    --muted-foreground: var(--srsa-muted-text);
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --accent: var(--srsa-clown-fish-yellow);
+    --accent-foreground: var(--srsa-deep-sea-blue); /* Deep blue text on yellow */
+
+    --destructive: 0 84.2% 60.2%; /* Default red */
+    --destructive-foreground: var(--srsa-pure-white);
+
+    --border: var(--srsa-light-grey-border);
+    --input: var(--srsa-light-grey-input);
+    --ring: var(--srsa-shores-turquoise); /* Focus ring color */
 
     --radius: 0.5rem;
 
     /* Standard Chart Colors */
-    --chart-1: hsl(222.2 47.4% 11.2%); /* primary */
-    --chart-2: hsl(170 60% 40%); /* A contrasting teal */
-    --chart-3: hsl(40 95% 55%);  /* A contrasting yellow/orange */
-    --chart-4: hsl(6 86% 66%);   /* A contrasting red */
-    --chart-5: hsl(190 70% 50%); /* A contrasting light blue */
+    --chart-1: var(--srsa-shores-turquoise);
+    --chart-2: var(--srsa-clown-fish-yellow);
+    --chart-3: var(--srsa-marine-green);
+    --chart-4: var(--srsa-deep-sea-blue);
+    --chart-5: hsl(170, 60%, 60%); /* Lighter Shores Turquoise for variety */
 
     /* Sidebar specific theme variables (Light Mode default) */
-    --sidebar-background: 0 0% 100%; /* card */
-    --sidebar-foreground: 222.2 84% 4.9%; /* card-foreground */
-    --sidebar-primary: 222.2 47.4% 11.2%; /* primary */
-    --sidebar-primary-foreground: 210 40% 98%; /* primary-foreground */
-    --sidebar-accent: 210 40% 96.1%; /* accent */
-    --sidebar-accent-foreground: 222.2 47.4% 11.2%; /* accent-foreground */
-    --sidebar-border: 214.3 31.8% 91.4%; /* border */
-    --sidebar-ring: 222.2 84% 4.9%; /* ring */
+    --sidebar-background: var(--srsa-pure-white);
+    --sidebar-foreground: var(--srsa-deep-sea-blue);
+    --sidebar-primary: var(--srsa-shores-turquoise);
+    --sidebar-primary-foreground: var(--srsa-pure-white);
+    --sidebar-accent: var(--srsa-clown-fish-yellow);
+    --sidebar-accent-foreground: var(--srsa-deep-sea-blue);
+    --sidebar-border: var(--srsa-light-grey-border);
+    --sidebar-ring: var(--srsa-shores-turquoise);
   }
 }
 
