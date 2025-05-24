@@ -54,7 +54,7 @@ export default function ReportIncidentPage() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">Submit New Incident Report</h1>
       <div className={cn(
-          "max-w-2xl p-6 rounded-lg border-white/30 bg-card text-card-foreground shadow-lg bg-opacity-50 backdrop-blur-xl animate-in fade-in zoom-in-80 slide-in-from-bottom-4 duration-500"
+          "max-w-2xl p-6 rounded-lg border bg-card text-card-foreground shadow-sm"
         )}>
         <TicketForm onSubmitSuccess={handleFormSubmit} />
       </div>

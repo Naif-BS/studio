@@ -1,6 +1,6 @@
 
 @font-face {
-  font-family: 'Helvetica Neue'; /* Corrected typo */
+  font-family: 'Helvetica Neue';
   src: url('/fonts/helvetica-neue-regular.woff2') format('woff2'),
        url('/fonts/helvetica-neue-regular.woff') format('woff');
   font-weight: normal;
@@ -17,65 +17,52 @@ body {
 
 @layer base {
   :root {
-    /* SRSA Primary Colors */
-    --srsa-deep-sea-blue: 212 70% 15%; /* #0B2142 */
-    --srsa-sea-blue: 216 75% 33%; /* #134B94 */
-    --srsa-shores-turquoise: 170 60% 40%; /* #26B9A4 */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    /* SRSA Secondary Colors */
-    --srsa-dolphins-grey: 0 1% 30%; /* #4D4C4C */
-    --srsa-clown-fish-yellow: 40 95% 55%; /* #FAAD1C */
-    --srsa-marine-green: 184 100% 26%; /* #007983 */
-    --srsa-cruise-white: 0 0% 97%; /* #F8F8F8 */
-    --srsa-coral-red: 6 86% 66%; /* #F16E62 */
-    --srsa-sky-blue: 190 70% 50%; /* #25C1DE */
-    --srsa-beach-beige: 45 50% 82%; /* #EAD8B9 */
-    
-    /* Light Theme based on SRSA */
-    --background: hsl(var(--srsa-cruise-white)); 
-    --foreground: hsl(var(--srsa-deep-sea-blue)); 
-    
-    --card: 0 0% 100%; /* Pure white for solid header/footer and base for glassy cards */
-    --card-foreground: hsl(var(--srsa-deep-sea-blue));
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: hsl(var(--srsa-cruise-white)); 
-    --popover-foreground: hsl(var(--srsa-deep-sea-blue));
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: hsl(var(--srsa-sea-blue)); 
-    --primary-foreground: hsl(var(--srsa-cruise-white)); 
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: hsl(var(--srsa-shores-turquoise)); 
-    --secondary-foreground: hsl(var(--srsa-deep-sea-blue)); 
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: hsl(45, 50%, 92%); /* Lightened Beach Beige for muted backgrounds */
-    --muted-foreground: hsl(var(--srsa-dolphins-grey)); 
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: hsl(var(--srsa-sky-blue)); 
-    --accent-foreground: hsl(var(--srsa-deep-sea-blue)); 
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: hsl(var(--srsa-coral-red)); 
-    --destructive-foreground: hsl(var(--srsa-cruise-white)); 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: hsl(212, 25%, 75%); /* Soft but visible border for header/footer */
-    --input: hsl(var(--border)); /* Synced input border with general border */
-    --ring: hsl(216, 75%, 40%); /* Slightly lighter Sea Blue for focus rings */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
 
-    --chart-1: hsl(var(--srsa-sea-blue));
-    --chart-2: hsl(var(--srsa-shores-turquoise));
-    --chart-3: hsl(var(--srsa-marine-green));
-    --chart-4: hsl(var(--srsa-clown-fish-yellow));
-    --chart-5: hsl(var(--srsa-coral-red));
     --radius: 0.5rem;
 
-    /* Sidebar specific theme variables (for bottom nav - Light Mode) */
-    --sidebar-background: hsl(var(--srsa-cruise-white)); 
-    --sidebar-foreground: hsl(212, 70%, 25%); 
-    --sidebar-primary: hsl(var(--srsa-sea-blue));    
-    --sidebar-primary-foreground: hsl(0, 0%, 100%); 
-    --sidebar-accent: hsl(216, 70%, 90%);     
-    --sidebar-accent-foreground: hsl(216, 75%, 30%);
-    --sidebar-border: hsl(212, 25%, 75%);      
-    --sidebar-ring: hsl(var(--srsa-sea-blue)); 
+    /* Standard Chart Colors */
+    --chart-1: hsl(222.2 47.4% 11.2%); /* primary */
+    --chart-2: hsl(170 60% 40%); /* A contrasting teal */
+    --chart-3: hsl(40 95% 55%);  /* A contrasting yellow/orange */
+    --chart-4: hsl(6 86% 66%);   /* A contrasting red */
+    --chart-5: hsl(190 70% 50%); /* A contrasting light blue */
+
+    /* Sidebar specific theme variables (Light Mode default) */
+    --sidebar-background: 0 0% 100%; /* card */
+    --sidebar-foreground: 222.2 84% 4.9%; /* card-foreground */
+    --sidebar-primary: 222.2 47.4% 11.2%; /* primary */
+    --sidebar-primary-foreground: 210 40% 98%; /* primary-foreground */
+    --sidebar-accent: 210 40% 96.1%; /* accent */
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%; /* accent-foreground */
+    --sidebar-border: 214.3 31.8% 91.4%; /* border */
+    --sidebar-ring: 222.2 84% 4.9%; /* ring */
   }
 }
 
@@ -84,8 +71,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply text-foreground;
+    @apply bg-background text-foreground;
     min-height: 100vh;
-    background-image: linear-gradient(to bottom, hsl(210, 40%, 97%), hsl(210, 40%, 93%));
   }
 }
