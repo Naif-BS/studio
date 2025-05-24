@@ -32,33 +32,33 @@ body {
     --srsa-beach-beige: 45 50% 82%; /* #EAD8B9 */
     
     /* Light Theme based on SRSA */
-    --background: hsl(210, 40%, 97%); /* Lighter end of the body gradient */
-    --foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue */
+    --background: hsl(210, 40%, 97%); 
+    --foreground: hsl(var(--srsa-deep-sea-blue)); 
     
-    --card: hsl(var(--srsa-cruise-white)); /* White for card base color (BEFORE opacity for glass effect) - was 0 0% 100% */
-    --card-foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue for text on cards */
+    --card: 0 0% 100%; /* Pure white */
+    --card-foreground: hsl(var(--srsa-deep-sea-blue));
 
-    --popover: hsl(var(--srsa-cruise-white)); /* White */
-    --popover-foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue */
+    --popover: hsl(var(--srsa-cruise-white)); 
+    --popover-foreground: hsl(var(--srsa-deep-sea-blue));
 
-    --primary: hsl(var(--srsa-sea-blue)); /* Sea Blue - for primary actions */
-    --primary-foreground: hsl(var(--srsa-cruise-white)); /* Cruise White text for high contrast on Sea Blue */
+    --primary: hsl(var(--srsa-sea-blue)); 
+    --primary-foreground: hsl(var(--srsa-cruise-white)); 
 
-    --secondary: hsl(var(--srsa-shores-turquoise)); /* Shores Turquoise - for secondary buttons/elements */
-    --secondary-foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue text on Shores Turquoise */
+    --secondary: hsl(var(--srsa-shores-turquoise)); 
+    --secondary-foreground: hsl(var(--srsa-deep-sea-blue)); 
 
-    --muted: hsl(45, 50%, 92%); /* Lighter, desaturated Beach Beige for muted elements */
-    --muted-foreground: hsl(var(--srsa-dolphins-grey)); /* Darker Dolphins Grey for muted text, still readable */
+    --muted: hsl(45, 50%, 92%); 
+    --muted-foreground: hsl(var(--srsa-dolphins-grey)); 
 
-    --accent: hsl(var(--srsa-sky-blue)); /* Sky Blue - for accents */
-    --accent-foreground: hsl(var(--srsa-deep-sea-blue)); /* Deep Sea Blue on Sky Blue accent */
+    --accent: hsl(var(--srsa-sky-blue)); 
+    --accent-foreground: hsl(var(--srsa-deep-sea-blue)); 
 
-    --destructive: hsl(var(--srsa-coral-red)); /* Coral Red */
-    --destructive-foreground: hsl(var(--srsa-cruise-white)); /* Cruise White */
+    --destructive: hsl(var(--srsa-coral-red)); 
+    --destructive-foreground: hsl(var(--srsa-cruise-white)); 
 
-    --border: hsl(212, 25%, 80%); /* Soft, visible border for general elements & glass card edge */
-    --input: hsl(var(--border)); /* Input border matches general border */
-    --ring: hsl(216, 75%, 40%); /* Slightly brighter Sea Blue for focus rings */
+    --border: hsl(212, 25%, 80%); 
+    --input: hsl(var(--border)); 
+    --ring: hsl(216, 75%, 40%); 
 
     --chart-1: hsl(var(--srsa-sea-blue));
     --chart-2: hsl(var(--srsa-shores-turquoise));
