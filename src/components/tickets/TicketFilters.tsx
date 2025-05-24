@@ -51,7 +51,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
 
   return (
     <div className={cn(
-      "p-3 mb-3 rounded-lg border bg-card text-card-foreground shadow-sm"
+      "p-3 mb-3 rounded-lg border bg-card text-card-foreground shadow-sm" // Changed shadow-lg to shadow-sm
     )}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
         {showSearch && (
