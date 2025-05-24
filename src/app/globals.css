@@ -18,50 +18,65 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 97%; /* Cruise White */
-    --foreground: 212 70% 15%; /* Deep Sea Blue */
+    /* SRSA Primary Colors */
+    --srsa-deep-sea-blue: 212 70% 15%; /* #0B2142 */
+    --srsa-sea-blue: 216 75% 33%; /* #134B94 */
+    --srsa-shores-turquoise: 170 60% 40%; /* #26B9A4 */
+
+    /* SRSA Secondary Colors */
+    --srsa-dolphins-grey: 0 1% 30%; /* #4D4C4C */
+    --srsa-clown-fish-yellow: 40 95% 55%; /* #FAAD1C */
+    --srsa-marine-green: 184 100% 26%; /* #007983 */
+    --srsa-cruise-white: 0 0% 97%; /* #F8F8F8 */
+    --srsa-coral-red: 6 86% 66%; /* #F16E62 */
+    --srsa-sky-blue: 190 70% 50%; /* #25C1DE */
+    --srsa-beach-beige: 45 50% 82%; /* #EAD8B9 */
     
-    --card: 0 0% 100%; /* White for cards, maintaining clarity */
-    --card-foreground: 212 70% 15%; /* Deep Sea Blue for text on cards */
+    /* Light Theme based on SRSA */
+    --background: var(--srsa-cruise-white); /* Cruise White */
+    --foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue */
+    
+    --card: 0 0% 100%; /* White for cards */
+    --card-foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue for text on cards */
 
     --popover: 0 0% 100%; /* White */
-    --popover-foreground: 212 70% 15%; /* Deep Sea Blue */
+    --popover-foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue */
 
-    --primary: 216 75% 33%; /* Sea Blue - for primary actions */
-    --primary-foreground: 0 0% 97%; /* Cruise White text for high contrast on Sea Blue */
+    --primary: var(--srsa-sea-blue); /* Sea Blue - for primary actions */
+    --primary-foreground: var(--srsa-cruise-white); /* Cruise White text for high contrast on Sea Blue */
 
-    --secondary: 170 60% 40%; /* Shores Turquoise - for secondary buttons/elements */
-    --secondary-foreground: 212 70% 15%; /* Deep Sea Blue text on Shores Turquoise */
+    --secondary: var(--srsa-shores-turquoise); /* Shores Turquoise - for secondary buttons/elements */
+    --secondary-foreground: var(--srsa-deep-sea-blue); /* Deep Sea Blue text on Shores Turquoise */
 
     --muted: 45 50% 92%; /* Lighter, desaturated Beach Beige for muted elements */
-    --muted-foreground: 0 1% 45%; /* Darker Dolphins Grey for muted text, still readable */
+    --muted-foreground: var(--srsa-dolphins-grey); /* Darker Dolphins Grey for muted text, still readable */
 
-    --accent: 190 70% 50%; /* Sky Blue - for accents */
+    --accent: var(--srsa-sky-blue); /* Sky Blue - for accents */
     --accent-foreground: 0 0% 100%; /* White text on Sky Blue accent */
 
-    --destructive: 6 86% 66%; /* Coral Red */
-    --destructive-foreground: 0 0% 97%; /* Cruise White */
+    --destructive: var(--srsa-coral-red); /* Coral Red */
+    --destructive-foreground: var(--srsa-cruise-white); /* Cruise White */
 
-    --border: 212 30% 88%; /* Light blue-grey border, subtle but present */
-    --input: 212 30% 88%; /* Matched with --border for better visibility */
+    --border: 212 25% 92%; /* Softer: Lighter, slightly less saturated blue-grey border */
+    --input: 212 25% 92%; /* Softer: Matched with --border for better visibility */
     --ring: 216 75% 40%; /* Slightly brighter Sea Blue for focus rings */
 
-    --chart-1: 216 75% 33%; /* Sea Blue */
-    --chart-2: 170 60% 40%; /* Shores Turquoise */
-    --chart-3: 184 100% 26%; /* Marine Green */
-    --chart-4: 40 95% 55%; /* Clown Fish Yellow */
-    --chart-5: 6 86% 66%; /* Coral Red */
+    --chart-1: var(--srsa-sea-blue);
+    --chart-2: var(--srsa-shores-turquoise);
+    --chart-3: var(--srsa-marine-green);
+    --chart-4: var(--srsa-clown-fish-yellow);
+    --chart-5: var(--srsa-coral-red);
     --radius: 0.5rem;
 
     /* Sidebar specific theme variables (for bottom nav - Light Mode) */
-    --sidebar-background: 0 0% 97%; /* Cruise White - Consistent with app background */
+    --sidebar-background: var(--srsa-cruise-white); /* Cruise White - Consistent with app background */
     --sidebar-foreground: 212 70% 25%; /* Slightly softer Deep Sea Blue for nav items */
-    --sidebar-primary: 216 75% 33%;    /* Sea Blue - Active item color */
+    --sidebar-primary: var(--srsa-sea-blue);    /* Sea Blue - Active item color */
     --sidebar-primary-foreground: 0 0% 100%; /* White */
     --sidebar-accent: 216 70% 90%;     /* Hover background - lighter Sea Blue/Sky Blue hue */
     --sidebar-accent-foreground: 216 75% 30%;/* Text on hover - Sea Blue */
     --sidebar-border: 212 30% 88%;      /* Border for the nav bar itself */
-    --sidebar-ring: 216 75% 40%; /* Sea Blue */
+    --sidebar-ring: var(--srsa-sea-blue); /* Sea Blue */
   }
 }
 
