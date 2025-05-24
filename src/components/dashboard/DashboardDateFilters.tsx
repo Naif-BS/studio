@@ -93,11 +93,13 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
 
   return (
     <div className="p-3 mb-4 border-b">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-end">
-        <div className="space-y-1.5">
+      {/* Row 1: Filter Type and Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-end gap-3">
+        {/* Filter Type Select */}
+        <div className="space-y-1.5 flex-1 sm:flex-none sm:w-52">
           <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
           <Select value={filterType} onValueChange={(value) => setFilterType(value as DateFilterType)}>
-            <SelectTrigger id="filter-type" className={cn("bg-background border-input", datePickerTriggerClass)}>
+            <SelectTrigger id="filter-type" className={cn("bg-background border-input w-full", datePickerTriggerClass)}>
               <SelectValue placeholder="Select timeframe" />
             </SelectTrigger>
             <SelectContent>
@@ -110,59 +112,69 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
           </Select>
         </div>
 
-        {filterType === 'daily' && (
-          <div className="space-y-1.5">
-            <Label htmlFor="daily-date" className="text-xs">Select Date</Label>
-            <DatePicker date={dailyDate} setDate={setDailyDate} triggerClassName={datePickerTriggerClass} />
-          </div>
-        )}
+        {/* Spacer for sm+ screens to push buttons to the right */}
+        <div className="hidden sm:block sm:flex-grow"></div>
 
-        {filterType === 'monthly' && (
-          <div className="space-y-1.5">
-            <Label htmlFor="monthly-date" className="text-xs">Select Month & Year</Label>
-            <DatePicker 
-                date={monthlyDate} 
-                setDate={setMonthlyDate} 
-                placeholder="Pick a month"
-                triggerClassName={datePickerTriggerClass}
-            />
-          </div>
-        )}
+        {/* Action Buttons */}
+        <div className="flex sm:flex-none gap-1.5 self-end sm:self-end w-full sm:w-auto justify-end">
+          {filterType !== 'allTime' && (
+             <Button variant="outline" onClick={handleReset} className="h-8 text-xs px-2 flex-auto sm:flex-initial">Reset</Button>
+          )}
+          <Button onClick={handleApply} disabled={filterType === 'allTime' && currentFilterType === 'allTime'} className="h-8 text-xs px-3 flex-auto sm:flex-initial">Apply</Button>
+        </div>
+      </div>
 
-        {filterType === 'yearly' && (
-          <div className="space-y-1.5">
-            <Label htmlFor="yearly-date" className="text-xs">Select Year</Label>
-            <DatePicker 
-                date={yearlyDate}
-                setDate={setYearlyDate}
-                placeholder="Pick a year"
-                triggerClassName={datePickerTriggerClass}
-            />
-          </div>
-        )}
-
-        {filterType === 'period' && (
-          <>
+      {/* Row 2: Conditional DatePickers (appears below the first row if needed) */}
+      { (filterType !== 'allTime') && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 items-end mt-3">
+          {filterType === 'daily' && (
             <div className="space-y-1.5">
-              <Label htmlFor="start-date" className="text-xs">Start Date</Label>
-              <DatePicker date={periodStartDate} setDate={setPeriodStartDate} triggerClassName={datePickerTriggerClass} />
+              <Label htmlFor="daily-date" className="text-xs">Select Date</Label>
+              <DatePicker date={dailyDate} setDate={setDailyDate} triggerClassName={datePickerTriggerClass} />
             </div>
+          )}
+
+          {filterType === 'monthly' && (
             <div className="space-y-1.5">
-              <Label htmlFor="end-date" className="text-xs">End Date</Label>
-              <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
-                disabled={(date) => periodStartDate ? date < periodStartDate : false}
-                triggerClassName={datePickerTriggerClass}
+              <Label htmlFor="monthly-date" className="text-xs">Select Month & Year</Label>
+              <DatePicker 
+                  date={monthlyDate} 
+                  setDate={setMonthlyDate} 
+                  placeholder="Pick a month"
+                  triggerClassName={datePickerTriggerClass}
               />
             </div>
-          </>
-        )}
-      </div>
-      <div className="flex justify-end gap-1.5 mt-3">
-        {filterType !== 'allTime' && (
-             <Button variant="outline" onClick={handleReset} className="h-8 text-xs px-2">Reset</Button>
-        )}
-        <Button onClick={handleApply} disabled={filterType === 'allTime' && currentFilterType === 'allTime'} className="h-8 text-xs px-3">Apply</Button>
-      </div>
+          )}
+
+          {filterType === 'yearly' && (
+            <div className="space-y-1.5">
+              <Label htmlFor="yearly-date" className="text-xs">Select Year</Label>
+              <DatePicker 
+                  date={yearlyDate}
+                  setDate={setYearlyDate}
+                  placeholder="Pick a year"
+                  triggerClassName={datePickerTriggerClass}
+              />
+            </div>
+          )}
+
+          {filterType === 'period' && (
+            <>
+              <div className="space-y-1.5">
+                <Label htmlFor="start-date" className="text-xs">Start Date</Label>
+                <DatePicker date={periodStartDate} setDate={setPeriodStartDate} triggerClassName={datePickerTriggerClass} />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="end-date" className="text-xs">End Date</Label>
+                <DatePicker date={periodEndDate} setDate={setPeriodEndDate} 
+                  disabled={(date) => periodStartDate ? date < periodStartDate : false}
+                  triggerClassName={datePickerTriggerClass}
+                />
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
