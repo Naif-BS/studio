@@ -32,10 +32,10 @@ body {
     --srsa-beach-beige: 45 50% 82%; /* #EAD8B9 */
     
     /* Light Theme based on SRSA */
-    --background: hsl(210, 40%, 97%); 
+    --background: hsl(var(--srsa-cruise-white)); 
     --foreground: hsl(var(--srsa-deep-sea-blue)); 
     
-    --card: 0 0% 100%; /* Pure white */
+    --card: 0 0% 100%; /* Pure white for solid header/footer */
     --card-foreground: hsl(var(--srsa-deep-sea-blue));
 
     --popover: hsl(var(--srsa-cruise-white)); 
@@ -56,8 +56,8 @@ body {
     --destructive: hsl(var(--srsa-coral-red)); 
     --destructive-foreground: hsl(var(--srsa-cruise-white)); 
 
-    --border: hsl(212, 25%, 80%); 
-    --input: hsl(var(--border)); 
+    --border: hsl(212, 25%, 75%); /* Made border slightly darker for better separation */
+    --input: hsl(212, 25%, 75%); /* Synced input border with general border */
     --ring: hsl(216, 75%, 40%); 
 
     --chart-1: hsl(var(--srsa-sea-blue));
@@ -74,7 +74,7 @@ body {
     --sidebar-primary-foreground: hsl(0, 0%, 100%); 
     --sidebar-accent: hsl(216, 70%, 90%);     
     --sidebar-accent-foreground: hsl(216, 75%, 30%);
-    --sidebar-border: hsl(212, 25%, 80%);      
+    --sidebar-border: hsl(212, 25%, 75%);      
     --sidebar-ring: hsl(var(--srsa-sea-blue)); 
   }
 }
