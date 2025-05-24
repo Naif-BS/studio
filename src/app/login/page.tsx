@@ -23,8 +23,8 @@ export default function LoginPage() {
             {/* <Image
               src="/srsa-logo.png"
               alt="SRSA Organization Logo"
-              width={240} // Increased width
-              height={48} // Increased height (maintaining 5:1 aspect ratio)
+              width={300} // Increased width
+              height={60} // Increased height (maintaining 5:1 aspect ratio)
             /> */}
             <h1 className="text-2xl font-bold text-foreground">Saudi Red Sea Authority</h1>
             <p className="text-sm text-muted-foreground">Media Monitoring Center</p>

@@ -36,8 +36,8 @@ export default function Header() {
           {/* <Image
             src="/srsa-logo.png"
             alt="SRSA Organization Logo"
-            width={200} // Increased width
-            height={40} // Increased height (maintaining 5:1 aspect ratio)
+            width={240} // Increased width
+            height={48} // Increased height (maintaining 5:1 aspect ratio)
             className="h-auto" // Added for responsive height
           /> */}
            <div className="flex flex-col">
