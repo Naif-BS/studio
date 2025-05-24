@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { DatePicker } from '@/components/ui/date-picker';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { startOfMonth, endOfMonth, startOfYear, endOfYear, subDays, isValid } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 
@@ -93,10 +93,7 @@ export default function DashboardDateFilters({ onApplyFilters, currentFilterType
 
   return (
     <Card className="mb-4 shadow-md">
-      <CardHeader className="pb-1 pt-2 px-3">
-        <CardTitle className="text-sm">Filter by Timeframe</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-2 pb-2 px-3">
+      <CardContent className="pt-3 pb-2 px-3">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 items-end">
           <div className="space-y-1">
             <Label htmlFor="filter-type" className="text-xs">Filter Type</Label>
