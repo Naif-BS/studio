@@ -22,6 +22,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { isWithinInterval, startOfDay, endOfDay, isSameDay, isSameMonth, isSameYear, isValid } from 'date-fns';
 import { mediaMaterialDisplay, platformDisplay } from '@/types';
 import TicketTable from '@/components/tickets/TicketTable';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 
 export default function DashboardPage() {
@@ -215,29 +216,35 @@ export default function DashboardPage() {
   if (isLoading && dateFilter.type === 'allTime' && allTickets.length === 0) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-24 w-full mb-6 rounded-lg" /> {/* Date Filters Skeleton */}
+        <DashboardDateFilters onApplyFilters={setDateFilter} currentFilterType={dateFilter.type} />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
-          <Skeleton className="h-[140px] md:col-span-2 lg:col-span-2 w-full rounded-lg" /> 
+          <StatCard glassEffect={true} className="md:col-span-2 lg:col-span-2" title="Loading..." value="..." icon={<FileText />} />
+          <StatCard glassEffect={true} className="md:col-span-2 lg:col-span-2" title="Loading..." value="..." icon={<Activity />} />
+          <StatCard glassEffect={true} className="md:col-span-2 lg:col-span-2" title="Loading..." value="..." icon={<Newspaper />} />
+          <StatCard glassEffect={true} className="md:col-span-2 lg:col-span-2" title="Loading..." value="..." icon={<RadioTower />} />
         </div>
-        <Skeleton className="h-10 w-1/4 mb-4" /> {/* Recent Incidents Title Skeleton */}
-        {/* Skeleton for TicketTable */}
-        <div className="rounded-md border">
-            <div className="flex items-center justify-between p-3 border-b bg-muted/50">
-                {/* Adjusted skeleton for fewer columns */}
-                {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-5 w-1/5 rounded" />)} 
-                <Skeleton className="h-5 w-[100px] rounded" /> {/* Actions column */}
+         {/* Skeleton for Recent Incidents Card */}
+        <Card>
+          <CardHeader>
+            <Skeleton className="h-6 w-3/4" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Skeleton className="h-10 w-full" /> {/* Filter Skeleton */}
+            {/* Table Skeleton */}
+            <div className="rounded-md border">
+                <div className="flex items-center justify-between p-3 border-b bg-muted/50">
+                    {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-5 w-1/5 rounded" />)} 
+                    <Skeleton className="h-5 w-[100px] rounded" /> 
+                </div>
+                {[...Array(recentIncidentsLimit)].map((_, i) => (
+                <div key={i} className="flex items-center justify-between p-3 border-b last:border-b-0">
+                     {[...Array(5)].map((_, j) => <Skeleton key={j} className="h-4 w-1/5 rounded" />)}
+                    <Skeleton className="h-8 w-[100px] rounded-md" /> 
+                </div>
+                ))}
             </div>
-            {[...Array(recentIncidentsLimit)].map((_, i) => (
-            <div key={i} className="flex items-center justify-between p-3 border-b last:border-b-0">
-                 {/* Adjusted skeleton for fewer columns */}
-                 {[...Array(5)].map((_, j) => <Skeleton key={j} className="h-4 w-1/5 rounded" />)}
-                <Skeleton className="h-8 w-[100px] rounded-md" /> {/* Actions column */}
-            </div>
-            ))}
-        </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -256,6 +263,7 @@ export default function DashboardPage() {
             description="Incident volume and status summary."
             subStats={incidentStatusSubStats}
             className="md:col-span-2 lg:col-span-2"
+            glassEffect={true}
           />
 
           <StatCard
@@ -265,6 +273,7 @@ export default function DashboardPage() {
             description="Incident handling efficiency and effectiveness."
             subStats={keyPerformanceMetricsSubStats}
             className="md:col-span-2 lg:col-span-2"
+            glassEffect={true}
           />
           
           <StatCard
@@ -274,6 +283,7 @@ export default function DashboardPage() {
             description="Primary media types causing incidents."
             subStats={topMaterialsSubStats}
             className="md:col-span-2 lg:col-span-2"
+            glassEffect={true}
           />
 
           <StatCard
@@ -283,19 +293,26 @@ export default function DashboardPage() {
             description="Primary platforms of reported incidents."
             subStats={topPlatformsSubStats}
             className="md:col-span-2 lg:col-span-2"
+            glassEffect={true}
           />
         </div>
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold tracking-tight mb-4">Recent Incidents Overview</h2>
-        <TicketFilters filters={contentFilters} onFilterChange={setContentFilters} />
-        <TicketTable
-            tickets={displayedTicketsInTable}
-            isLoading={isLoading && allTickets.length === 0}
-            onRowClick={handleTicketRowClick}
-            visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform', 'Received']}
-        />
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold tracking-tight">Recent Incidents Overview</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <TicketFilters filters={contentFilters} onFilterChange={setContentFilters} />
+            <TicketTable
+                tickets={displayedTicketsInTable}
+                isLoading={isLoading && allTickets.length === 0}
+                onRowClick={handleTicketRowClick}
+                visibleColumns={['Status', 'Description', 'Media Material', 'Media Platform', 'Received']}
+            />
+          </CardContent>
+        </Card>
       </section>
 
       {modalTicket && (
@@ -308,6 +325,4 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-
     
