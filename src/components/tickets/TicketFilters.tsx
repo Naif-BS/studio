@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import type { TicketStatus, MediaMaterial, Platform } from '@/types';
 import { ticketStatusOptions, mediaMaterialOptions, platformOptions, ticketStatusDisplay, mediaMaterialDisplay, platformDisplay } from '@/types';
 import { FilterX } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export interface TicketFiltersState {
   status?: TicketStatus | '';
@@ -49,7 +50,9 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
   const hasActiveFilters = filters.status || filters.mediaMaterial || filters.platform || (showSearch && filters.searchTerm);
 
   return (
-    <div className="mb-3 p-3 rounded-lg border bg-card text-card-foreground shadow-lg bg-opacity-75 backdrop-blur-md">
+    <div className={cn(
+      "mb-3 p-3 rounded-lg border-white/30 bg-card text-card-foreground shadow-lg bg-opacity-50 backdrop-blur-xl animate-in fade-in zoom-in-80 slide-in-from-bottom-4 duration-500"
+    )}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
         {showSearch && (
           <div className="space-y-1.5">
