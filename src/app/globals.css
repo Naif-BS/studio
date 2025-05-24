@@ -57,8 +57,8 @@ body {
     --destructive: var(--srsa-coral-red); /* Coral Red */
     --destructive-foreground: var(--srsa-cruise-white); /* Cruise White */
 
-    --border: 212 25% 92%; /* Softer: Lighter, slightly less saturated blue-grey border */
-    --input: 212 25% 92%; /* Softer: Matched with --border for better visibility */
+    --border: 212 25% 92% / 0; /* Transparent border */
+    --input: 212 25% 92% / 0; /* Transparent input border */
     --ring: 216 75% 40%; /* Slightly brighter Sea Blue for focus rings */
 
     --chart-1: var(--srsa-sea-blue);
