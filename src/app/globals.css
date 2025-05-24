@@ -27,10 +27,10 @@ body {
     --srsa-sky-blue: 190 70% 50%; /* #25C1DE - For charts or accents */
 
     /* Greys for borders, inputs, muted backgrounds etc. */
-    --srsa-light-grey-border: 0 0% 88%;
-    --srsa-light-grey-input: 0 0% 88%;
-    --srsa-light-grey-muted-bg: 0 0% 90%;
-    --srsa-light-grey-secondary-bg: 0 0% 95%;
+    /* Using a lighter Deep Sea Blue for borders/inputs now */
+    --srsa-light-blue-border: 212 70% 65%; /* Lighter Deep Sea Blue for borders */
+    --srsa-light-grey-muted-bg: 0 0% 90%; /* Approx #E6E6E6 */
+    --srsa-light-grey-secondary-bg: 0 0% 95%; /* Approx #F2F2F2 */
     --srsa-muted-text: 212 70% 45%; /* Lighter Deep Sea Blue for muted text */
 
 
@@ -38,50 +38,48 @@ body {
     --background: var(--srsa-cruise-white);
     --foreground: var(--srsa-deep-sea-blue);
 
-    --card: var(--srsa-pure-white); /* Cards pure white for max contrast with cruise-white background */
+    --card: var(--srsa-cruise-white); /* Cards use Cruise White */
     --card-foreground: var(--srsa-deep-sea-blue);
 
-    --popover: var(--srsa-pure-white);
+    --popover: var(--srsa-pure-white); /* Popovers pure white */
     --popover-foreground: var(--srsa-deep-sea-blue);
 
-    --primary: var(--srsa-marine-green); /* Marine Green as new primary */
-    --primary-foreground: var(--srsa-pure-white); /* White text on Marine Green */
+    --primary: var(--srsa-deep-sea-blue); /* Deep Sea Blue as new primary */
+    --primary-foreground: var(--srsa-cruise-white); /* Cruise White text on Deep Sea Blue */
 
-    --secondary: var(--srsa-light-grey-secondary-bg);
+    --secondary: var(--srsa-light-grey-secondary-bg); /* Light grey for secondary backgrounds */
     --secondary-foreground: var(--srsa-deep-sea-blue);
 
-    --muted: var(--srsa-light-grey-muted-bg);
-    --muted-foreground: var(--srsa-muted-text);
+    --muted: var(--srsa-light-grey-muted-bg); /* Muted background */
+    --muted-foreground: var(--srsa-muted-text); /* Muted text (lighter deep sea blue) */
 
-    --accent: var(--srsa-clown-fish-yellow);
+    --accent: var(--srsa-clown-fish-yellow); /* Clown Fish Yellow */
     --accent-foreground: var(--srsa-deep-sea-blue); /* Deep blue text on yellow */
 
     --destructive: 0 84.2% 60.2%; /* Default red */
-    --destructive-foreground: var(--srsa-pure-white);
+    --destructive-foreground: var(--srsa-cruise-white);
 
-    --border: var(--srsa-light-grey-border);
-    --input: var(--srsa-light-grey-input);
-    --ring: var(--srsa-marine-green); /* Focus ring color, now Marine Green */
+    --border: var(--srsa-light-blue-border); /* Lighter Deep Sea Blue for borders */
+    --input: var(--srsa-light-blue-border); /* Lighter Deep Sea Blue for input borders */
+    --ring: var(--srsa-sky-blue); /* Focus ring color, Sky Blue for visibility */
 
     --radius: 0.5rem;
 
     /* Standard Chart Colors */
-    --chart-1: var(--srsa-marine-green); /* Marine Green */
-    --chart-2: var(--srsa-clown-fish-yellow); /* Clown Fish Yellow */
-    --chart-3: var(--srsa-sky-blue); /* Sky Blue as a distinct chart color */
-    --chart-4: var(--srsa-deep-sea-blue); /* Deep Sea Blue */
-    --chart-5: hsl(184, 100%, 36%); /* Lighter Marine Green for variety */
+    --chart-1: var(--srsa-deep-sea-blue); /* Deep Sea Blue first */
+    --chart-2: var(--srsa-clown-fish-yellow);
+    --chart-3: var(--srsa-sky-blue);
+    --chart-4: var(--srsa-marine-green); /* Marine Green */
+    --chart-5: hsl(184, 100%, 36%); /* Lighter Marine Green */
 
 
-    /* Sidebar specific theme variables (Light Mode default) */
-    --sidebar-background: var(--srsa-pure-white);
-    --sidebar-foreground: var(--srsa-deep-sea-blue);
-    --sidebar-primary: var(--srsa-marine-green);
-    --sidebar-primary-foreground: var(--srsa-pure-white);
-    --sidebar-accent: var(--srsa-clown-fish-yellow);
-    --sidebar-accent-foreground: var(--srsa-deep-sea-blue);
-    --sidebar-border: var(--srsa-light-grey-border);
-    --sidebar-ring: var(--srsa-marine-green);
+    /* Sidebar specific theme variables */
+    --sidebar-background: var(--srsa-deep-sea-blue);
+    --sidebar-foreground: var(--srsa-cruise-white);
+    --sidebar-border: var(--srsa-muted-text); /* Border for sidebar itself, slightly lighter blue */
+    --sidebar-active-icon: var(--srsa-clown-fish-yellow);
+    --sidebar-active-text: var(--srsa-cruise-white);
+    --sidebar-inactive-opacity: 0.7;
   }
 }
 

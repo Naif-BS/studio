@@ -29,12 +29,12 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-sidebar text-sidebar-foreground border-sidebar-border px-4 md:px-6">
       <div className="flex-1">
-        <Link href="/dashboard" className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
+        <Link href="/dashboard" className="flex items-center gap-2 text-sidebar-foreground hover:opacity-80 transition-opacity">
            <div className="flex flex-col">
             <span className="text-lg font-semibold leading-tight">Saudi Red Sea Authority</span>
-            <span className="text-xs text-muted-foreground leading-tight">Media Monitoring Center</span>
+            <span className="text-xs text-muted-foreground opacity-80 leading-tight">Media Monitoring Center</span>
           </div>
         </Link>
       </div>
@@ -42,14 +42,14 @@ export default function Header() {
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full hover:bg-white/10">
               <Avatar className="h-9 w-9">
                 <AvatarImage
                   src={user.photoURL || undefined}
                   alt={user.displayName || 'User'}
                   data-ai-hint="user avatar"
                 />
-                <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
+                <AvatarFallback className="bg-sky-blue text-deep-sea-blue">{getInitials(user.displayName)}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>

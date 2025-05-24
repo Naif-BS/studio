@@ -24,25 +24,31 @@ export default function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-border shadow-md flex items-center z-40"> {/* Changed shadow-lg to shadow-md */}
+    <nav className="fixed bottom-0 left-0 right-0 h-16 bg-sidebar text-sidebar-foreground border-t border-sidebar-border shadow-md flex items-center z-40">
       <ul className="flex justify-around items-center w-full h-full px-1">
-        {navItems.map((item) => (
-          <li key={item.href} className="flex-1">
-            <Link
-              href={item.href}
-              className={cn(
-                "flex flex-col items-center justify-center h-full p-1 rounded-md text-xs font-medium transition-colors w-full",
-                "hover:bg-accent hover:text-accent-foreground",
-                (pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href)))
-                  ? "text-primary"
-                  : "text-muted-foreground"
-              )}
-            >
-              <item.icon className="h-5 w-5 mb-0.5" />
-              <span className="truncate text-[10px]">{item.label}</span>
-            </Link>
-          </li>
-        ))}
+        {navItems.map((item) => {
+          const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
+          return (
+            <li key={item.href} className="flex-1">
+              <Link
+                href={item.href}
+                className={cn(
+                  "flex flex-col items-center justify-center h-full p-1 rounded-md text-xs font-medium transition-colors w-full",
+                  "hover:bg-white/5" // Subtle hover on dark background
+                )}
+              >
+                <item.icon className={cn(
+                    "h-5 w-5 mb-0.5",
+                    isActive ? "text-sidebar-active-icon" : "text-sidebar-foreground opacity-sidebar-inactive-opacity"
+                  )} />
+                <span className={cn(
+                    "truncate text-[10px]",
+                     isActive ? "text-sidebar-active-text" : "text-sidebar-foreground opacity-sidebar-inactive-opacity"
+                    )}>{item.label}</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
