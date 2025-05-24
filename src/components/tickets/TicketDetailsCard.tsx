@@ -28,10 +28,8 @@ interface TicketDetailsCardProps {
 export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction, isUpdating, isModalVariant }: TicketDetailsCardProps) {
   const { user } = useAuth();
   const [newActionText, setNewActionText] = useState('');
-  // Removed selectedStatus state as it's no longer needed
 
   React.useEffect(() => {
-    // setSelectedStatus(ticket.status); // Removed
     setNewActionText('');
   }, [ticket]);
 
@@ -51,7 +49,8 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     }
   };
 
-  const canUpdateStatus = ticket.status !== 'Closed'; // This now primarily means "can log action" or "can close"
+  const canUpdateStatus = ticket.status !== 'Closed';
+  const hasLoggedActions = ticket.actionsLog.length > 0;
   const showActionSection = !!onUpdateStatus && !!onAddAction;
 
   const mediaMaterialDisplay: Record<string, string> = {
@@ -81,7 +80,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
   return (
     <Card className={cn(
       "w-full",
-      isModalVariant ? "" : "shadow-lg border animate-in fade-in zoom-in-80 slide-in-from-bottom-4 duration-500"
+      isModalVariant ? "" : "shadow-sm animate-in fade-in zoom-in-80 slide-in-from-bottom-4 duration-500" // Default shadow-sm
     )}>
       {!isModalVariant && (
         <CardHeader>
@@ -165,12 +164,11 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
           )}
         </div>
 
-        {showActionSection && ( // canUpdateStatus check is now within button disable logic
+        {showActionSection && (
             <>
             <Separator className="my-4" />
             <div className="space-y-3">
               <h3 className="font-semibold text-md flex items-center"><Edit3 className="h-5 w-5 me-2 text-primary"/>Update Incident</h3>
-              {/* Status Select and Update Button Removed */}
               <div className="space-y-1.5">
                  <label htmlFor="action-log" className="text-sm font-medium text-muted-foreground">Log Action</label>
                 <Textarea
@@ -186,7 +184,7 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
                 <Button onClick={handleAddAction} disabled={!newActionText.trim() || isUpdating || !canUpdateStatus} className="flex-1 sm:flex-auto">
                   <Send className="h-4 w-4 me-2" /> Log Action
                 </Button>
-                <Button variant="destructive" onClick={handleCloseIncident} disabled={isUpdating || !canUpdateStatus} className="flex-1 sm:flex-auto">
+                <Button variant="destructive" onClick={handleCloseIncident} disabled={isUpdating || !canUpdateStatus || !hasLoggedActions} className="flex-1 sm:flex-auto">
                   <CheckCircle2 className="h-4 w-4 me-2" /> Close Incident
                 </Button>
               </div>
@@ -203,3 +201,4 @@ export default function TicketDetailsCard({ ticket, onUpdateStatus, onAddAction,
     </Card>
   );
 }
+
