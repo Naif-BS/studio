@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { LogOut, UserCircle, Settings } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -31,9 +32,18 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-card px-4 md:px-6">
       <div className="flex-1">
-        <Link href="/dashboard" className="flex flex-col text-primary hover:opacity-80 transition-opacity">
-          <span className="text-lg font-semibold leading-tight">Saudi Red Sea Authority</span>
-          <span className="text-xs text-muted-foreground leading-tight">Media Monitoring Center</span>
+        <Link href="/dashboard" className="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
+          {/* <Image
+            src="/srsa-logo.png"
+            alt="SRSA Organization Logo"
+            width={200} // Increased width
+            height={40} // Increased height (maintaining 5:1 aspect ratio)
+            className="h-auto" // Added for responsive height
+          /> */}
+           <div className="flex flex-col">
+            <span className="text-lg font-semibold leading-tight">Saudi Red Sea Authority</span>
+            <span className="text-xs text-muted-foreground leading-tight">Media Monitoring Center</span>
+          </div>
         </Link>
       </div>
 

@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const { login, isLoading: authLoading } = useAuth();
@@ -19,10 +20,15 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center space-y-2 pb-4">
           <div className="mx-auto mb-4">
-            {/* Placeholder for a potential future logo, or remove this div if not needed */}
+            {/* <Image
+              src="/srsa-logo.png"
+              alt="SRSA Organization Logo"
+              width={240} // Increased width
+              height={48} // Increased height (maintaining 5:1 aspect ratio)
+            /> */}
+            <h1 className="text-2xl font-bold text-foreground">Saudi Red Sea Authority</h1>
+            <p className="text-sm text-muted-foreground">Media Monitoring Center</p>
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Saudi Red Sea Authority</h1>
-          <p className="text-sm text-muted-foreground">Media Monitoring Center</p>
           <CardDescription className="pt-2">Sign in with your Outlook account</CardDescription>
         </CardHeader>
         <CardContent>
