@@ -47,7 +47,7 @@ body {
     --secondary: hsl(var(--srsa-shores-turquoise)); 
     --secondary-foreground: hsl(var(--srsa-deep-sea-blue)); 
 
-    --muted: hsl(45, 50%, 92%); 
+    --muted: hsl(45, 50%, 92%); /* Lightened Beach Beige for muted backgrounds */
     --muted-foreground: hsl(var(--srsa-dolphins-grey)); 
 
     --accent: hsl(var(--srsa-sky-blue)); 
@@ -56,9 +56,9 @@ body {
     --destructive: hsl(var(--srsa-coral-red)); 
     --destructive-foreground: hsl(var(--srsa-cruise-white)); 
 
-    --border: hsl(212, 25%, 75%); /* Made border slightly darker for better separation */
+    --border: hsl(212, 25%, 75%); /* Lightened Deep Sea Blue for borders */
     --input: hsl(212, 25%, 75%); /* Synced input border with general border */
-    --ring: hsl(216, 75%, 40%); 
+    --ring: hsl(216, 75%, 40%); /* Slightly lighter Sea Blue for focus rings */
 
     --chart-1: hsl(var(--srsa-sea-blue));
     --chart-2: hsl(var(--srsa-shores-turquoise));
@@ -84,8 +84,8 @@ body {
     @apply border-border;
   }
   body {
-    @apply text-foreground;
-    background-image: linear-gradient(to bottom, hsl(210, 40%, 97%), hsl(210, 40%, 93%));
+    @apply bg-background text-foreground; /* Uses --background from :root which is Cruise White */
     min-height: 100vh;
   }
 }
+
