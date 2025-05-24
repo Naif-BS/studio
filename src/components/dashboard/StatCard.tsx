@@ -18,33 +18,40 @@ interface StatCardProps {
   icon: React.ReactNode;
   description?: string;
   className?: string;
-  percentageChange?: number;
-  comparisonLabel?: string;
+  percentageChange?: number; // For the main KPI
+  comparisonLabel?: string; // For the main KPI
   subStats?: SubStat[];
+  glassEffect?: boolean;
 }
 
-export default function StatCard({ title, value, icon, description, className, percentageChange, comparisonLabel, subStats }: StatCardProps) {
+export default function StatCard({ title, value, icon, description, className, percentageChange, comparisonLabel, subStats, glassEffect }: StatCardProps) {
   const hasPercentageChange = typeof percentageChange === 'number';
   const isPositiveChange = hasPercentageChange && percentageChange > 0;
   const isNegativeChange = hasPercentageChange && percentageChange < 0;
 
   const displayValue = (typeof value === 'string' && value === '...') ? '...' :
                        (typeof value === 'number' ? value.toLocaleString() : value);
+  
+  const cardClasses = cn(
+    "shadow-sm", // Default shadow
+    glassEffect && "bg-opacity-50 backdrop-blur-xl !border-white/30 shadow-lg", // Glass effect overrides
+    className
+  );
 
   return (
-    <Card className={cn("shadow-sm", className)}>
+    <Card className={cardClasses}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-foreground">
           {title}
         </CardTitle>
-        {React.cloneElement(icon as React.ReactElement, { className: "h-7 w-7 text-marine-green", strokeWidth: "1.75" })}
+        {React.cloneElement(icon as React.ReactElement, { className: "h-8 w-8 text-marine-green", strokeWidth: "1.5" })}
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="text-2xl font-bold">{displayValue}</div>
         {description && (
           <p className="text-xs text-muted-foreground pt-1">{description}</p>
         )}
-        {hasPercentageChange && comparisonLabel && !subStats && ( // Only show main % change if no subStats
+        {hasPercentageChange && comparisonLabel && !subStats && ( // Only show main % change if no subStats or if it's a card without subStats
           <div className={cn(
             "text-xs flex items-center mt-1",
             isPositiveChange && "text-green-600",
