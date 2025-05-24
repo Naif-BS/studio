@@ -51,8 +51,7 @@ export default function TicketFilters({ filters, onFilterChange, showSearch = tr
 
   return (
     <div className={cn(
-      "mb-3 p-3 rounded-lg border bg-card text-card-foreground shadow-lg" 
-      // Removed glassy classes and animation, as it's a custom wrapper, not a Card component instance
+      "p-3 mb-3 rounded-lg border-white/30 bg-card text-card-foreground shadow-lg bg-opacity-50 backdrop-blur-xl animate-in fade-in zoom-in-80 slide-in-from-bottom-4 duration-500"
     )}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
         {showSearch && (
