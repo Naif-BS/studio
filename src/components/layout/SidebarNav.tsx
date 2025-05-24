@@ -32,10 +32,10 @@ export default function SidebarNav() {
               href={item.href}
               className={cn(
                 "flex flex-col items-center justify-center h-full p-1 rounded-md text-xs font-medium transition-colors w-full",
-                "hover:bg-accent hover:text-accent-foreground",
+                "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", // Using sidebar theme vars for hover as they are defined
                 (pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href)))
-                  ? "text-primary"
-                  : "text-muted-foreground"
+                  ? "text-primary" // Active item uses primary theme color
+                  : "text-muted-foreground" // Inactive uses muted theme color
               )}
             >
               <item.icon className="h-5 w-5 mb-0.5" />
